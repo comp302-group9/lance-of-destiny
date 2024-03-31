@@ -1,19 +1,19 @@
 
-import java.awt.*;
-import javax.swing.*;
+import java.awt.Color;
+
+import javax.swing.JFrame;
 
 public class GameFrame extends JFrame {
-	
-	GamePanel panel;
-	
-	GameFrame() { //costruttore	
-		 
-		panel = new GamePanel();
-		
-		//this.add(panel);  //finestra AWT
-		
-		this.getContentPane().add(panel); //finestra Swing
-		
+
+	RunningModeController controller;
+
+	GameFrame() { // costruttore
+
+		controller = new RunningModeController();
+
+		// this.add(panel); //finestra AWT
+
+		this.getContentPane().add(controller); // finestra Swing
 		this.setTitle("Bricks Crusher: Break the Bricks");
 		this.setResizable(false);
 		this.setBackground(Color.black);
@@ -21,7 +21,7 @@ public class GameFrame extends JFrame {
 		this.pack();
 		this.setVisible(true);
 		this.setLocationRelativeTo(null);
-	
-	} //end costruttore
 
-} 
+	} // end costruttore
+
+}
