@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.net.URL;
 
-public class GamePanel extends JPanel implements KeyListener, Runnable {
+public class RunningModeController extends JPanel implements KeyListener, Runnable {
 
     private static final int WIDTH = 800;
     private static final int HEIGHT = 600;
@@ -16,7 +16,7 @@ public class GamePanel extends JPanel implements KeyListener, Runnable {
     private boolean[] keys;
     private long lastUpdateTime;
 
-    public GamePanel() {
+    public RunningModeController() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         setBackground(Color.BLACK);
         addKeyListener(this); // Add key listener to the panel
