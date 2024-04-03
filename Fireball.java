@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.geom.Area;
+
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
@@ -56,7 +58,10 @@ public class Fireball {
 
     // Check collision with paddle
     public boolean collidesWithPaddle(Paddle paddle) {
-        return getBounds().intersects(paddle);
+        Area ballArea = new Area(getBounds());
+        Area paddleArea = new Area(paddle.getBounds());
+        ballArea.intersect(paddleArea);
+        return !ballArea.isEmpty();
     }
 
     // Check collision with walls

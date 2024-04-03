@@ -106,6 +106,9 @@ public class RunningModeController extends JPanel implements KeyListener, Runnab
 
         // Draw the fireball
         fireball.draw(g);
+        g.setColor(Color.RED); // Choose the color you want for the bounds
+    //g.drawRect(paddle.getBounds().x, paddle.getBounds().y, paddle.getBounds().width, paddle.getBounds().height);
+    g.drawRect(fireball.getBounds().x, fireball.getBounds().y, fireball.getBounds().width, fireball.getBounds().height);
     }
 
     @Override
