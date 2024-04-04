@@ -19,7 +19,6 @@ public class Paddle {
     private int paddleSpeed = 6;
     private double rotationAngle = 0;
     private double rotationSpeed = 20; // degrees per second
-    private double lineLength = 50; // Length of the perpendicular line
 
     public Paddle(int x, int y, int width, int height) {
         this.x = x;
@@ -35,83 +34,48 @@ public class Paddle {
         }
     }
 
-    public int getX() {
-        return x;
-    }
+    public int getX() {return x;}
+    public int getY() {return y;}
+    public int getWidth() {return width;}
+    public int getHeight() {return height;}
+    public double getRotationAngle() {return rotationAngle;}
 
-    public int getY() {
-        return y;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setDeltaY(int yDirection) {
-        int dy = yDirection * paddleSpeed;
-        y += dy;
-    }
-
+    // Responsible for left-right movement
     public void setDeltaX(int xDirection) {
         int dx = xDirection * paddleSpeed;
         x += dx;
     }
 
+    // Responsible for right rotation
     public void rotateClockwise(double deltaTime) {
         rotationAngle += rotationSpeed * deltaTime;
-        if (rotationAngle > 45) { // Ensure rotation is within bounds
+        if (rotationAngle > 45) {
             rotationAngle = 45;
         }
     }
 
+    // Responsible for left rotation
     public void rotateAntiClockwise(double deltaTime) {
         rotationAngle -= rotationSpeed * deltaTime;
-        if (rotationAngle < -45) { // Ensure rotation is within bounds
+        if (rotationAngle < -45) {
             rotationAngle = -45;
         }
     }
 
+    // Draws the paddle
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
-        g2d.rotate(Math.toRadians(rotationAngle), x + width / 2, y + height / 2); // Rotate around center of paddle
-        
-        // Draw the image onto the paddle
-        if (image != null) {
-            g2d.drawImage(image, x, y, width, height, null);
-        } else {
-            // If image fails to load, draw a colored rectangle as fallback
-            g2d.setColor(new Color(160, 160, 255));
-            g2d.fillRect(x, y, width, height);
-        }
-/* 
-        // Draw perpendicular line
-        double lineAngle = rotationAngle + 90; // Perpendicular to paddle
-        double lineX = x + width / 2 + lineLength * Math.cos(Math.toRadians(lineAngle));
-        double lineY = y + height / 2 - lineLength * Math.sin(Math.toRadians(lineAngle));
-        g2d.setColor(Color.WHITE);
-        g2d.draw(new Line2D.Double(x + width / 2, y + height / 2, lineX, lineY));
-        g2d.dispose();
-        // Calculate slope of perpendicular line
-    double slope = Math.tan(Math.toRadians(lineAngle));
-    System.out.println("Angle: " + Math.toRadians(lineAngle) + "Slope of perpendicular line: " + slope);*/
+        g2d.rotate(Math.toRadians(rotationAngle), x + width / 2, y + height / 2);
+        g2d.drawImage(image, x, y, width, height, null);
     }
 
+    // To get the boundries of the rotated paddle
     public Shape getBounds() {
         AffineTransform transform = new AffineTransform();
-        // Translate to the center of the rectangle (assuming x and y represent top-left corner)
-        transform.translate(x + width / 2, y + height / 2);
+        transform.translate(x + width / 2, y + height / 2);// Translating transform object to the center of paddle
         transform.rotate(Math.toRadians(rotationAngle), 0, 0); // Rotate around the center
         Rectangle2D paddleRectangle = new Rectangle2D.Double(-width / 2, -height / 2, width, height); // Centered rectangle
-        Shape transformedRect = transform.createTransformedShape(paddleRectangle);
-        // Return a new Rectangle based on the bounding box
+        Shape transformedRect = transform.createTransformedShape(paddleRectangle);// Apply transformation to new rectangle
         return transformedRect;
     }
-
-    public double getRotationAngle() {
-        // TODO Auto-generated method stub
-return rotationAngle;    }
 }

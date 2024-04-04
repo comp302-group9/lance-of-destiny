@@ -25,37 +25,27 @@ public class Fireball {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        // Set initial velocity
-        dx = 5; // Adjust as needed
-        dy = -5; // Adjust as needed
+        setDefaultVelocity();
     }
 
+    private void setDefaultVelocity(){
+        dx = 5;
+        dy = -5;
+    }
+
+    //updates the fireball location
     public void move() {
-        // Update the position of the fireball
         x += dx;
         y += dy;
     }
 
-    public void draw(Graphics g) {
-        // Draw the fireball
-        if (image != null) {
-            g.drawImage(image, x, y, width, height, null);
-        } 
-    }
-
+    public void reflectHorizontal() {dy = -dy;}
+    public void reflectVertical() {dx = -dx;}
+    
     public Rectangle getBounds() {
         return new Rectangle(x, y, width, height); 
     }
-
-    public void reflectHorizontal() {
-        dy = -dy; // Reverse vertical direction
-    }
-
-    public void reflectVertical() {
-        dx = -dx; // Reverse horizontal direction
-    }
-
+    
     // Check collision with paddle
     public boolean collidesWithPaddle(Paddle paddle) {
         Area ballArea = new Area(getBounds());
@@ -63,34 +53,40 @@ public class Fireball {
         ballArea.intersect(paddleArea);
         return !ballArea.isEmpty();
     }
-
+    
     public void reflectFromPaddle(Paddle paddle) {
         // Calculate initial velocity magnitude of the ball
         double v_ball_initial = Math.sqrt(dx * dx + dy * dy); // initial velocity of the ball in m/s
         
         // angle of the wall in radians
         double theta_wall = Math.toRadians(paddle.getRotationAngle()); // angle of the wall in radians
-
-         // Calculate initial velocity angle of the ball
-         double theta_ball = Math.atan2(dy, dx); // angle of initial velocity of the ball
-
-         // Calculate angle between initial velocity of the ball and the wall
-         double alpha = theta_wall - theta_ball;
- 
-         // Calculate final velocity components of the ball after collision using reflection law
+        
+        // Calculate initial velocity angle of the ball
+        double theta_ball = Math.atan2(dy, dx); // angle of initial velocity of the ball
+        
+        // Calculate angle between initial velocity of the ball and the wall
+        double alpha = theta_wall - theta_ball;
+        
+        // Calculate final velocity components of the ball after collision using reflection law
         dx = v_ball_initial * Math.cos(theta_wall + alpha);
         dy = v_ball_initial * Math.sin(theta_wall + alpha);
- 
+        
     }
     
     // Check collision with walls
     public void checkCollisionWithWalls(int screenWidth, int screenHeight) {
-        if (x <= 0 || x + width >= screenWidth) {
-            reflectVertical(); // Reflect if hitting left or right wall
+        if (x <= 0 || x + width >= screenWidth) {//right, left walls
+            reflectVertical();
         }
-        if (y <= 0 || y + height >= screenHeight) {
-            reflectHorizontal(); // Reflect if hitting top wall
+        if (y <= 0 || y + height >= screenHeight) {//up, down walls (if want to drop ball, just add "y <= 0" in if statment)
+            reflectHorizontal();
         }
-        // You may handle collision with bottom wall if necessary
+    }
+
+    public void draw(Graphics g) {
+        // Draw the fireball
+        if (image != null) {
+            g.drawImage(image, x, y, width, height, null);
+        } 
     }
 }

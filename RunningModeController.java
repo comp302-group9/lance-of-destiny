@@ -18,7 +18,6 @@ public class RunningModeController extends JPanel implements KeyListener, Runnab
 
     public RunningModeController() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        setBackground(Color.BLACK);
         addKeyListener(this); // Add key listener to the panel
         setFocusable(true); // Make panel focusable to receive key events
 
@@ -26,7 +25,6 @@ public class RunningModeController extends JPanel implements KeyListener, Runnab
         try {
             URL imageURL = getClass().getResource("images/Background.png");
             backgroundImage = ImageIO.read(imageURL);
-            
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -102,23 +100,17 @@ public void run() {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Draw the background image
+        // Draw the objects
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-
-        // Draw the paddle
         paddle.draw(g);
-
-        // Draw the fireball
         fireball.draw(g);
-        g.setColor(Color.RED); // Choose the color you want for the bounds
-    //g.drawRect(paddle.getBounds().x, paddle.getBounds().y, paddle.getBounds().width, paddle.getBounds().height);
-    g.drawRect(fireball.getBounds().x, fireball.getBounds().y, fireball.getBounds().width, fireball.getBounds().height);
+        
+        //g.setColor(Color.RED);
+        //g.drawRect(fireball.getBounds().x, fireball.getBounds().y, fireball.getBounds().width, fireball.getBounds().height);
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-        // Unused
-    }
+    public void keyTyped(KeyEvent e) {}
 
     @Override
     public void keyPressed(KeyEvent e) {
