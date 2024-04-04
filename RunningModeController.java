@@ -18,7 +18,6 @@ public class RunningModeController extends JPanel implements KeyListener, Runnab
 
     public RunningModeController() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        setBackground(Color.BLACK);
         addKeyListener(this); // Add key listener to the panel
         setFocusable(true); // Make panel focusable to receive key events
 
@@ -26,7 +25,6 @@ public class RunningModeController extends JPanel implements KeyListener, Runnab
         try {
             URL imageURL = getClass().getResource("images/Background.png");
             backgroundImage = ImageIO.read(imageURL);
-            
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -49,69 +47,70 @@ public class RunningModeController extends JPanel implements KeyListener, Runnab
     }
 
     @Override
-    public void run() {
-        while (true) {
-            // Calculate delta time (time elapsed since last update)
-            long currentTime = System.currentTimeMillis();
-            double deltaTime = (currentTime - lastUpdateTime) / 1000.0; // Convert to seconds
-            lastUpdateTime = currentTime;
+public void run() {
+    long lastCollisionTime = 0; // Initialize the last collision time
+    long cooldown = 1000; // Set the cooldown time in milliseconds (adjust as needed)
 
-            // Continuous movement logic
-            if (keys[KeyEvent.VK_LEFT]) {
-                paddle.setDeltaX(-1); // Move paddle left
-            }
-            if (keys[KeyEvent.VK_RIGHT]) {
-                paddle.setDeltaX(1); // Move paddle right
-            }
+    while (true) {
+        // Calculate delta time (time elapsed since last update)
+        long currentTime = System.currentTimeMillis();
+        double deltaTime = (currentTime - lastUpdateTime) / 1000.0; // Convert to seconds
+        lastUpdateTime = currentTime;
 
-            // Continuous rotation logic
-            if (keys[KeyEvent.VK_A]) {
-                paddle.rotateAntiClockwise(deltaTime); // Rotate paddle anti-clockwise
-            }
-            if (keys[KeyEvent.VK_D]) {
-                paddle.rotateClockwise(deltaTime); // Rotate paddle clockwise
-            }
+        // Continuous movement logic for the paddle
+        if (keys[KeyEvent.VK_LEFT]) {
+            paddle.setDeltaX(-1); // Move paddle left
+        }
+        if (keys[KeyEvent.VK_RIGHT]) {
+            paddle.setDeltaX(1); // Move paddle right
+        }
 
-            // Move the fireball
-            fireball.move();
+        // Continuous rotation logic for the paddle
+        if (keys[KeyEvent.VK_A]) {
+            paddle.rotateAntiClockwise(deltaTime); // Rotate paddle anti-clockwise
+        }
+        if (keys[KeyEvent.VK_D]) {
+            paddle.rotateClockwise(deltaTime); // Rotate paddle clockwise
+        }
 
-            // Check collision of fireball with walls
-            fireball.checkCollisionWithWalls(WIDTH, HEIGHT);
+        // Move the fireball
+        fireball.move();
 
-            // Check collision of fireball with paddle
-            if (fireball.collidesWithPaddle(paddle)) {
-                fireball.reflectHorizontal(); // Reflect fireball when colliding with paddle
-            }
+        // Check collision of fireball with walls
+        fireball.checkCollisionWithWalls(WIDTH, HEIGHT);
 
-            // Repaint the panel
-            repaint();
+        // Check collision of fireball with paddle and apply cooldown
+        if (fireball.collidesWithPaddle(paddle) && (currentTime - lastCollisionTime) >= cooldown) {
+            fireball.reflectFromPaddle(paddle); // Reflect fireball when colliding with paddle
+            lastCollisionTime = currentTime; // Update the last collision time
+        }
 
-            // Pause for a short duration to prevent high CPU usage
-            try {
-                Thread.sleep(10); // Adjust the sleep duration as needed
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        // Repaint the panel
+        repaint();
+
+        // Pause for a short duration to prevent high CPU usage
+        try {
+            Thread.sleep(10); // Adjust the sleep duration as needed
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
+}
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Draw the background image
+        // Draw the objects
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-
-        // Draw the paddle
         paddle.draw(g);
-
-        // Draw the fireball
         fireball.draw(g);
+        
+        //g.setColor(Color.RED);
+        //g.drawRect(fireball.getBounds().x, fireball.getBounds().y, fireball.getBounds().width, fireball.getBounds().height);
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-        // Unused
-    }
+    public void keyTyped(KeyEvent e) {}
 
     @Override
     public void keyPressed(KeyEvent e) {
