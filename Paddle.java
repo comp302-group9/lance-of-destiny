@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ public class Paddle {
     private int paddleSpeed = 6;
     private double rotationAngle = 0;
     private double rotationSpeed = 20; // degrees per second
+    private double lineLength = 50; // Length of the perpendicular line
 
     public Paddle(int x, int y, int width, int height) {
         this.x = x;
@@ -85,8 +87,17 @@ public class Paddle {
             g2d.setColor(new Color(160, 160, 255));
             g2d.fillRect(x, y, width, height);
         }
-        
+/* 
+        // Draw perpendicular line
+        double lineAngle = rotationAngle + 90; // Perpendicular to paddle
+        double lineX = x + width / 2 + lineLength * Math.cos(Math.toRadians(lineAngle));
+        double lineY = y + height / 2 - lineLength * Math.sin(Math.toRadians(lineAngle));
+        g2d.setColor(Color.WHITE);
+        g2d.draw(new Line2D.Double(x + width / 2, y + height / 2, lineX, lineY));
         g2d.dispose();
+        // Calculate slope of perpendicular line
+    double slope = Math.tan(Math.toRadians(lineAngle));
+    System.out.println("Angle: " + Math.toRadians(lineAngle) + "Slope of perpendicular line: " + slope);*/
     }
 
     public Shape getBounds() {
@@ -96,16 +107,11 @@ public class Paddle {
         transform.rotate(Math.toRadians(rotationAngle), 0, 0); // Rotate around the center
         Rectangle2D paddleRectangle = new Rectangle2D.Double(-width / 2, -height / 2, width, height); // Centered rectangle
         Shape transformedRect = transform.createTransformedShape(paddleRectangle);
-        
-        // Get the bounding box of the transformed shape
-        Rectangle bounds = transformedRect.getBounds();
-        
-        // Translate the bounding box back to the original position
-        bounds.translate((int)(x + width / 2 - bounds.getCenterX()), (int)(y + height / 2 - bounds.getCenterY()));
-    
         // Return a new Rectangle based on the bounding box
         return transformedRect;
     }
-    
-    
+
+    public double getRotationAngle() {
+        // TODO Auto-generated method stub
+return rotationAngle;    }
 }
