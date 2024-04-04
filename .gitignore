@@ -5,3 +5,7 @@
 /Play.class
 /RunningModeController.class
 /Barrier.class
+/SimpleBarrier.class
+/ReinforcedBarrier.class
+/ExplosiveBarrier.class
+/RewardingBarrier.class
