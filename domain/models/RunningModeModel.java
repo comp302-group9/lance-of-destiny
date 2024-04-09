@@ -14,7 +14,7 @@ public class RunningModeModel {
 
     public RunningModeModel() {
         // Initialize the paddle
-        paddle = new Paddle(WIDTH / 2, HEIGHT - 50, 100, 20); // Adjust parameters as needed
+        paddle = new Paddle(WIDTH / 2, HEIGHT - 50, WIDTH/10, 20); // Adjust parameters as needed
 
         // Initialize the fireball
         fireball = new Fireball(WIDTH / 2, HEIGHT / 2, 20, 20); // Adjust parameters as needed

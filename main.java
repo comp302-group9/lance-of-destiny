@@ -1,9 +1,9 @@
 // Main.java
 import javax.swing.*;
 
-import domain.controllers.RunningModeController;
-import domain.models.RunningModeModel;
-import ui.screens.RunningModeView;
+import domain.controllers.*;
+import domain.models.*;
+import ui.screens.*;
 
 public class main {
     public static void main(String[] args) {
@@ -13,6 +13,9 @@ public class main {
             RunningModeView view = new RunningModeView(model);
             RunningModeController controller = new RunningModeController(model, view);
 
+            BuildingModeModel model2 = new BuildingModeModel();
+            BuildingModeView view2 = new BuildingModeView(model2);
+            BuildingModeController controller2 = new BuildingModeController(model2, view2);
             // Create the main frame
             JFrame frame = new JFrame("Running Mode");
             frame.getContentPane().add(view);
