@@ -1,6 +1,10 @@
 public class Play {
 	public static void main(String[] args) {
-		GameFrame frame = new GameFrame();
+
+		// GameFrame frame = new GameFrame();
+
+		BuildingModeFrame frame = new BuildingModeFrame();
 
 	}
+
 }
