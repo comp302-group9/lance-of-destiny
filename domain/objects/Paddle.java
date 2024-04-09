@@ -1,3 +1,4 @@
+package domain.objects;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
@@ -28,7 +29,7 @@ public class Paddle {
         
         // Load the image from the class's resources
         try {
-            image = ImageIO.read(getClass().getResource("images/Player.png"));
+            image = ImageIO.read(getClass().getResource("/ui/images/Player.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

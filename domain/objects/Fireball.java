@@ -1,7 +1,11 @@
+package domain.objects;
 import java.awt.*;
 import java.awt.geom.Area;
 
 import javax.swing.*;
+
+import domain.objects.Paddle;
+
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -21,7 +25,7 @@ public class Fireball {
 
         // Load the image from the class's resources
         try {
-            image = ImageIO.read(getClass().getResource("images/Fireball.png")); // Adjust image path
+            image = ImageIO.read(getClass().getResource("/ui/images/Fireball.png")); // Adjust image path
         } catch (IOException e) {
             e.printStackTrace();
         }
