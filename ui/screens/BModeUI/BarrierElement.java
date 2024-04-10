@@ -1,4 +1,4 @@
-package ui;
+package ui.screens.BModeUI;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-import domain.Barrier;
+import domain.objects.Barrier.Barrier;
 
 public class BarrierElement extends JPanel {
 

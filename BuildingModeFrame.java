@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import domain.Barrier;
-import ui.BarrierElement;
+import domain.models.BuildingModeModel;
+import domain.objects.Barrier.Barrier;
+import ui.screens.BModeUI.BarrierElement;
 
 public class BuildingModeFrame {
 

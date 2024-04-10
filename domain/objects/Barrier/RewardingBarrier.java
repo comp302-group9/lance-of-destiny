@@ -1,4 +1,4 @@
-package domain;
+package domain.objects.Barrier;
 
 public class RewardingBarrier extends Barrier {
 	private String containedSpell;

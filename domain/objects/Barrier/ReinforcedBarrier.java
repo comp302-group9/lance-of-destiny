@@ -1,4 +1,4 @@
-package domain;
+package domain.objects.Barrier;
 
 public class ReinforcedBarrier extends Barrier {
 
