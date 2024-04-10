@@ -1,3 +1,4 @@
+package ui;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -12,12 +13,14 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import domain.Barrier;
+
 public class BarrierElement extends JPanel {
 
 	JTextField textField = new JTextField();
 	private JButton displayButton;
 
-	public BarrierElement() {
+	public BarrierElement(Barrier b) {
 		// setBackground(Color.BLACK); // Set the background color to black
 		// setPreferredSize(new Dimension(500, 500)); // Set preferred size for the
 		// panel
@@ -25,7 +28,7 @@ public class BarrierElement extends JPanel {
 		// THIS IS CRITICAL IF YOU DONT PUT IT THEN IT MAY NOT APPEAR
 		setLayout(null);
 
-		JLabel titleLabel = new JLabel("Simple Barrier");
+		JLabel titleLabel = new JLabel(b.getName());
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
 		titleLabel.setBounds(10, 10, 200, 20);
 		add(titleLabel);

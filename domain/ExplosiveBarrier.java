@@ -1,10 +1,10 @@
+package domain;
 
 public class ExplosiveBarrier extends Barrier {
 
 	private int explosionRadius;
 
-	public ExplosiveBarrier(int x, int y, int explosionRadius) {
-		super(x, y);
+	public ExplosiveBarrier(int explosionRadius) {
 		this.explosionRadius = explosionRadius;
 	}
 
@@ -13,7 +13,18 @@ public class ExplosiveBarrier extends Barrier {
 		System.out.println("Explosive barrier destroyed");
 	}
 
+	@Override
+	public String getName() {
+		return "Explosive Barrier";
+	}
+
+	@Override
+	public String getImg() {
+		return "images/explosiveBarrier.png";
+	}
+
 	public int getExplosionRadius() {
 		return explosionRadius;
 	}
+
 }

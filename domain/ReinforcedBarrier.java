@@ -1,10 +1,10 @@
+package domain;
 
 public class ReinforcedBarrier extends Barrier {
 
 	private int hitCount;
 
-	public ReinforcedBarrier(int x, int y, int hitCount) {
-		super(x, y);
+	public ReinforcedBarrier(int hitCount) {
 		this.hitCount = hitCount;
 	}
 
@@ -14,5 +14,10 @@ public class ReinforcedBarrier extends Barrier {
 		if (hitCount <= 0) {
 			System.out.println("Reinforced Barrier destroyed");
 		}
+	}
+
+	@Override
+	public String getName() {
+		return "Reinforced Barrier";
 	}
 }

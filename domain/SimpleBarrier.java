@@ -1,12 +1,17 @@
+package domain;
 
 public class SimpleBarrier extends Barrier {
 
-	public SimpleBarrier(int x, int y) {
-		super(x, y);
+	public SimpleBarrier() {
 	}
 
 	@Override
 	public void onHit() {
 		System.out.println("Reinforced Barrier destroyed");
+	}
+
+	@Override
+	public String getName() {
+		return "Simple Barrier";
 	}
 }

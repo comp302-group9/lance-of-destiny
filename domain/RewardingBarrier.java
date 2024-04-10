@@ -1,9 +1,9 @@
+package domain;
 
 public class RewardingBarrier extends Barrier {
 	private String containedSpell;
 
-	public RewardingBarrier(int x, int y, String containedSpell) {
-		super(x, y);
+	public RewardingBarrier(String containedSpell) {
 		this.containedSpell = containedSpell;
 	}
 
@@ -12,8 +12,14 @@ public class RewardingBarrier extends Barrier {
 		System.out.println("Rewarding Barrier destroyed");
 	}
 
+	@Override
+	public String getName() {
+		return "Rewarding Barrier";
+	}
+
 	// Getter for containedSpell
 	public String getContainedSpell() {
 		return containedSpell;
 	}
+
 }

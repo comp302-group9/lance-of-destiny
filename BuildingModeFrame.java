@@ -1,6 +1,11 @@
 
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+
+import domain.Barrier;
+import ui.BarrierElement;
 
 public class BuildingModeFrame {
 
@@ -14,6 +19,10 @@ public class BuildingModeFrame {
 	}
 
 	private static void createAndShowGUI() {
+
+		BuildingModeModel bModel = new BuildingModeModel();
+		ArrayList<Barrier> bList = bModel.getBarrierList();
+
 		// Create and set up the main window
 		JFrame frame = new JFrame("Barrier Element");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -23,13 +32,11 @@ public class BuildingModeFrame {
 		// Set layout to null to allow manual positioning of the panel
 		frame.setLayout(null);
 
-		// Create an instance of BarrierElement JPanel
-		// SimpleBarrier b = new SimpleBarrier(6, 9);
-
 		int y = 50; // Initial x-coordinate for the first panel
 
 		for (int i = 0; i < 4; i++) {
-			BarrierElement barrierElement = new BarrierElement();
+
+			BarrierElement barrierElement = new BarrierElement(bList.get(i));
 
 			// Position the panel within the frame
 			barrierElement.setBounds(550, y, 200, 100);
