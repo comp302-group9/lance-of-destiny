@@ -18,7 +18,7 @@ public class main {
             BuildingModeController controller2 = new BuildingModeController(model2, view2);
             // Create the main frame
             JFrame frame = new JFrame("Running Mode");
-            frame.getContentPane().add(view);
+            frame.getContentPane().add(view2);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();
             frame.setVisible(true);

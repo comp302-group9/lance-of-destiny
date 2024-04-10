@@ -20,7 +20,7 @@ public class BuildingModeController implements Runnable{
         while (true) {
             long currentTime = System.currentTimeMillis();
             model.update(currentTime, keys, BuildingModeView.WIDTH, BuildingModeView.HEIGHT);
-            view.repaint(); // Repaint the view
+            //view.repaint(); // Repaint the view
             try {
                 Thread.sleep(10); // Pause for a short duration
             } catch (InterruptedException e) {

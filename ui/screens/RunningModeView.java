@@ -18,6 +18,10 @@ public class RunningModeView extends JPanel{
     public static final int HEIGHT = 600;
     private BufferedImage backgroundImage;
     private RunningModeModel model;
+    private BufferedImage image;
+
+    
+        
 
     public RunningModeView(RunningModeModel model){
         this.model=model;
