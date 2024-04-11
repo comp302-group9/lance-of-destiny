@@ -10,7 +10,6 @@ public class main {
         SwingUtilities.invokeLater(() -> {
             // Create the model, view, and controller
             
-
             BuildingModeModel model2 = new BuildingModeModel();
             BuildingModeView view2 = new BuildingModeView(model2);
             BuildingModeController controller2 = new BuildingModeController(model2, view2);
