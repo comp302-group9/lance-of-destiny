@@ -27,7 +27,7 @@ public class BuildingModeView extends JPanel{
 
         grid = model.readTxt("/domain/txtData/Test.txt");
         placement = new BarrierPlacementPanel(model, grid);
-        placement.setBounds(0, 82, BarrierPlacementPanel.WIDTH, BarrierPlacementPanel.HEIGHT);
+        placement.setBounds(0, 0, BarrierPlacementPanel.WIDTH, BarrierPlacementPanel.HEIGHT);
         this.add(placement);
     }
     

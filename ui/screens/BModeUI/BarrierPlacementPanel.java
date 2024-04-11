@@ -28,8 +28,8 @@ import java.io.IOException;
 
 public class BarrierPlacementPanel extends JPanel{
     private BuildingModeModel model;
-    public static final int WIDTH = 580;
-    public static final int HEIGHT = 435;
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 600;
     int buttonWidth = 7*HEIGHT/64;
     int buttonHeight = 2*WIDTH/72;
     private BufferedImage backgroundImage;
