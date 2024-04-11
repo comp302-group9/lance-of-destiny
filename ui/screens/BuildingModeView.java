@@ -12,6 +12,9 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -253,22 +256,18 @@ public class BuildingModeView extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int value = Integer.parseInt(elements[0].getTextFieldText());
-			    model.setNumber_simple(value);
-			    
+				changeRandomValues(grid, value, 1);
+
 			    int value1 = Integer.parseInt(elements[1].getTextFieldText());
-			    model.setNumber_simple(value1);
+			    changeRandomValues(grid, value1, 2);
 			    
 			    int value2 = Integer.parseInt(elements[2].getTextFieldText());
-			    model.setNumber_simple(value2);
+			    changeRandomValues(grid, value2, 3);
 			    
 			    int value3 = Integer.parseInt(elements[3].getTextFieldText());
-			    model.setNumber_simple(value3);
+			    changeRandomValues(grid, value3, 4);
 			    
-			    System.out.println(value);
-			    System.out.println(value1);
-			    System.out.println(value2);
-			    System.out.println(value3);
-			    
+			    readGrid(grid);
 			}
 		});
 		add(placeButton);
@@ -298,6 +297,24 @@ public class BuildingModeView extends JPanel {
     		add(barrierElement);
 			elements[i]=barrierElement;
 		}
-
 	}
+	
+	public void changeRandomValues(int[][] array, int numChanges, int replacementValue) {
+		//int[][] temp = model.createEmptyGrid();
+        int rows = array.length;
+        int cols = array[0].length;
+		int change_num = 0;
+
+        Random random = new Random();
+        while (change_num < numChanges) {
+            int row = random.nextInt(rows);
+            int col = random.nextInt(cols);
+
+            if (array[row][col] == 0) {
+                array[row][col] = replacementValue;
+				change_num++;
+            }
+        }
+    }
+	
 }
