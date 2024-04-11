@@ -9,9 +9,7 @@ public class main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             // Create the model, view, and controller
-            RunningModeModel model = new RunningModeModel();
-            RunningModeView view = new RunningModeView(model);
-            RunningModeController controller = new RunningModeController(model, view);
+            
 
             BuildingModeModel model2 = new BuildingModeModel();
             BuildingModeView view2 = new BuildingModeView(model2);
@@ -25,8 +23,6 @@ public class main {
             frame.setLocationRelativeTo(null); // Center the frame
 
             // Start the game loop
-            Thread gameThread = new Thread(controller);
-            gameThread.start();
         });
     }
 }

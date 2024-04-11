@@ -10,6 +10,10 @@ import domain.objects.Barrier.Barrier;
 import domain.objects.Barrier.*;
 
 public class BuildingModeModel {
+    public int number_simple = 0;
+    public int number_reinforced = 0;
+    public int number_explosive = 0;
+    public int number_rewarding = 0;
 
     private ArrayList<Barrier> BarrierList = new ArrayList<Barrier>();
 
@@ -48,7 +52,7 @@ public class BuildingModeModel {
     }
 
     public int[][] readTxt(String fileName){
-        int[][] matrix = new int[11][10];
+        int[][] matrix = new int[10][11];
         try (BufferedReader br = new BufferedReader(new FileReader("domain\\txtData\\Test.txt"))) {
             String line;
             int row = 0;
