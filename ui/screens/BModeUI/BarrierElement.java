@@ -27,10 +27,12 @@ public class BarrierElement extends JPanel {
 
 		// THIS IS CRITICAL IF YOU DONT PUT IT THEN IT MAY NOT APPEAR
 		setLayout(null);
+		setBackground(new Color(0,0,0,0));
 
 		JLabel titleLabel = new JLabel(b.getName());
 		titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
 		titleLabel.setBounds(10, 10, 200, 20);
+		titleLabel.setForeground(Color.CYAN);
 		add(titleLabel);
 
 		textField.setBounds(125, 50, 50, 30); // Set bounds (x, y, width, height) for the text field
