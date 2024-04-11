@@ -20,6 +20,7 @@ public class main {
             frame.pack();
             frame.setVisible(true);
             frame.setLocationRelativeTo(null); // Center the frame
+            frame.setResizable(false);
 
             // Start the game loop
         });

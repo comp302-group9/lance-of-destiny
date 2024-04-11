@@ -13,10 +13,13 @@ import domain.objects.Barrier.RewardingBarrier;
 import domain.objects.Barrier.SimpleBarrier;
 
 public class BuildingModeModel {
-	public int number_simple = 0;
-	public int number_reinforced = 0;
-	public int number_explosive = 0;
-	public int number_rewarding = 0;
+    public static final int ROWS = 11;
+    public static final int COLUMNS = 11;
+
+    public int number_simple = 0;
+    public int number_reinforced = 0;
+    public int number_explosive = 0;
+    public int number_rewarding = 0;
 
 	private ArrayList<Barrier> BarrierList = new ArrayList<Barrier>();
 
@@ -47,34 +50,34 @@ public class BuildingModeModel {
 
 	}
 
-	public int[][] createEmptyGrid() {
-		int[][] grid = new int[10][11];
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 11; j++) {
-				grid[i][j] = 0;
-			}
-		}
-		return grid;
-	}
+    public int[][] createEmptyGrid(){
+        int[][] grid = new int[ROWS][COLUMNS];
+        for (int i=0; i<10 ;i++){
+            for (int j=0; j<11 ;j++){
+                grid[i][j]=0;
+            }
+        }
+        return grid;
+    }
 
-	public int[][] readTxt(String fileName) {
-		int[][] matrix1 = new int[10][11];
-		try (BufferedReader br = new BufferedReader(new FileReader("domain\\txtData\\Test.txt"))) {
-			String line;
-			int row = 0;
-
-			while ((line = br.readLine()) != null) {
-				String[] elements = line.split(" ");
-				for (int col = 0; col < elements.length; col++) {
-					matrix1[row][col] = Integer.parseInt(elements[col]);
-				}
-				row++;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return matrix1;
-	}
+    public int[][] readTxt(String fileName){
+        int[][] matrix = new int[ROWS][COLUMNS];
+        try (BufferedReader br = new BufferedReader(new FileReader("domain\\txtData\\Test.txt"))) {
+            String line;
+            int row = 0;
+            
+            while ((line = br.readLine()) != null) {
+                String[] elements = line.split(" ");
+                for (int col = 0; col < elements.length; col++) {
+                    matrix[row][col] = Integer.parseInt(elements[col]);
+                }
+                row++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return matrix;
+    }
 
 	private void writeTxt(String fileName, int[][] matrix) {
 		try (FileWriter writer = new FileWriter(fileName)) {

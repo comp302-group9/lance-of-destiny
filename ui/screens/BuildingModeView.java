@@ -46,7 +46,7 @@ public class BuildingModeView extends JPanel {
 	private JLabel rewardingLabel;
 	public static final int ROWS = 10;
 	public static final int COLUMNS = 11;
-	public static JButton[] buttons = new JButton[10 * ROWS + COLUMNS];
+	public static JButton[] buttons = new JButton[10* BuildingModeModel.ROWS + BuildingModeModel.COLUMNS];
 
 	public BuildingModeView(BuildingModeModel model) {
 		this.model = model;
@@ -61,14 +61,14 @@ public class BuildingModeView extends JPanel {
 			e.printStackTrace();
 		}
 
-		// grid = model.readTxt("/domain/txtData/Test.txt");
-		grid = model.createEmptyGrid();
+		 grid = model.readTxt("/domain/txtData/Test.txt");
+		// grid = model.createEmptyGrid();
 
 		addEmptyButtons();
 		readGrid(grid);
 		currentState();
 		addButton();
-		createAndShowGUI();
+		addInputFields();
 
 	}
 
@@ -79,32 +79,32 @@ public class BuildingModeView extends JPanel {
 		g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
 	}
 
-	protected void readGrid(int[][] grid) {
-		for (int i = 0; i < 10; i++) {
-			for (int j = 0; j < 11; j++) {
-				if (grid[i][j] != 0) {
-					switch (grid[i][j]) {
-					case 1:
-						model.number_simple++;
-						buttons[10 * i + j].setIcon(simple);
-						break;
-					case 2:
-						model.number_reinforced++;
-						buttons[10 * i + j].setIcon(firm);
-						break;
-					case 3:
-						model.number_explosive++;
-						buttons[10 * i + j].setIcon(explosive);
-						break;
-					case 4:
-						model.number_rewarding++;
-						buttons[10 * i + j].setIcon(rewarding);
-						break;
-					}
-				}
-			}
-		}
-	}
+    protected void readGrid(int[][] grid){
+        for (int i=0; i<BuildingModeModel.ROWS ;i++){
+            for (int j=0; j<BuildingModeModel.COLUMNS ;j++){
+                if(grid[i][j]!=0){
+                switch (grid[i][j]) {
+                    case 1:
+                        model.number_simple++;
+                        buttons[BuildingModeModel.ROWS*i+j].setIcon(simple);
+                        break;
+                    case 2:
+                        model.number_reinforced++;
+                        buttons[BuildingModeModel.ROWS*i+j].setIcon(firm);
+                        break;
+                    case 3:
+                        model.number_explosive++;
+                        buttons[BuildingModeModel.ROWS*i+j].setIcon(explosive);
+                        break;
+                    case 4:
+                        model.number_rewarding++;
+                        buttons[BuildingModeModel.ROWS*i+j].setIcon(rewarding);
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
 	private ImageIcon scaleImage(String imagePath) {
 		try {
@@ -126,8 +126,8 @@ public class BuildingModeView extends JPanel {
 		int yStart = WIDTH / 32;
 		int xGap = HEIGHT / 128;
 		int yGap = WIDTH / 96;
-		for (int row = 0; row < ROWS; row++) {
-			for (int col = 0; col < COLUMNS; col++) {
+		for (int row = 0; row < BuildingModeModel.ROWS; row++) {
+			for (int col = 0; col < BuildingModeModel.COLUMNS; col++) {
 				JButton button = new JButton(empty);
 				button.setFocusable(false);
 				int x = xStart + col * (buttonWidth + xGap);
@@ -158,7 +158,7 @@ public class BuildingModeView extends JPanel {
 					}
 				});
 				add(button);
-				buttons[10 * row + col] = button;
+				buttons[BuildingModeModel.ROWS * row + col] = button;
 			}
 		}
 	}
@@ -169,13 +169,13 @@ public class BuildingModeView extends JPanel {
 		explosiveLabel = new JLabel("Explosive: " + model.number_explosive);
 		rewardingLabel = new JLabel("Rewarding: " + model.number_rewarding);
 
-		simpleLabel.setBounds(3 * WIDTH / 4, 3 * HEIGHT / 4, 150, 20);
-		reinforcedLabel.setBounds(3 * WIDTH / 4, 3 * HEIGHT / 4 + 20, 150, 20);
-		explosiveLabel.setBounds(3 * WIDTH / 4, 3 * HEIGHT / 4 + 40, 150, 20);
-		rewardingLabel.setBounds(3 * WIDTH / 4, 3 * HEIGHT / 4 + 60, 150, 20);
+        simpleLabel.setBounds(3*WIDTH/4, 12*HEIGHT/20, WIDTH/5, HEIGHT/20);
+        reinforcedLabel.setBounds(3*WIDTH/4, 12*HEIGHT/20+30, WIDTH/5, HEIGHT/20);
+        explosiveLabel.setBounds(3*WIDTH/4, 12*HEIGHT/20+60, WIDTH/5, HEIGHT/20);
+        rewardingLabel.setBounds(3*WIDTH/4, 12*HEIGHT/20+90, WIDTH/5, HEIGHT/20);
 
-		Font labelFont = new Font("Old English Text MT", Font.ITALIC, 18);
-		Color labelColor = Color.WHITE;
+        Font labelFont = new Font("Old English Text MT", Font.ITALIC, WIDTH/35);
+        Color labelColor = Color.WHITE;
 
 		simpleLabel.setFont(labelFont);
 		simpleLabel.setForeground(labelColor);
@@ -245,19 +245,9 @@ public class BuildingModeView extends JPanel {
 		add(switchPanelButton);
 	}
 
-	private void createAndShowGUI() {
+	private void addInputFields() {
 
-		BuildingModeModel bModel = new BuildingModeModel();
-		ArrayList<Barrier> bList = bModel.getBarrierList();
-
-		// Create and set up the main window
-		// JFrame frame = new JFrame("Barrier Element");
-		// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// frame.setSize(800, 600); // Set your preferred size
-		// frame.setLocationRelativeTo(null); // Center the frame on the screen
-
-		// Set layout to null to allow manual positioning of the panel
-		// frame.setLayout(null);
+		ArrayList<Barrier> bList = model.getBarrierList();
 
 		int y = 50; // Initial x-coordinate for the first panel
 
