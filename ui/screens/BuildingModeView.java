@@ -87,8 +87,10 @@ public class BuildingModeView extends JPanel {
     protected void readGrid(int[][] grid){
         for (int i=0; i<BuildingModeModel.ROWS ;i++){
             for (int j=0; j<BuildingModeModel.COLUMNS ;j++){
-                if(grid[i][j]!=0){
                 switch (grid[i][j]) {
+					case 0:
+                        buttons[BuildingModeModel.ROWS*i+j].setIcon(empty);
+                        break;
                     case 1:
                         model.number_simple++;
                         buttons[BuildingModeModel.ROWS*i+j].setIcon(simple);
@@ -106,7 +108,7 @@ public class BuildingModeView extends JPanel {
                         buttons[BuildingModeModel.ROWS*i+j].setIcon(rewarding);
                         break;
                     }
-                }
+                
             }
         }
     }
@@ -255,18 +257,21 @@ public class BuildingModeView extends JPanel {
 		placeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int[][] temp = model.createEmptyGrid();
+
 				int value = Integer.parseInt(elements[0].getTextFieldText());
-				changeRandomValues(grid, value, 1);
+				if(value)changeRandomValues(temp, value, 1);
 
 			    int value1 = Integer.parseInt(elements[1].getTextFieldText());
-			    changeRandomValues(grid, value1, 2);
+			    changeRandomValues(temp, value1, 2);
 			    
 			    int value2 = Integer.parseInt(elements[2].getTextFieldText());
-			    changeRandomValues(grid, value2, 3);
+			    changeRandomValues(temp, value2, 3);
 			    
 			    int value3 = Integer.parseInt(elements[3].getTextFieldText());
-			    changeRandomValues(grid, value3, 4);
+			    changeRandomValues(temp, value3, 4);
 			    
+				grid = temp;
 			    readGrid(grid);
 			}
 		});
@@ -300,7 +305,6 @@ public class BuildingModeView extends JPanel {
 	}
 	
 	public void changeRandomValues(int[][] array, int numChanges, int replacementValue) {
-		//int[][] temp = model.createEmptyGrid();
         int rows = array.length;
         int cols = array[0].length;
 		int change_num = 0;
