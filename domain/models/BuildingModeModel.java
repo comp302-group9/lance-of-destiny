@@ -92,4 +92,36 @@ public class BuildingModeModel {
 		}
 	}
 
+	public int getNumber_simple() {
+		return number_simple;
+	}
+
+	public void setNumber_simple(int number_simple) {
+		this.number_simple = number_simple;
+	}
+
+	public int getNumber_reinforced() {
+		return number_reinforced;
+	}
+
+	public void setNumber_reinforced(int number_reinforced) {
+		this.number_reinforced = number_reinforced;
+	}
+
+	public int getNumber_explosive() {
+		return number_explosive;
+	}
+
+	public void setNumber_explosive(int number_explosive) {
+		this.number_explosive = number_explosive;
+	}
+
+	public int getNumber_rewarding() {
+		return number_rewarding;
+	}
+
+	public void setNumber_rewarding(int number_rewarding) {
+		this.number_rewarding = number_rewarding;
+	}
+
 }

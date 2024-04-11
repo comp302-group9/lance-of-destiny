@@ -44,6 +44,8 @@ public class BuildingModeView extends JPanel {
 	private JLabel reinforcedLabel;
 	private JLabel explosiveLabel;
 	private JLabel rewardingLabel;
+	private BarrierElement[] elements = new BarrierElement[4];
+	
 	public static final int ROWS = 10;
 	public static final int COLUMNS = 11;
 	public static JButton[] buttons = new JButton[10* BuildingModeModel.ROWS + BuildingModeModel.COLUMNS];
@@ -61,8 +63,8 @@ public class BuildingModeView extends JPanel {
 			e.printStackTrace();
 		}
 
-		 grid = model.readTxt("/domain/txtData/Test.txt");
-		// grid = model.createEmptyGrid();
+		//grid = model.readTxt("/domain/txtData/Test.txt");
+		grid = model.createEmptyGrid();
 
 		addEmptyButtons();
 		readGrid(grid);
@@ -243,25 +245,58 @@ public class BuildingModeView extends JPanel {
 			}
 		});
 		add(switchPanelButton);
+		
+		
+		JButton placeButton = new JButton("Place");
+		placeButton.setBounds(20, 400, 120, 30);
+		placeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int value = Integer.parseInt(elements[0].getTextFieldText());
+			    model.setNumber_simple(value);
+			    
+			    int value1 = Integer.parseInt(elements[1].getTextFieldText());
+			    model.setNumber_simple(value1);
+			    
+			    int value2 = Integer.parseInt(elements[2].getTextFieldText());
+			    model.setNumber_simple(value2);
+			    
+			    int value3 = Integer.parseInt(elements[3].getTextFieldText());
+			    model.setNumber_simple(value3);
+			    
+			    System.out.println(value);
+			    System.out.println(value1);
+			    System.out.println(value2);
+			    System.out.println(value3);
+			    
+			}
+		});
+		add(placeButton);
 	}
 
 	private void addInputFields() {
 
 		ArrayList<Barrier> bList = model.getBarrierList();
 
-		int y = 50; // Initial x-coordinate for the first panel
+		int yStart = 39 * HEIGHT / 64;
+		int xStart = WIDTH / 30;
+		int panelWidth = 200;
+		int panelHeight = 100;
+		int gap = HEIGHT / 30;
 
 		for (int i = 0; i < 4; i++) {
+    		BarrierElement barrierElement = new BarrierElement(bList.get(i));
 
-			BarrierElement barrierElement = new BarrierElement(bList.get(i));
+    		int row = i / 2; // Assuming you want 2 panels per row
+    		int col = i % 2; // Assuming you want 2 panels per row
 
-			// Position the panel within the frame
-			barrierElement.setBounds(550, y, 200, 100);
+    		int x = xStart + col * (panelWidth + gap);
+    		int y = yStart + row * (panelHeight + gap);
+			
+    		barrierElement.setBounds(x, y, panelWidth, panelHeight);
 
-			// Add the BarrierElement JPanel to the main window
-			add(barrierElement);
-
-			y += 120; // Increase x-coordinate for the next panel, with a gap of 20 pixels
+    		add(barrierElement);
+			elements[i]=barrierElement;
 		}
 
 	}
