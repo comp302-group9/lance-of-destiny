@@ -79,7 +79,7 @@ public class BuildingModeModel {
         return matrix;
     }
 
-	private void writeTxt(String fileName, int[][] matrix) {
+	public void writeTxt(String fileName, int[][] matrix) {
 		try (FileWriter writer = new FileWriter(fileName)) {
 			for (int i = 0; i < matrix.length; i++) {
 				for (int j = 0; j < matrix[i].length; j++) {
@@ -87,9 +87,11 @@ public class BuildingModeModel {
 				}
 				writer.write("\n");
 			}
+			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 	public int getNumber_simple() {

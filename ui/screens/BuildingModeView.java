@@ -13,6 +13,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -26,6 +28,7 @@ import domain.controllers.RunningModeController;
 import domain.models.BuildingModeModel;
 import domain.models.RunningModeModel;
 import domain.objects.Barrier.Barrier;
+import ui.screens.BModeUI.BarrierButton;
 import ui.screens.BModeUI.BarrierElement;
 
 public class BuildingModeView extends JPanel {
@@ -36,11 +39,6 @@ public class BuildingModeView extends JPanel {
 	public int[][] grid;
 	int buttonWidth = 7 * HEIGHT / 64;
 	int buttonHeight = 2 * WIDTH / 72;
-	private ImageIcon empty = scaleImage("/ui/images/Empty3.png");
-	private ImageIcon simple = scaleImage("/ui/images/simpleBarrierIcon.png");
-	private ImageIcon firm = scaleImage("/ui/images/reinforcedBarrierIcon.png");
-	private ImageIcon explosive = scaleImage("/ui/images/explosiveBarrierIcon.png");
-	private ImageIcon rewarding = scaleImage("/ui/images/rewardingBarrierIcon.png");
 	private JLabel simpleLabel;
 	private JLabel reinforcedLabel;
 	private JLabel explosiveLabel;
@@ -49,8 +47,14 @@ public class BuildingModeView extends JPanel {
 	
 	public static final int ROWS = 10;
 	public static final int COLUMNS = 11;
-	public static JButton[] buttons = new JButton[10* BuildingModeModel.ROWS + BuildingModeModel.COLUMNS];
-
+	public static BarrierButton[] buttons = new BarrierButton[10* BuildingModeModel.ROWS + BuildingModeModel.COLUMNS];
+	
+	private ImageIcon empty = scaleImage("/ui/images/Empty3.png");
+	private ImageIcon simple = scaleImage("/ui/images/simpleBarrierIcon.png");
+	private ImageIcon firm = scaleImage("/ui/images/reinforcedBarrierIcon.png");
+	private ImageIcon explosive = scaleImage("/ui/images/explosiveBarrierIcon.png");
+	private ImageIcon rewarding = scaleImage("/ui/images/rewardingBarrierIcon.png");
+	
 	public BuildingModeView(BuildingModeModel model) {
 		this.model = model;
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -64,8 +68,8 @@ public class BuildingModeView extends JPanel {
 			e.printStackTrace();
 		}
 
-		//grid = model.readTxt("/domain/txtData/Test.txt");
-		grid = model.createEmptyGrid();
+		grid = model.readTxt("/domain/txtData/Test.txt");
+		//grid = model.createEmptyGrid();
 
 		addEmptyButtons();
 		readGrid(grid);
@@ -133,7 +137,7 @@ public class BuildingModeView extends JPanel {
 		int yGap = WIDTH / 96;
 		for (int row = 0; row < BuildingModeModel.ROWS; row++) {
 			for (int col = 0; col < BuildingModeModel.COLUMNS; col++) {
-				JButton button = new JButton(empty);
+				BarrierButton button = new BarrierButton(row,col);
 				button.setFocusable(false);
 				int x = xStart + col * (buttonWidth + xGap);
 				int y = yStart + row * (buttonHeight + yGap);
@@ -211,31 +215,39 @@ public class BuildingModeView extends JPanel {
 		model.setNumber_rewarding(0);
 	}
 
-	public void switchBarrier(JButton button) {
+	public void switchBarrier(BarrierButton button) {
+		int row = button.getRow();
+		int col = button.getCol();
+
 		if (button.getIcon() == empty) {
 			button.setIcon(simple);
 			model.number_simple++;
+			grid[row][col]=1;
 		} else if (button.getIcon() == simple) {
 			button.setIcon(firm);
 			model.number_simple--;
 			model.number_reinforced++;
+			grid[row][col]=2;
 		} else if (button.getIcon() == firm) {
 			button.setIcon(explosive);
 			model.number_reinforced--;
 			model.number_explosive++;
+			grid[row][col]=3;
 		} else if (button.getIcon() == explosive) {
 			button.setIcon(rewarding);
 			model.number_explosive--;
 			model.number_rewarding++;
+			grid[row][col]=4;
 		} else if (button.getIcon() == rewarding) {
 			button.setIcon(empty);
 			model.number_rewarding--;
+			grid[row][col]=0;
 		}
 	}
 
 	public void addButton() {
 		JButton switchPanelButton = new JButton("Play");
-		switchPanelButton.setBounds(600, 500, 120, 30); // Adjust the position and size as needed
+		switchPanelButton.setBounds(600, 490, 120, 30); // Adjust the position and size as needed
 		switchPanelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -265,24 +277,11 @@ public class BuildingModeView extends JPanel {
 				resetCurrent();
 				int[][] temp = model.createEmptyGrid();
 
-				if(!elements[0].getTextFieldText().isEmpty()){
-					int value = Integer.parseInt(elements[0].getTextFieldText());
-					changeRandomValues(temp, value, 1);
-				}
-
-				if(!elements[1].getTextFieldText().isEmpty()){
-			    int value1 = Integer.parseInt(elements[1].getTextFieldText());
-			    changeRandomValues(temp, value1, 2);
-				}
-			    
-				if(!elements[2].getTextFieldText().isEmpty()){
-			    int value2 = Integer.parseInt(elements[2].getTextFieldText());
-			    changeRandomValues(temp, value2, 3);
-				}
-
-				if(!elements[3].getTextFieldText().isEmpty()){
-			    int value3 = Integer.parseInt(elements[3].getTextFieldText());
-			    changeRandomValues(temp, value3, 4);
+				for (int i=0;i<4;i++){
+					if(isValidInteger(elements[i].getTextFieldText())){
+						int value = Integer.parseInt(elements[i].getTextFieldText());
+						changeRandomValues(temp, value, i+1);
+					}
 				}
 
 				grid = temp;
@@ -293,16 +292,30 @@ public class BuildingModeView extends JPanel {
 		add(placeButton);
 		
 		JButton saveButton = new JButton("Save");
-		saveButton.setBounds(600, 550, 120, 30);
+		saveButton.setBounds(600, 560, 120, 30);
+		saveButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				model.writeTxt("domain\\txtData\\Test.txt", grid);
+			}
+		});
+		
 		add(saveButton);
 	} 
+
+	public static boolean isValidInteger(String input) {
+        String regex = "^[1-9]\\d*$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+        return matcher.matches();
+    }
 
 	private void addInputFields() {
 
 		ArrayList<Barrier> bList = model.getBarrierList();
 
 		int yStart = 39 * HEIGHT / 64;
-		int xStart = WIDTH / 30;
+		int xStart = WIDTH / 15;
 		int panelWidth = 200;
 		int panelHeight = 100;
 		int gap = HEIGHT / 30;
