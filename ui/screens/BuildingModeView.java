@@ -12,9 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -236,8 +234,8 @@ public class BuildingModeView extends JPanel {
 	}
 
 	public void addButton() {
-		JButton switchPanelButton = new JButton("Switch Panel");
-		switchPanelButton.setBounds(20, 380, 120, 30); // Adjust the position and size as needed
+		JButton switchPanelButton = new JButton("Play");
+		switchPanelButton.setBounds(600, 500, 120, 30); // Adjust the position and size as needed
 		switchPanelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -260,7 +258,7 @@ public class BuildingModeView extends JPanel {
 		
 		
 		JButton placeButton = new JButton("Place");
-		placeButton.setBounds(20, 400, 120, 30);
+		placeButton.setBounds(600, 525, 120, 30);
 		placeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -293,7 +291,11 @@ public class BuildingModeView extends JPanel {
 			}
 		});
 		add(placeButton);
-	}
+		
+		JButton saveButton = new JButton("Save");
+		saveButton.setBounds(600, 550, 120, 30);
+		add(saveButton);
+	} 
 
 	private void addInputFields() {
 

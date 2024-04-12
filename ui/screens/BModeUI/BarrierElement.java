@@ -2,11 +2,9 @@ package ui.screens.BModeUI;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,7 +14,7 @@ import javax.swing.border.LineBorder;
 import domain.objects.Barrier.Barrier;
 
 public class BarrierElement extends JPanel {
-
+ 
 	JTextField textField = new JTextField();
 	private JButton displayButton;
 
@@ -39,30 +37,13 @@ public class BarrierElement extends JPanel {
 		textField.setBorder(BorderFactory.createLineBorder(getForeground())); // Add border for visibility
 		textField.setFont(new Font("Arial", Font.PLAIN, 14)); // Set font for better visibility
 
-		displayButton = new JButton("Display Text");
-		displayButton.setBounds(120, 70, 150, 30);
-		displayButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Text Field Content: " + textField.getText());
-			}
-		});
-
-		add(displayButton); // Add the display button to the panel
 		setBorder(new LineBorder(Color.BLACK, 2));
-		add(textField); // Add the text field to the panel
-
-	}
-
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-
-		// Draw a rectangle shape
-		g.setColor(Color.BLUE); // Set color of the shape
-		g.fillRect(10, 40, 100, 50); // Fill rectangle shape
-		g.setColor(Color.BLACK); // Set color of the outline
-		g.drawRect(10, 40, 100, 50); // Draw rectangle outline
+		add(textField);
+		
+		ImageIcon icon = new ImageIcon(getClass().getResource(b.getImg())); // Adjust the path as necessary
+        JLabel imageLabel = new JLabel(icon);
+        imageLabel.setBounds(20, 40, 100, 50); // Adjust size and position as needed
+        add(imageLabel);
 
 	}
 

@@ -20,4 +20,9 @@ public class ReinforcedBarrier extends Barrier {
 	public String getName() {
 		return "Reinforced Barrier";
 	}
+	
+	@Override
+	public String getImg() {
+		return "/ui/images/reinforcedBarrier.png";
+	}
 }

@@ -1,7 +1,8 @@
 package domain.controllers;
 
 
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import domain.models.RunningModeModel;
 import ui.screens.RunningModeView;
@@ -10,7 +11,7 @@ public class RunningModeController implements KeyListener, Runnable {
     private RunningModeModel model;
     private RunningModeView view;
     private boolean[] keys;
-    private long lastUpdateTime;
+    private long lastUpdateTime; 
 
     public RunningModeController(RunningModeModel model, RunningModeView view) {
         this.model = model;

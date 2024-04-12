@@ -21,5 +21,10 @@ public class RewardingBarrier extends Barrier {
 	public String getContainedSpell() {
 		return containedSpell;
 	}
+	
+	@Override
+	public String getImg() {
+		return "/ui/images/rewardingBarrier.png";
+	}
 
 }

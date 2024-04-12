@@ -19,7 +19,7 @@ public class BuildingModeModel {
     public int number_simple = 0;
     public int number_reinforced = 0;
     public int number_explosive = 0;
-    public int number_rewarding = 0;
+    public int number_rewarding = 0; 
 
 	private ArrayList<Barrier> BarrierList = new ArrayList<Barrier>();
 

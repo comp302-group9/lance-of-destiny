@@ -1,11 +1,12 @@
 // Main.java
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
-import domain.controllers.*;
-import domain.models.*;
-import ui.screens.*;
+import domain.controllers.BuildingModeController;
+import domain.models.BuildingModeModel;
+import ui.screens.BuildingModeView;
 
-public class main {
+public class main { 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             // Create the model, view, and controller

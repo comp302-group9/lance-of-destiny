@@ -12,7 +12,7 @@ public abstract class Barrier {
 
 	}
 
-	public String getImg() {
+	public String getImg() { 
 		return img;
 	}
 

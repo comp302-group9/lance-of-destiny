@@ -14,4 +14,9 @@ public class SimpleBarrier extends Barrier {
 	public String getName() {
 		return "Simple Barrier";
 	}
+	
+	@Override
+	public String getImg() {
+		return "/ui/images/simpleBarrier.png";
+	}
 }

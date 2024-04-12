@@ -20,7 +20,7 @@ public class ExplosiveBarrier extends Barrier {
 
 	@Override
 	public String getImg() {
-		return "images/explosiveBarrier.png";
+		return "/ui/images/explosiveBarrier.png";
 	}
 
 	public int getExplosionRadius() {
