@@ -206,6 +206,13 @@ public class BuildingModeView extends JPanel {
 		rewardingLabel.setText("Rewarding: " + model.number_rewarding);
 	}
 
+	public void resetCurrent(){
+		model.setNumber_simple(0);
+		model.setNumber_reinforced(0);
+		model.setNumber_explosive(0);
+		model.setNumber_rewarding(0);
+	}
+
 	public void switchBarrier(JButton button) {
 		if (button.getIcon() == empty) {
 			button.setIcon(simple);
@@ -257,22 +264,32 @@ public class BuildingModeView extends JPanel {
 		placeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				resetCurrent();
 				int[][] temp = model.createEmptyGrid();
 
-				int value = Integer.parseInt(elements[0].getTextFieldText());
-				if(value)changeRandomValues(temp, value, 1);
+				if(!elements[0].getTextFieldText().isEmpty()){
+					int value = Integer.parseInt(elements[0].getTextFieldText());
+					changeRandomValues(temp, value, 1);
+				}
 
+				if(!elements[1].getTextFieldText().isEmpty()){
 			    int value1 = Integer.parseInt(elements[1].getTextFieldText());
 			    changeRandomValues(temp, value1, 2);
+				}
 			    
+				if(!elements[2].getTextFieldText().isEmpty()){
 			    int value2 = Integer.parseInt(elements[2].getTextFieldText());
 			    changeRandomValues(temp, value2, 3);
-			    
+				}
+
+				if(!elements[3].getTextFieldText().isEmpty()){
 			    int value3 = Integer.parseInt(elements[3].getTextFieldText());
 			    changeRandomValues(temp, value3, 4);
-			    
+				}
+
 				grid = temp;
 			    readGrid(grid);
+				updateCurrent();
 			}
 		});
 		add(placeButton);
