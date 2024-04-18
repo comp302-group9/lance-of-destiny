@@ -1,6 +1,5 @@
 package domain.controllers;
 
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -11,23 +10,26 @@ public class RunningModeController implements KeyListener, Runnable {
     private RunningModeModel model;
     private RunningModeView view;
     private boolean[] keys;
-    private long lastUpdateTime; 
+    private boolean isPaused = false;
+    private boolean running = true;  // Flag to control the running of the game loop
 
     public RunningModeController(RunningModeModel model, RunningModeView view) {
         this.model = model;
         this.view = view;
-        view.addKeyListener(this); // Add key listener to the view
-        view.setFocusable(true); // Make panel focusable to receive key events
-        keys = new boolean[256]; // Initialize the keys array
-        lastUpdateTime = System.currentTimeMillis(); // Initialize last update time
+        view.addKeyListener(this);
+        view.setFocusable(true);
+        keys = new boolean[256];  // Array to keep track of key states
     }
-
+    
     @Override
     public void run() {
         while (true) {
-            long currentTime = System.currentTimeMillis();
-            model.update(currentTime, keys, RunningModeView.WIDTH, RunningModeView.HEIGHT);
-            view.repaint(); // Repaint the view
+            if (!model.isPaused()) {
+                long currentTime = System.currentTimeMillis();
+                model.update(currentTime, keys, RunningModeView.WIDTH, RunningModeView.HEIGHT);
+                view.repaint(); // Repaint the view
+            }
+        
             try {
                 Thread.sleep(10); // Pause for a short duration
             } catch (InterruptedException e) {
@@ -40,18 +42,24 @@ public class RunningModeController implements KeyListener, Runnable {
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
         keys[keyCode] = true; // Mark the key as pressed
+    
+        // Toggle pause state when 'P' is pressed
+        if (keyCode == KeyEvent.VK_P) {
+            model.setPaused(!model.isPaused());
+        }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        int keyCode = e.getKeyCode();
-        keys[keyCode] = false; // Mark the key as released
+        keys[e.getKeyCode()] = false;
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        // TODO Auto-generated method stub
+        // Not needed for this implementation
     }
 
-    // Other KeyListener methods (keyTyped) implementations
+    public void stopGame() {
+        running = false;  // Method to stop the game loop
+    }
 }

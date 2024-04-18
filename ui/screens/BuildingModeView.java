@@ -1,5 +1,8 @@
 package ui.screens;
 
+import javax.swing.*;
+import domain.models.RunningModeModel;
+import domain.controllers.RunningModeController;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -15,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -23,10 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
-import domain.controllers.RunningModeController;
 import domain.models.BuildingModeModel;
-import domain.models.RunningModeModel;
 import domain.objects.Barrier.Barrier;
 import ui.screens.BModeUI.BarrierButton;
 import ui.screens.BModeUI.BarrierElement;
@@ -36,6 +35,7 @@ public class BuildingModeView extends JPanel {
 	public static final int HEIGHT = 600;
 	private BufferedImage backgroundImage;
 	private BuildingModeModel model;
+    private JButton playButton;
 	public int[][] grid;
 	int buttonWidth = 7 * HEIGHT / 64;
 	int buttonHeight = 2 * WIDTH / 72;
@@ -55,8 +55,10 @@ public class BuildingModeView extends JPanel {
 	private ImageIcon explosive = scaleImage("/ui/images/explosiveBarrierIcon.png");
 	private ImageIcon rewarding = scaleImage("/ui/images/rewardingBarrierIcon.png");
 	
+	
 	public BuildingModeView(BuildingModeModel model) {
 		this.model = model;
+		initializeUI();
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		setLayout(null);
 		setBackground(Color.BLACK);
@@ -351,6 +353,32 @@ public class BuildingModeView extends JPanel {
 				change_num++;
             }
         }
+    }
+
+	private void initializeUI() {
+        playButton = new JButton("Play");
+        playButton.addActionListener(createPlayButtonListener());
+        add(playButton);
+    }
+
+    private ActionListener createPlayButtonListener() {
+        return e -> {
+            // Create the running mode model, view, and controller
+            RunningModeModel runningModel = new RunningModeModel();
+            RunningModeView runningView = new RunningModeView(runningModel);
+            RunningModeController runningController = new RunningModeController(runningModel, runningView);
+
+            // Get the parent frame of this panel to switch content
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(runningView);
+            frame.revalidate();
+            frame.repaint();
+
+            // Start the game loop in a new thread
+            Thread gameThread = new Thread(runningController);
+            gameThread.start();
+        };
     }
 	
 }

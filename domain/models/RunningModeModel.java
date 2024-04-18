@@ -11,6 +11,7 @@ public class RunningModeModel {
     private Paddle paddle;
     private Fireball fireball;
     private long lastUpdateTime;
+    private boolean paused = false; 
 
     public RunningModeModel() {
         // Initialize the paddle
@@ -21,6 +22,14 @@ public class RunningModeModel {
 
         lastUpdateTime = System.currentTimeMillis();
 
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+    
+    public boolean isPaused() {
+        return paused;
     }
 
     public Paddle getPaddle() {
