@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import domain.models.RunningModeModel;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
+import domain.objects.Barrier.Barrier;
 
 
 public class RunningModeView extends JPanel {
@@ -84,6 +85,12 @@ public class RunningModeView extends JPanel {
 
         Fireball fireball = model.getFireball();
         fireball.draw(g);
+
+        for (Barrier i: RunningModeModel.barriers){
+            if (i!=null){
+            i.draw(g);
+            }
+        }
 
         if (model.isPaused()) {
             g.setColor(new Color(0, 0, 0, 128)); // Translucent black overlay

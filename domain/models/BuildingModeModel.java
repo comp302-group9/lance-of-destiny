@@ -26,7 +26,7 @@ public class BuildingModeModel {
 	Barrier a = new SimpleBarrier();
 	Barrier b = new ReinforcedBarrier(4);
 	Barrier c = new ExplosiveBarrier(4);
-	Barrier d = new RewardingBarrier("x");
+	Barrier d = new RewardingBarrier();
 
 	public BuildingModeModel() {
 		BarrierList.add(a);
@@ -52,8 +52,8 @@ public class BuildingModeModel {
 
     public int[][] createEmptyGrid(){
         int[][] grid = new int[ROWS][COLUMNS];
-        for (int i=0; i<10 ;i++){
-            for (int j=0; j<11 ;j++){
+        for (int i=0; i<ROWS ;i++){
+            for (int j=0; j<COLUMNS ;j++){
                 grid[i][j]=0;
             }
         }

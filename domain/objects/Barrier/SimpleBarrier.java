@@ -3,11 +3,17 @@ package domain.objects.Barrier;
 public class SimpleBarrier extends Barrier {
 
 	public SimpleBarrier() {
+		super();
+	}
+
+	public SimpleBarrier(int x, int y){
+		super(x, y);
 	}
 
 	@Override
-	public void onHit() {
+	public boolean onHit() {
 		System.out.println("Reinforced Barrier destroyed");
+		return true;
 	}
 
 	@Override

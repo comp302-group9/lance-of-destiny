@@ -1,17 +1,44 @@
 package domain.objects.Barrier;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import domain.models.RunningModeModel;
+
 public abstract class Barrier {
 
 	protected int x;
 	protected int y;
 	protected String name;
 	protected String img;
+	private BufferedImage image;
 
 	// Constructor
 	public Barrier() {
+		try {
+			this.image = ImageIO.read(getClass().getResource(this.getImg()));
+			System.out.println(image);
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 
+	public Barrier(int x, int y) {
+		this.x=x;
+		this.y=y;
+		try {
+			this.image = ImageIO.read(getClass().getResource(this.getImg()));
+			System.out.println(image);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+	
 	public String getImg() { 
 		return img;
 	}
@@ -21,7 +48,7 @@ public abstract class Barrier {
 	}
 
 	// Method to handle the barrier being hit by the Fire Ball
-	public abstract void onHit();
+	public abstract boolean onHit();
 
 	// Getter methods
 	public int getX() {
@@ -48,4 +75,10 @@ public abstract class Barrier {
 		name = name;
 	}
 
+	public void draw(Graphics g) {
+        // Draw the fireball
+        if (image != null) {
+            g.drawImage(image, x, y, 7 * RunningModeModel.HEIGHT / 64,  2 * RunningModeModel.WIDTH / 72, null);
+        } 
+    }
 }

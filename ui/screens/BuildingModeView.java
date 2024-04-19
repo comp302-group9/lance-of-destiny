@@ -70,8 +70,8 @@ public class BuildingModeView extends JPanel {
 			e.printStackTrace();
 		}
 
-		grid = model.readTxt("/domain/txtData/Test.txt");
-		//grid = model.createEmptyGrid();
+		//grid = model.readTxt("/domain/txtData/Test.txt");
+		grid = model.createEmptyGrid();
 
 		addEmptyButtons();
 		readGrid(grid);
@@ -255,7 +255,7 @@ public class BuildingModeView extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				RunningModeModel model = new RunningModeModel();
 				RunningModeView view = new RunningModeView(model);
-				RunningModeController controller = new RunningModeController(model, view);
+				RunningModeController controller = new RunningModeController(model, view, grid);
 
 				JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(BuildingModeView.this);
 
@@ -366,7 +366,7 @@ public class BuildingModeView extends JPanel {
             // Create the running mode model, view, and controller
             RunningModeModel runningModel = new RunningModeModel();
             RunningModeView runningView = new RunningModeView(runningModel);
-            RunningModeController runningController = new RunningModeController(runningModel, runningView);
+            RunningModeController runningController = new RunningModeController(runningModel, runningView, grid);
 
             // Get the parent frame of this panel to switch content
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
