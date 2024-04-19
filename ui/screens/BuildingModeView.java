@@ -31,14 +31,15 @@ import ui.screens.BModeUI.BarrierButton;
 import ui.screens.BModeUI.BarrierElement;
 
 public class BuildingModeView extends JPanel {
-	public static final int WIDTH = 800;
+	public static final int WIDTH = 900;
 	public static final int HEIGHT = 600;
 	private BufferedImage backgroundImage;
 	private BuildingModeModel model;
     private JButton playButton;
 	public int[][] grid;
-	int buttonWidth = 7 * HEIGHT / 64;
-	int buttonHeight = 2 * WIDTH / 72;
+	//int buttonWidth = 21 * WIDTH / 256;
+	int buttonWidth = RunningModeModel.barrierWidth;
+	int buttonHeight = RunningModeModel.barrierHeight;
 	private JLabel simpleLabel;
 	private JLabel reinforcedLabel;
 	private JLabel explosiveLabel;
@@ -142,9 +143,7 @@ public class BuildingModeView extends JPanel {
 				button.setFocusable(false);
 				int x = xStart + col * (buttonWidth + xGap);
 				int y = yStart + row * (buttonHeight + yGap);
-				if (row % 2 == 0) {
-					x += WIDTH / 128;
-				}
+				//if (row % 2 == 0) {x += WIDTH / 128;}
 				button.setBounds(x, y, buttonWidth, buttonHeight);
 				button.setContentAreaFilled(false);
 				button.setBorderPainted(false);

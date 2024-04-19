@@ -10,14 +10,15 @@ import domain.objects.Barrier.ExplosiveBarrier;
 import domain.objects.Barrier.ReinforcedBarrier;
 import domain.objects.Barrier.RewardingBarrier;
 import domain.objects.Barrier.SimpleBarrier;
+import ui.screens.BuildingModeView;
 
 public class RunningModeModel {
-    public static final int WIDTH = 800;
-    public static final int HEIGHT = 600;
+    public static final int WIDTH = BuildingModeView.WIDTH;
+    public static final int HEIGHT = BuildingModeView.HEIGHT;
+    public static int barrierWidth = 33 * WIDTH / 512;
+	public static int barrierHeight = HEIGHT / 30;
     private static final int ROWS = BuildingModeModel.ROWS;
     private static final int COLUMNS = BuildingModeModel.COLUMNS;
-    int buttonWidth = 7 * HEIGHT / 64;
-	int buttonHeight = 2 * WIDTH / 72;
     private Paddle paddle;
     private Fireball fireball;
     private long lastUpdateTime;
@@ -29,7 +30,7 @@ public class RunningModeModel {
         paddle = new Paddle(WIDTH / 2, HEIGHT - 50, WIDTH/10, 20); // Adjust parameters as needed
 
         // Initialize the fireball
-        fireball = new Fireball(WIDTH / 2, HEIGHT / 2, 20, 20); // Adjust parameters as needed
+        fireball = new Fireball( WIDTH / 2, 7 * HEIGHT / 8, 20, 20); // Adjust parameters as needed
 
         lastUpdateTime = System.currentTimeMillis();
     }
@@ -52,7 +53,7 @@ public class RunningModeModel {
     long lastCollisionTime = 0; // Initialize the last collision time
     long cooldown = 1000; // Set the cooldown time in milliseconds (adjust as needed)
 
-    public void update(long currentTime, boolean[] keys, int WIDTH, int HEIGHT) {
+    public void update(long currentTime, boolean[] keys) {
         // Calculate delta time (time elapsed since last update)
         double deltaTime = (currentTime - lastUpdateTime) / 1000.0; // Convert to seconds
         lastUpdateTime = currentTime;
@@ -94,8 +95,8 @@ public class RunningModeModel {
 		int yGap = WIDTH / 96;
         for (int row = 0; row < ROWS; row++) {
 			for (int col = 0; col < COLUMNS; col++) {
-                int x = xStart + col * (buttonWidth + xGap);
-				int y = yStart + row * (buttonHeight + yGap);
+                int x = xStart + col * (barrierWidth + xGap);
+				int y = yStart + row * (barrierHeight + yGap);
 				switch (grid[row][col]) {
 					case 0:
                         break;

@@ -75,7 +75,7 @@ public abstract class Barrier {
 	public void draw(Graphics g) {
         // Draw the fireball
         if (image != null) {
-            g.drawImage(image, x, y, 7 * RunningModeModel.HEIGHT / 64,  2 * RunningModeModel.WIDTH / 72, null);
+            g.drawImage(image, x, y, RunningModeModel.barrierWidth,  RunningModeModel.barrierHeight, null);
         } 
     }
 
