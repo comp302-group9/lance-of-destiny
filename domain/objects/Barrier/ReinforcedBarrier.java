@@ -6,6 +6,7 @@ public class ReinforcedBarrier extends Barrier {
 
 	public ReinforcedBarrier(int hitCount) {
 		this.hitCount = hitCount;
+		this.message="*At least 10*";
 	}
 
 	public ReinforcedBarrier(int x,int y) {

@@ -4,6 +4,7 @@ public class SimpleBarrier extends Barrier {
 
 	public SimpleBarrier() {
 		super();
+		this.message="*At least 75*";
 	}
 
 	public SimpleBarrier(int x, int y){

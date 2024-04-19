@@ -15,6 +15,7 @@ public abstract class Barrier {
 	protected String name;
 	protected String img;
 	private BufferedImage image;
+	protected String message;
 
 	// Constructor
 	public Barrier() {
@@ -30,8 +31,6 @@ public abstract class Barrier {
 		this.y=y;
 		try {
 			this.image = ImageIO.read(getClass().getResource(this.getImg()));
-			System.out.println(image);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,4 +78,8 @@ public abstract class Barrier {
             g.drawImage(image, x, y, 7 * RunningModeModel.HEIGHT / 64,  2 * RunningModeModel.WIDTH / 72, null);
         } 
     }
+
+	public String getMessage(){
+		return message;
+	}
 }

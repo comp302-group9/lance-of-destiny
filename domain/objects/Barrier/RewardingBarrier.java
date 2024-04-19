@@ -9,6 +9,7 @@ public class RewardingBarrier extends Barrier {
 	public RewardingBarrier() {
 		super();
 		this.containedSpell=spells[new Random().nextInt(spells.length)];
+		this.message="*At least 5*";
 	}
 
 	public RewardingBarrier(int x, int y) {

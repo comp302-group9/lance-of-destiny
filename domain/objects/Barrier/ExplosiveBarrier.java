@@ -9,6 +9,7 @@ public class ExplosiveBarrier extends Barrier {
 	public ExplosiveBarrier(int explosionRadius) {
 		super();
 		this.explosionRadius = explosionRadius;
+		this.message="*At least 5*";
 	}
 
 	public ExplosiveBarrier(int x, int y) {
