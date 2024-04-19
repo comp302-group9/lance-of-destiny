@@ -45,9 +45,8 @@ public class BuildingModeView extends JPanel {
 	private JLabel rewardingLabel;
 	private BarrierElement[] elements = new BarrierElement[4];
 	
-	public static final int ROWS = 10;
-	public static final int COLUMNS = 11;
-	public static BarrierButton[] buttons = new BarrierButton[10* BuildingModeModel.ROWS + BuildingModeModel.COLUMNS];
+
+	public static BarrierButton[] buttons = new BarrierButton[BuildingModeModel.ROWS * BuildingModeModel.COLUMNS];
 	
 	private ImageIcon empty = scaleImage("/ui/images/Empty3.png");
 	private ImageIcon simple = scaleImage("/ui/images/simpleBarrierIcon.png");
@@ -93,23 +92,23 @@ public class BuildingModeView extends JPanel {
             for (int j=0; j<BuildingModeModel.COLUMNS ;j++){
                 switch (grid[i][j]) {
 					case 0:
-                        buttons[BuildingModeModel.ROWS*i+j].setIcon(empty);
+                        buttons[BuildingModeModel.COLUMNS*i+j].setIcon(empty);
                         break;
                     case 1:
                         model.number_simple++;
-                        buttons[BuildingModeModel.ROWS*i+j].setIcon(simple);
+                        buttons[BuildingModeModel.COLUMNS*i+j].setIcon(simple);
                         break;
                     case 2:
                         model.number_reinforced++;
-                        buttons[BuildingModeModel.ROWS*i+j].setIcon(firm);
+                        buttons[BuildingModeModel.COLUMNS*i+j].setIcon(firm);
                         break;
                     case 3:
                         model.number_explosive++;
-                        buttons[BuildingModeModel.ROWS*i+j].setIcon(explosive);
+                        buttons[BuildingModeModel.COLUMNS*i+j].setIcon(explosive);
                         break;
                     case 4:
                         model.number_rewarding++;
-                        buttons[BuildingModeModel.ROWS*i+j].setIcon(rewarding);
+                        buttons[BuildingModeModel.COLUMNS*i+j].setIcon(rewarding);
                         break;
                     }
                 
@@ -169,7 +168,7 @@ public class BuildingModeView extends JPanel {
 					}
 				});
 				add(button);
-				buttons[BuildingModeModel.ROWS * row + col] = button;
+				buttons[BuildingModeModel.COLUMNS * row + col] = button;
 			}
 		}
 	}

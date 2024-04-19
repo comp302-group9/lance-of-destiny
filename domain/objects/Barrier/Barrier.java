@@ -20,8 +20,6 @@ public abstract class Barrier {
 	public Barrier() {
 		try {
 			this.image = ImageIO.read(getClass().getResource(this.getImg()));
-			System.out.println(image);
-
         } catch (IOException e) {
             e.printStackTrace();
         }

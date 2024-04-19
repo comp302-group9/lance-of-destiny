@@ -15,7 +15,7 @@ public class RunningModeModel {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
     private static final int ROWS = BuildingModeModel.ROWS;
-    private static final int COLS = BuildingModeModel.COLUMNS;
+    private static final int COLUMNS = BuildingModeModel.COLUMNS;
     int buttonWidth = 7 * HEIGHT / 64;
 	int buttonHeight = 2 * WIDTH / 72;
     private Paddle paddle;
@@ -92,8 +92,8 @@ public class RunningModeModel {
 		int yStart = WIDTH / 32;
 		int xGap = HEIGHT / 128;
 		int yGap = WIDTH / 96;
-        for (int row = 0; row < BuildingModeModel.ROWS; row++) {
-			for (int col = 0; col < BuildingModeModel.COLUMNS; col++) {
+        for (int row = 0; row < ROWS; row++) {
+			for (int col = 0; col < COLUMNS; col++) {
                 int x = xStart + col * (buttonWidth + xGap);
 				int y = yStart + row * (buttonHeight + yGap);
 				switch (grid[row][col]) {
