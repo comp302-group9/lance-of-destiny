@@ -3,6 +3,8 @@ package ui.screens;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
@@ -23,6 +25,7 @@ public class RunningModeView extends JPanel {
     private RunningModeModel model;
     private BufferedImage backgroundImage;
     private JPanel pausePanel;  // Panel for pause screen
+    private JLabel pauseLabel;
 
     public RunningModeView(RunningModeModel model) {
         this.model = model;
@@ -32,6 +35,28 @@ public class RunningModeView extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        setupUIComponents();
+    }
+
+    private void setupUIComponents() {
+        setLayout(new BorderLayout());
+
+        pauseLabel = new JLabel("Pause");
+        pauseLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        pauseLabel.setForeground(Color.WHITE);
+        pauseLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        pauseLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                setPaused(true);
+                model.setPaused(true);
+            }
+        });
+
+        JPanel topLeftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topLeftPanel.setOpaque(false);
+        topLeftPanel.add(pauseLabel);
+        add(topLeftPanel, BorderLayout.NORTH);
     }
 
     // Method to toggle the pause screen
@@ -39,6 +64,7 @@ public class RunningModeView extends JPanel {
         if (paused) {
             addPauseScreen();
         } else {
+            model.setPaused(false);
             removePauseScreen();
         }
         revalidate();
@@ -46,33 +72,32 @@ public class RunningModeView extends JPanel {
     }
 
     private void addPauseScreen() {
-        pausePanel = new JPanel(new GridBagLayout());
-        pausePanel.setBounds(0, 0, WIDTH, HEIGHT);
-        pausePanel.setOpaque(false);
+        if (pausePanel == null) {
+            pausePanel = new JPanel(new GridBagLayout());
+            pausePanel.setBounds(0, 0, WIDTH, HEIGHT);
+            pausePanel.setOpaque(false);
 
-        JLabel pauseLabel = new JLabel("Game Paused");
-        pauseLabel.setFont(new Font("Arial", Font.BOLD, 48));
-        pauseLabel.setForeground(Color.WHITE);
+            JLabel pauseLabel = new JLabel("Game is paused");
+            pauseLabel.setFont(new Font("Arial", Font.BOLD, 22));
+            pauseLabel.setForeground(Color.WHITE);
 
-        JButton resumeButton = new JButton("Resume");
-        resumeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setPaused(false);  // Remove pause screen when button is clicked
-            }
-        });
+            JButton resumeButton = new JButton("Resume");
+            resumeButton.addActionListener(e -> setPaused(false));
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridwidth = GridBagConstraints.REMAINDER;
+            gbc.fill = GridBagConstraints.HORIZONTAL;
+            pausePanel.add(pauseLabel, gbc);
+            pausePanel.add(resumeButton, gbc);
+            add(pausePanel, BorderLayout.CENTER);
+        }
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        pausePanel.add(pauseLabel, gbc);
-        pausePanel.add(resumeButton, gbc);
-        add(pausePanel, BorderLayout.CENTER);
     }
 
     private void removePauseScreen() {
-        remove(pausePanel);
+        if (pausePanel != null) {
+            remove(pausePanel);
+            pausePanel = null;
+        }
     }
 
     @Override
@@ -92,11 +117,5 @@ public class RunningModeView extends JPanel {
             }
         }
 
-        if (model.isPaused()) {
-            g.setColor(new Color(0, 0, 0, 128)); // Translucent black overlay
-            g.fillRect(0, 0, WIDTH, HEIGHT);
-            g.setColor(Color.WHITE);
-            g.drawString("Game Paused - Press 'P' to Resume", WIDTH / 2 - 100, HEIGHT / 2);
-        }
     }
 }
