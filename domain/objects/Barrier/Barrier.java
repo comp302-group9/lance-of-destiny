@@ -14,7 +14,7 @@ public abstract class Barrier {
 	protected int y;
 	protected String name;
 	protected String img;
-	private BufferedImage image;
+	protected BufferedImage image;
 	protected String message;
 
 	// Constructor
