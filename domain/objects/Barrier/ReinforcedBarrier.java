@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.util.Random;
 
 import domain.models.RunningModeModel;
 
@@ -18,6 +19,7 @@ public class ReinforcedBarrier extends Barrier {
 
 	public ReinforcedBarrier(int x,int y) {
 		super(x,y);
+		//this.hitCount=new Random().nextInt(3)+2;
 	}
 
 	@Override
