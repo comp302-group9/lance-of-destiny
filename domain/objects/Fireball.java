@@ -9,6 +9,8 @@ import domain.objects.Paddle;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.util.ArrayList;
+import domain.objects.Barrier.*;
 
 public class Fireball {
 
@@ -92,5 +94,36 @@ public class Fireball {
         if (image != null) {
             g.drawImage(image, x, y, width, height, null);
         } 
+    }
+    // Check collision with barriers
+    public boolean collidesWithBarrier(Barrier barrier) {
+        Rectangle ballBounds = getBounds();
+        Rectangle barrierBounds = barrier.getBounds();
+        return ballBounds.intersects(barrierBounds);
+    }
+
+    public void handleCollisionWithBarrier(Barrier barrier) {
+        // Handle collision based on barrier type
+        if (barrier instanceof SimpleBarrier) {
+            // Bounce off the simple barrier
+            reflectHorizontal();
+        } else if (barrier instanceof ReinforcedBarrier) {
+        	reflectHorizontal();
+        	// Handle collision with reinforced barrier
+            // Implement appropriate behavior
+        } else if (barrier instanceof ExplosiveBarrier) {
+        	reflectHorizontal();
+        } else if (barrier instanceof RewardingBarrier) {
+        	reflectHorizontal();
+        	// Handle collision with rewarding barrier
+            // Implement appropriate behavior
+        }
+    }
+    public void checkCollisionWithBarriers(ArrayList<Barrier> barriers) {
+        for (Barrier barrier : barriers) {
+            if (collidesWithBarrier(barrier)) {
+                handleCollisionWithBarrier(barrier);
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ import domain.controllers.BuildingModeController;
 import domain.models.BuildingModeModel;
 import ui.screens.BuildingModeView;
 
+
 public class main { 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

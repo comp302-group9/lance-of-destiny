@@ -1,6 +1,7 @@
 package domain.objects.Barrier;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -12,6 +13,8 @@ public abstract class Barrier {
 
 	protected int x;
 	protected int y;
+	protected int width;
+	protected int height;
 	protected String name;
 	protected String img;
 	protected BufferedImage image;
@@ -29,6 +32,8 @@ public abstract class Barrier {
 	public Barrier(int x, int y) {
 		this.x=x;
 		this.y=y;
+		this.width= 33 * 900 / 512;
+		this.height =  600 / 30;
 		try {
 			this.image = ImageIO.read(getClass().getResource(this.getImg()));
         } catch (IOException e) {
@@ -77,6 +82,9 @@ public abstract class Barrier {
         if (image != null) {
             g.drawImage(image, x, y, RunningModeModel.barrierWidth,  RunningModeModel.barrierHeight, null);
         } 
+    }
+	public Rectangle getBounds() {
+        return new Rectangle(x, y, width, height); 
     }
 
 	public String getMessage(){

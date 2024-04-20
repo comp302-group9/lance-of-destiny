@@ -79,6 +79,7 @@ public class RunningModeModel {
 
         // Check collision of fireball with walls
         fireball.checkCollisionWithWalls(WIDTH, HEIGHT);
+        fireball.checkCollisionWithBarriers(barriers);
 
         
         // Check collision of fireball with paddle and apply cooldown
