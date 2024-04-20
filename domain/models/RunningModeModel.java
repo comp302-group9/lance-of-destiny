@@ -61,9 +61,14 @@ public class RunningModeModel {
         // Continuous movement logic for the paddle
         if (keys[KeyEvent.VK_LEFT]) {
             paddle.setDeltaX(-1); // Move paddle left
+            paddle.setDirection(-1);
         }
-        if (keys[KeyEvent.VK_RIGHT]) {
+        else if (keys[KeyEvent.VK_RIGHT]) {
             paddle.setDeltaX(1); // Move paddle right
+            paddle.setDirection(1);
+        }
+        else{
+            paddle.setDirection(0);
         }
 
         // Continuous rotation logic for the paddle
@@ -84,6 +89,7 @@ public class RunningModeModel {
         // Check collision of fireball with paddle and apply cooldown
         if (fireball.collidesWithPaddle(paddle) && (currentTime - lastCollisionTime) >= cooldown) {
             fireball.reflectFromPaddle(paddle); // Reflect fireball when colliding with paddle
+            fireball.validateSpeed(paddle);
             lastCollisionTime = currentTime; // Update the last collision time
         }
     }

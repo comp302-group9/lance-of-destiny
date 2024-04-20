@@ -75,6 +75,23 @@ public class Fireball {
         dx = v_ball_initial * Math.cos(theta_wall + alpha);
         dy = v_ball_initial * Math.sin(theta_wall + alpha);
         
+        if((dx<0&&paddle.getDirection()>0)||(dx>0&&paddle.getDirection()<0)){
+            dx*=-1;
+        }
+    }
+
+    public void validateSpeed(Paddle paddle){
+        float increase = 5/64;
+        if((dx>0&&paddle.getDirection()>0)||(dx<0&&paddle.getDirection()<0)){
+            double currentSpeed = Math.sqrt(dx * dx + dy * dy);
+        
+        // Calculate the ratio of the new speed to the current speed
+        double ratio = (currentSpeed + increase) / currentSpeed;
+        
+        // Increase the speed while maintaining direction
+        dx *= ratio;
+        dy *= ratio;
+        }
     }
     
     // Check collision with walls
