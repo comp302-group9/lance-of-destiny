@@ -1,8 +1,5 @@
 package ui.screens;
 
-import javax.swing.*;
-import domain.models.RunningModeModel;
-import domain.controllers.RunningModeController;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -18,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,7 +23,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+
+import domain.controllers.RunningModeController;
 import domain.models.BuildingModeModel;
+import domain.models.RunningModeModel;
 import domain.objects.Barrier.Barrier;
 import ui.screens.BModeUI.BarrierButton;
 import ui.screens.BModeUI.BarrierElement;
@@ -34,7 +35,7 @@ public class BuildingModeView extends JPanel {
 	public static final int WIDTH = 900;
 	public static final int HEIGHT = 600;
 	private BufferedImage backgroundImage;
-	private BuildingModeModel model;
+	private BuildingModeModel model; 
     private JButton playButton;
 	public int[][] grid;
 	//int buttonWidth = 21 * WIDTH / 256;

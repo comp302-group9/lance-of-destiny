@@ -10,7 +10,7 @@ public class BarrierButton extends JButton {
         this.col = col;
     }
 
-    public int getRow() {
+    public int getRow() { 
         return row;
     }
 

@@ -14,7 +14,7 @@ public class BuildingModeController implements Runnable {
 	}
 
 	@Override
-	public void run() {
+	public void run() { 
 		while (true) {
 			long currentTime = System.currentTimeMillis();
 			model.update(currentTime, keys, BuildingModeView.WIDTH, BuildingModeView.HEIGHT);

@@ -18,7 +18,7 @@ public abstract class Barrier {
 	protected String message;
 
 	// Constructor
-	public Barrier() {
+	public Barrier() { 
 		try {
 			this.image = ImageIO.read(getClass().getResource(this.getImg()));
         } catch (IOException e) {

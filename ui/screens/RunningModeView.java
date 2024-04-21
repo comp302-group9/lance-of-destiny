@@ -1,14 +1,20 @@
 package ui.screens;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,7 +26,7 @@ import domain.objects.Barrier.Barrier;
 
 
 public class RunningModeView extends JPanel {
-    public static final int WIDTH = 800;
+    public static final int WIDTH = 900;
     public static final int HEIGHT = 600;
     private RunningModeModel model;
     private BufferedImage backgroundImage;
