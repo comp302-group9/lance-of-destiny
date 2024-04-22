@@ -41,7 +41,7 @@ public class RunningModeView extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        setupUIComponents();
+        setupUIComponents(); 
     }
 
     private void setupUIComponents() {
