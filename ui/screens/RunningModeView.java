@@ -9,27 +9,37 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 import java.io.IOException;
+import java.util.Random;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
+import javax.swing.border.Border;
 
 import domain.models.RunningModeModel;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
+import ui.ymirUI;
 
 
 public class RunningModeView extends JPanel {
-    public static final int WIDTH = 800;
+    public static final int WIDTH = 900;
     public static final int HEIGHT = 600;
     private RunningModeModel model;
     private BufferedImage backgroundImage;
     private JPanel pausePanel;  // Panel for pause screen
     private JLabel pauseLabel;
+    
 
     public RunningModeView(RunningModeModel model) {
         this.model = model;
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+
+        ymirUI.addYmir(this);
+
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/ui/images/Background.png"));
         } catch (IOException e) {

@@ -15,8 +15,14 @@ import ui.screens.BuildingModeView;
 public class RunningModeModel {
     public static final int WIDTH = BuildingModeView.WIDTH;
     public static final int HEIGHT = BuildingModeView.HEIGHT;
+    //Barrier parameters that can be adjusted according to the style
     public static int barrierWidth = 33 * WIDTH / 512;
 	public static int barrierHeight = HEIGHT / 30;
+    private int xStart = HEIGHT / 32;
+	private int yStart = WIDTH / 32;
+	private int xGap = HEIGHT / 128;
+	private int yGap = WIDTH / 96;
+
     private static final int ROWS = BuildingModeModel.ROWS;
     private static final int COLUMNS = BuildingModeModel.COLUMNS;
     private Paddle paddle;
@@ -24,13 +30,17 @@ public class RunningModeModel {
     private long lastUpdateTime;
     private boolean paused = false; 
     public static ArrayList<Barrier> barriers = new ArrayList<Barrier>();
+    private long gameStartingTime;
+    private int score=0;
 
     public RunningModeModel() {
+        gameStartingTime = System.currentTimeMillis();
+
         // Initialize the paddle
         paddle = new Paddle(WIDTH / 2, HEIGHT - 50, WIDTH/10, 20); // Adjust parameters as needed
 
         // Initialize the fireball
-        fireball = new Fireball( WIDTH / 2, 7 * HEIGHT / 8, 20, 20); // Adjust parameters as needed
+        fireball = new Fireball( WIDTH / 2, 7 * HEIGHT / 8, 16, 16); // Adjust parameters as needed
 
         lastUpdateTime = System.currentTimeMillis();
     }
@@ -91,14 +101,19 @@ public class RunningModeModel {
             fireball.reflectFromPaddle(paddle); // Reflect fireball when colliding with paddle
             fireball.validateSpeed(paddle);
             lastCollisionTime = currentTime; // Update the last collision time
+            score+=(int) (300 / ((currentTime - gameStartingTime) / 10000.0));
+            //System.out.println(score);
+            //increaseScore(currentTime, score);
         }
     }
 
+    private void increaseScore(long currentTime, int score) {
+        long elapsedTime = currentTime - gameStartingTime;
+        score += (int) (300 / (elapsedTime / 1000.0));
+        System.out.println(score);
+    }
+
     public void initaliseBarrierLocations(int[][] grid){
-        int xStart = HEIGHT / 32;
-		int yStart = WIDTH / 32;
-		int xGap = HEIGHT / 128;
-		int yGap = WIDTH / 96;
         for (int row = 0; row < ROWS; row++) {
 			for (int col = 0; col < COLUMNS; col++) {
                 int x = xStart + col * (barrierWidth + xGap);

@@ -1,10 +1,13 @@
 // Main.java
+import java.awt.image.BufferedImage;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import domain.controllers.BuildingModeController;
 import domain.models.BuildingModeModel;
 import ui.screens.BuildingModeView;
+import ui.screens.RModeUI.TopMenu;
 
 public class main { 
     public static void main(String[] args) {
@@ -14,8 +17,9 @@ public class main {
             BuildingModeModel model2 = new BuildingModeModel();
             BuildingModeView view2 = new BuildingModeView(model2);
             BuildingModeController controller2 = new BuildingModeController(model2, view2);
+            TopMenu menu = new TopMenu();
             // Create the main frame
-            JFrame frame = new JFrame("Running Mode");
+            JFrame frame = new JFrame("Building Mode");
             frame.getContentPane().add(view2);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();
