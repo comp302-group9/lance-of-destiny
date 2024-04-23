@@ -114,9 +114,9 @@ public abstract class Barrier {
 	        int futureX = x;
 	        if (isMoving) {
 	            if (direction == 0) {
-	                futureX -= L / 4; // Move left
+	                //futureX -= L / 4; // Move left
 	            } else {
-	                futureX += L / 4; // Move right
+	                //futureX += L / 4; // Move right
 	            }
 	        }
 
