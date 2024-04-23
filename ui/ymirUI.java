@@ -1,31 +1,37 @@
 package ui;
 
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 import javax.swing.Timer;
-
-
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class ymirUI {
+    public ymirUI(){}
+
     private static final int WIDTH = 900;
     private static final int HEIGHT = 600;
     static ImageIcon[] coinGifs = new ImageIcon[4];
     static ImageIcon[] witchGifs = new ImageIcon[4];
     static int currentGifIndex = 0;
     static Random random = new Random();
-    static Timer timer;
+    static Timer timer;    
+    static BufferedImage gifImage;
     public static void addYmir(JPanel panel){
-        
+
         coinGifs[0] = new ImageIcon("ui\\gifs\\coin.gif");
         coinGifs[1] = new ImageIcon("ui\\gifs\\coinFast.gif");
         coinGifs[2] = new ImageIcon("ui\\gifs\\coinHat.png");
         coinGifs[3] = new ImageIcon("ui\\gifs\\coinWand.png");
 
-        //ImageIcon firstGifIcon = new ImageIcon("ui\\gifs\\TwoFaceGif-small.gif");
         witchGifs[0] = new ImageIcon("ui\\gifs\\witch-wait.gif");
         witchGifs[1] = new ImageIcon("ui\\gifs\\witch-wand.gif");
         witchGifs[2] = new ImageIcon("ui\\gifs\\witch-cast.gif");
@@ -48,7 +54,7 @@ public class ymirUI {
                 coinGifLabel.setIcon(coinGifs[currentGifIndex]);
             }
             //24900
-            timer.setDelay(currentGifIndex == 0 ? 2450 : (currentGifIndex == 1 ? 2600 : x));
+            timer.setDelay(currentGifIndex == 0 ? 2400 : (currentGifIndex == 1 ? 2600 : x));
             }
         });
         timer.setDelay(currentGifIndex == 0 ? 2400 : (currentGifIndex == 1 ? 2600 : x));

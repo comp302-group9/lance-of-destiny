@@ -2,7 +2,9 @@ package domain.models;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Random;
 
+import domain.objects.Box;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
@@ -31,7 +33,8 @@ public class RunningModeModel {
     private boolean paused = false; 
     public static ArrayList<Barrier> barriers = new ArrayList<Barrier>();
     private long gameStartingTime;
-    private int score=0;
+    public ArrayList<Box> boxes= new ArrayList<Box>();
+    private Random random=new Random();
 
     public RunningModeModel() {
         gameStartingTime = System.currentTimeMillis();
@@ -61,13 +64,20 @@ public class RunningModeModel {
         return fireball;
     }
     long lastCollisionTime = 0; // Initialize the last collision time
+    long waittime = 0;
     long cooldown = 1000; // Set the cooldown time in milliseconds (adjust as needed)
 
     public void update(long currentTime, boolean[] keys) {
+        
         // Calculate delta time (time elapsed since last update)
         double deltaTime = (currentTime - lastUpdateTime) / 1000.0; // Convert to seconds
         lastUpdateTime = currentTime;
-
+        if((currentTime - waittime) >= 200){
+            if (keys[KeyEvent.VK_B]) {
+            boxes.add(new Box(random.nextInt(WIDTH), 50));
+        }waittime = currentTime;
+        }
+        
         // Continuous movement logic for the paddle
         if (keys[KeyEvent.VK_LEFT]) {
             paddle.setDeltaX(-1); // Move paddle left
@@ -94,16 +104,21 @@ public class RunningModeModel {
 
         // Check collision of fireball with walls
         fireball.checkCollisionWithWalls(WIDTH, HEIGHT);
-
         
+        for (int i=0; i<boxes.size() ; i++){
+            Box box = boxes.get(i);
+            box.move();
+            if (box.getY() > HEIGHT) {
+                boxes.remove(i); // Remove the box if its Y coordinate exceeds HEIGHT
+                i--; // Decrement the loop counter since we removed an element
+            }
+        }
+
         // Check collision of fireball with paddle and apply cooldown
         if (fireball.collidesWithPaddle(paddle) && (currentTime - lastCollisionTime) >= cooldown) {
             fireball.reflectFromPaddle(paddle); // Reflect fireball when colliding with paddle
             fireball.validateSpeed(paddle);
             lastCollisionTime = currentTime; // Update the last collision time
-            score+=(int) (300 / ((currentTime - gameStartingTime) / 10000.0));
-            //System.out.println(score);
-            //increaseScore(currentTime, score);
         }
     }
 
@@ -136,6 +151,7 @@ public class RunningModeModel {
                     case 4:
                         Barrier rewarding = new RewardingBarrier(x,y);
                         barriers.add(rewarding);
+                        boxes.add(new Box(x+(barrierWidth/2),y+(barrierHeight/2)));
                         break;
                 }
 			}

@@ -20,6 +20,7 @@ import javax.swing.Timer;
 import javax.swing.border.Border;
 
 import domain.models.RunningModeModel;
+import domain.objects.Box;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
@@ -39,7 +40,7 @@ public class RunningModeView extends JPanel {
         this.model = model;
 
         ymirUI.addYmir(this);
-
+   
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/ui/images/Background.png"));
         } catch (IOException e) {
@@ -122,6 +123,12 @@ public class RunningModeView extends JPanel {
         fireball.draw(g);
 
         for (Barrier i: RunningModeModel.barriers){
+            if (i!=null){
+            i.draw(g);
+            }
+        }
+
+        for (Box i: model.boxes){
             if (i!=null){
             i.draw(g);
             }
