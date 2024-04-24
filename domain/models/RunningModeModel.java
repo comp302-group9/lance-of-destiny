@@ -104,6 +104,7 @@ public class RunningModeModel {
 
         // Check collision of fireball with walls
         fireball.checkCollisionWithWalls(WIDTH, HEIGHT);
+        fireball.checkCollisionWithBarriers(barriers);
         
         for (int i=0; i<boxes.size() ; i++){
             Box box = boxes.get(i);

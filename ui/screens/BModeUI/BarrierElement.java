@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-import domain.objects.Barrier.Barrier;
+import domain.objects.Barrier.*;
 
 public class BarrierElement extends JPanel {
  
