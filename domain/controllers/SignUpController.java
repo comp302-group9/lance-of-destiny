@@ -75,5 +75,6 @@ public class SignUpController {
         SignInView signInView = new SignInView();
         SignInController controller = new SignInController(signInView);
         signInView.display();
+        signUpView.closeFrame();
     }
 }

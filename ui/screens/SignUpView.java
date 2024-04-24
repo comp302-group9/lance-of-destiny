@@ -122,4 +122,11 @@ public class SignUpView extends JPanel {
     public void setStatus(String message) {
         statusLabel.setText(message);
     }
+    
+    public void closeFrame() {
+        if (frame != null) {
+            frame.setVisible(false);
+            frame.dispose();  // Close the frame when switching views
+        }
+    }
 }

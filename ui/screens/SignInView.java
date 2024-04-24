@@ -2,13 +2,18 @@ package ui.screens;
 
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import domain.models.User;
 
 public class SignInView extends JPanel {
     private JFrame frame;
@@ -78,6 +83,15 @@ public class SignInView extends JPanel {
             frame.setVisible(false);
             frame.dispose();  // Close the frame when switching views
         }
+    }
+    
+    public void displayUsers(List<User> users) {
+        JTextArea userListTextArea = new JTextArea(10, 30); // Set the size according to your needs
+        for (User user : users) {
+            userListTextArea.append(user.getUsername() + " - " + user.getEmail() + "\n");
+        }
+        // Now display this text area in your UI, either in a dialog or directly in the main window
+        JOptionPane.showMessageDialog(null, userListTextArea, "User List", JOptionPane.INFORMATION_MESSAGE);
     }
     
     public JPanel getPanel() {
