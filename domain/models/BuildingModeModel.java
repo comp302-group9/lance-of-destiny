@@ -46,8 +46,12 @@ public class BuildingModeModel {
 		BarrierList = barrierList;
 	}
 
-	public void validate() {
-
+	public boolean validateBarriers() {
+		// Validate the counts against required minimums
+		if (number_simple < 75 || number_reinforced < 10 || number_explosive < 5 || number_rewarding < 10) {
+			return false;
+		}
+		return true;
 	}
 
     public int[][] createEmptyGrid(){
