@@ -15,6 +15,6 @@
 /BarrierElement$1.class
 /BuildingModeController.class
 /BuildingModeModel.class
+/DatabaseConnection.class
 /domain/
-/ui/
-/main$1.class
+/database/
