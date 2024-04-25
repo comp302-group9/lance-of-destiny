@@ -51,7 +51,9 @@ public class RunningModeModel {
         return fireball;
     }
     long lastCollisionTime = 0; // Initialize the last collision time
+    long lastCollisionTime2 = 0;
     long cooldown = 1000; // Set the cooldown time in milliseconds (adjust as needed)
+    long cooldownbar = 15;
 
     public void update(long currentTime, boolean[] keys) {
         // Calculate delta time (time elapsed since last update)
@@ -87,7 +89,10 @@ public class RunningModeModel {
         // Check collision of fireball with walls
         fireball.checkCollisionWithWalls(WIDTH, HEIGHT);
         fireball.checkCollisionWithBarriers(barriers);
-
+        if ((currentTime - lastCollisionTime2) >= cooldownbar) {
+        	fireball.checkCollisionWithBarriers(barriers);
+        	lastCollisionTime2 = currentTime;
+        }
         
         // Check collision of fireball with paddle and apply cooldown
         if (fireball.collidesWithPaddle(paddle) && (currentTime - lastCollisionTime) >= cooldown) {

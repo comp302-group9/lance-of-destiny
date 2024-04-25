@@ -21,7 +21,7 @@ public abstract class Barrier {
 	protected String img;
 	protected BufferedImage image;
 	protected String message;
-	public boolean isMoving;
+	public boolean isMoving = false;
     protected int direction; // 0 for left, 1 for right (for horizontal movement)
 
 
@@ -49,6 +49,28 @@ public abstract class Barrier {
             e.printStackTrace();
         }
 	}
+	
+	public boolean hasBarrierOnImmediateLeft(ArrayList<Barrier> barriers) {
+        Rectangle bounds = getBounds();
+        int leftBoundary = bounds.x - bounds.width; // Immediate left
+
+        return barriers.stream().anyMatch(barrier ->
+            barrier != this && barrier.getBounds().x <= leftBoundary &&
+            Math.abs(barrier.getBounds().x - bounds.x) <= bounds.width
+        );
+    }
+
+    // Check if there's a barrier immediately on the right
+    public boolean hasBarrierOnImmediateRight(ArrayList<Barrier> barriers) {
+        Rectangle bounds = getBounds();
+        int rightBoundary = bounds.x + bounds.width; // Immediate right
+
+        return barriers.stream().anyMatch(barrier ->
+            barrier != this && barrier.getBounds().x >= rightBoundary &&
+            Math.abs(barrier.getBounds().x - bounds.x) <= bounds.width
+        );
+    }
+	
 	public boolean checkIfMoving() {
         // Check if there is free space around the barrier in the x-axis
         // If there is free space, return true with a probability of 0.2
@@ -56,27 +78,8 @@ public abstract class Barrier {
     }
 	
 	public void move(ArrayList<Barrier> barriers, double deltaTime) {
-        if (isMoving) {
-            
-        	double movementDistance = (33 * 900 / 512) / 4; // L/4
-            double movement = movementDistance * deltaTime; // Scale by delta time
-        	
-        	if (direction == 0) {
-                x -= 10; // Move left
-            } else {
-                x += 10; // Move right
-            }
-
-            // Check for collisions with other barriers
-            if (isCollidingWithOtherBarriers(barriers)) {
-                reverseDirection(); // Reverse direction if collision is detected
-            }
-            
-            if (x < 0 || x + width > RunningModeModel.WIDTH) {
-                reverseDirection(); // Reverse if hitting screen boundaries
-            }
-        }
-    }
+        
+	}
 	
 	 public boolean isCollidingWithOtherBarriers(ArrayList<Barrier> barriers) {
 	        Rectangle bounds = getBounds();
@@ -88,10 +91,10 @@ public abstract class Barrier {
 	        return false; // No collision
 	    }
 
-	    // Reverse the movement direction
-	    public void reverseDirection() {
-	        direction = (direction == 0) ? 1 : 0;
-	    }
+	 // Reverse the movement direction
+	 public void reverseDirection() {
+	     direction = (direction == 0) ? 1 : 0;
+	 }
 	
 	
 	

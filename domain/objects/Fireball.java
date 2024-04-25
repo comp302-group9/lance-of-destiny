@@ -151,25 +151,27 @@ public class Fireball {
         }
     }
     public void checkCollisionWithBarriers(ArrayList<Barrier> barriers) {
-    	ArrayList<Barrier> barriersCopy = new ArrayList<>(barriers); // Create a copy of the list
+        ArrayList<Barrier> barriersCopy = new ArrayList<>(barriers); // Create a copy of the list
 
         for (Barrier barrier : barriersCopy) { // Iterate over the copy
-            if (collidesWithBarrier(barrier)) {
-                // Reflect the fireball before removing the barrier
-                int ballCenterX = getBounds().x + getBounds().width / 2;
-                int barrierCenterX = barrier.getBounds().x + barrier.getBounds().width / 2;
+            Rectangle ballBounds = getBounds();
+            Rectangle barrierBounds = barrier.getBounds();
 
-                if (ballCenterX < barrierCenterX) {
-                    reflectVertical(); // Reflect vertically
+            if (ballBounds.intersects(barrierBounds)) { // If the fireball collides with the barrier
+
+                // Determine if the impact is along the top/bottom or sides
+                boolean hitTopBottom = (ballBounds.y + ballBounds.height <= barrierBounds.y-5 + barrierBounds.height / 2) ||
+                                       (ballBounds.y >= barrierBounds.y-5 + barrierBounds.height / 2);
+
+                if (hitTopBottom) {
+                    reflectHorizontal(); // If hitting top/bottom, reflect horizontally
                 } else {
-                    reflectHorizontal(); // Reflect horizontally
+                    reflectVertical(); // Otherwise, reflect vertically
                 }
 
-                if (barrier.onHit()) {
-                	barriers.remove(barrier); // Modify the original list
-                	
+                if (barrier.onHit()) { // If the barrier should be destroyed
+                    barriers.remove(barrier); // Safely remove it from the list
                 }
-                
             }
         }
     }
