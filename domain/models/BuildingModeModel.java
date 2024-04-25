@@ -13,8 +13,8 @@ import domain.objects.Barrier.RewardingBarrier;
 import domain.objects.Barrier.SimpleBarrier;
 
 public class BuildingModeModel {
-    public static final int ROWS = 11;
-    public static final int COLUMNS = 11;
+    public static final int ROWS = 10;
+    public static final int COLUMNS = 14;
 
     public int number_simple = 0;
     public int number_reinforced = 0;
@@ -26,7 +26,7 @@ public class BuildingModeModel {
 	Barrier a = new SimpleBarrier();
 	Barrier b = new ReinforcedBarrier(4);
 	Barrier c = new ExplosiveBarrier(4);
-	Barrier d = new RewardingBarrier("x");
+	Barrier d = new RewardingBarrier();
 
 	public BuildingModeModel() {
 		BarrierList.add(a);
@@ -46,14 +46,18 @@ public class BuildingModeModel {
 		BarrierList = barrierList;
 	}
 
-	public void validate() {
-
+	public boolean validateBarriers() {
+		// Validate the counts against required minimums
+		if (number_simple < 75 || number_reinforced < 10 || number_explosive < 5 || number_rewarding < 10) {
+			return false;
+		}
+		return true;
 	}
 
     public int[][] createEmptyGrid(){
         int[][] grid = new int[ROWS][COLUMNS];
-        for (int i=0; i<10 ;i++){
-            for (int j=0; j<11 ;j++){
+        for (int i=0; i<ROWS ;i++){
+            for (int j=0; j<COLUMNS ;j++){
                 grid[i][j]=0;
             }
         }

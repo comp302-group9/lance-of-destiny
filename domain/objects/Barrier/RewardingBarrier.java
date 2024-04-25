@@ -1,15 +1,26 @@
 package domain.objects.Barrier;
 
+import java.util.Random;
+
 public class RewardingBarrier extends Barrier {
 	private String containedSpell;
+	static String[] spells= {"A", "B", "C"};
 
-	public RewardingBarrier(String containedSpell) {
-		this.containedSpell = containedSpell;
+	public RewardingBarrier() {
+		super();
+		this.containedSpell=spells[new Random().nextInt(spells.length)];
+		this.message="*At least 10*";
+	}
+
+	public RewardingBarrier(int x, int y) {
+		super(x,y);
+		this.containedSpell=spells[new Random().nextInt(spells.length)];
 	}
 
 	@Override
-	public void onHit() {
+	public boolean onHit() {
 		System.out.println("Rewarding Barrier destroyed");
+		return true;
 	}
 
 	@Override

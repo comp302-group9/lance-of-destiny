@@ -9,6 +9,8 @@ import domain.objects.Paddle;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
+import java.util.ArrayList;
+import domain.objects.Barrier.*;
 
 public class Fireball {
 
@@ -92,5 +94,83 @@ public class Fireball {
         if (image != null) {
             g.drawImage(image, x, y, width, height, null);
         } 
+    }
+    // Check collision with barriers
+    public boolean collidesWithBarrier(Barrier barrier) {
+        Rectangle ballBounds = getBounds();
+        Rectangle barrierBounds = barrier.getBounds();
+        return ballBounds.intersects(barrierBounds);
+    }
+
+    public void handleCollisionWithBarrier(Barrier barrier) {
+    	
+    	Rectangle ballBounds = getBounds();
+        Rectangle barrierBounds = barrier.getBounds();
+
+        int ballCenterX = ballBounds.x + ballBounds.width / 2;
+        int ballCenterY = ballBounds.y + ballBounds.height / 2;
+
+        int barrierCenterX = barrierBounds.x + barrierBounds.width / 2;
+        int barrierCenterY = barrierBounds.y + barrierBounds.height / 2;
+
+        // Calculate differences in centers
+        int diffX = ballCenterX - barrierCenterX;
+        int diffY = ballCenterY - barrierCenterY;
+
+        boolean isVerticalCollision = Math.abs(ballCenterX - barrierCenterX) > Math.abs(ballCenterY - barrierCenterY);
+
+        if (isVerticalCollision) {
+            reflectVertical(); // If it's a vertical collision, reflect vertically
+        } else {
+            reflectHorizontal(); // If it's a horizontal collision, reflect horizontally
+        }
+        
+        if (barrier.onHit()) { // If barrier should be destroyed
+            barrier.destroy();
+        }
+    
+
+        // Handle collision based on barrier type
+        if (barrier instanceof SimpleBarrier) {
+            // Bounce off the simple barrier
+            reflectHorizontal();
+            
+        } else if (barrier instanceof ReinforcedBarrier) {
+        	reflectHorizontal();
+        	
+        	// Handle collision with reinforced barrier
+            // Implement appropriate behavior
+        } else if (barrier instanceof ExplosiveBarrier) {
+        	reflectHorizontal();
+        	
+        } else if (barrier instanceof RewardingBarrier) {
+        	reflectHorizontal();
+        	
+        	// Handle collision with rewarding barrier
+            // Implement appropriate behavior
+        }
+    }
+    public void checkCollisionWithBarriers(ArrayList<Barrier> barriers) {
+    	ArrayList<Barrier> barriersCopy = new ArrayList<>(barriers); // Create a copy of the list
+
+        for (Barrier barrier : barriersCopy) { // Iterate over the copy
+            if (collidesWithBarrier(barrier)) {
+                // Reflect the fireball before removing the barrier
+                int ballCenterX = getBounds().x + getBounds().width / 2;
+                int barrierCenterX = barrier.getBounds().x + barrier.getBounds().width / 2;
+
+                if (ballCenterX < barrierCenterX) {
+                    reflectVertical(); // Reflect vertically
+                } else {
+                    reflectHorizontal(); // Reflect horizontally
+                }
+
+                if (barrier.onHit()) {
+                	barriers.remove(barrier); // Modify the original list
+                	
+                }
+                
+            }
+        }
     }
 }

@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-import domain.objects.Barrier.Barrier;
+import domain.objects.Barrier.*;
 
 public class BarrierElement extends JPanel {
  
@@ -33,9 +33,16 @@ public class BarrierElement extends JPanel {
 		titleLabel.setForeground(Color.CYAN);
 		add(titleLabel);
 
-		textField.setBounds(125, 50, 50, 30); // Set bounds (x, y, width, height) for the text field
+		JLabel messageLabel = new JLabel(b.getMessage());
+		messageLabel.setFont(new Font("Arial", Font.BOLD, 12));
+		messageLabel.setBounds(125, 80, 200, 20);
+		messageLabel.setForeground(Color.RED);
+		add(messageLabel);
+
+		textField.setBounds(130, 55, 50, 20); // Set bounds (x, y, width, height) for the text field
 		textField.setBorder(BorderFactory.createLineBorder(getForeground())); // Add border for visibility
 		textField.setFont(new Font("Arial", Font.PLAIN, 14)); // Set font for better visibility
+		textField.setHorizontalAlignment(JTextField.CENTER);
 
 		setBorder(new LineBorder(Color.BLACK, 2));
 		add(textField);

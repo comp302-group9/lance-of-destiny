@@ -13,12 +13,13 @@ public class RunningModeController implements KeyListener, Runnable {
     private boolean isPaused = false;
     private boolean running = true;  // Flag to control the running of the game loop
 
-    public RunningModeController(RunningModeModel model, RunningModeView view) {
+    public RunningModeController(RunningModeModel model, RunningModeView view, int[][] grid) {
         this.model = model;
         this.view = view;
         view.addKeyListener(this);
         view.setFocusable(true);
         keys = new boolean[256];  // Array to keep track of key states
+        model.initaliseBarrierLocations(grid);
     }
     
     @Override
@@ -26,7 +27,7 @@ public class RunningModeController implements KeyListener, Runnable {
         while (true) {
             if (!model.isPaused()) {
                 long currentTime = System.currentTimeMillis();
-                model.update(currentTime, keys, RunningModeView.WIDTH, RunningModeView.HEIGHT);
+                model.update(currentTime, keys);
                 view.repaint(); // Repaint the view
             }
         
