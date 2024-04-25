@@ -4,8 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import database.DatabaseConnection;
 import domain.models.User;
@@ -35,7 +33,7 @@ public class SignInController {
         try (Connection conn = DatabaseConnection.getConnection()) {
             if (validateCredentials(username, password, conn)) {
                 signInView.setSignInStatus("Sign in successful.");
-                displayUsers(conn);
+                //displayUsers(conn);
             } else {
                 signInView.setSignInStatus("Invalid credentials.");
             }
@@ -59,26 +57,26 @@ public class SignInController {
         return false;
     }
     
-    private List<User> fetchAllUsers(Connection conn) throws SQLException {
-        List<User> users = new ArrayList<>();
-        String sql = "SELECT username, email FROM users";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    String username = rs.getString("username");
-                    String email = rs.getString("email");
-                    users.add(new User(username, email)); // Assuming User has a constructor that accepts username and email
-                }
-            }
-        }
-        return users;
-    }
-    
-    private void displayUsers(Connection conn) throws SQLException {
-        List<User> users = fetchAllUsers(conn);
-        // Assuming you have a method in signInView to display these users:
-        signInView.displayUsers(users);
-    }
+//    private List<User> fetchAllUsers(Connection conn) throws SQLException {
+//        List<User> users = new ArrayList<>();
+//        String sql = "SELECT username, email FROM users";
+//        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+//            try (ResultSet rs = stmt.executeQuery()) {
+//                while (rs.next()) {
+//                    String username = rs.getString("username");
+//                    String email = rs.getString("email");
+//                    users.add(new User(username, email)); // Assuming User has a constructor that accepts username and email
+//                }
+//            }
+//        }
+//        return users;
+//    }
+//    
+//    private void displayUsers(Connection conn) throws SQLException {
+//        List<User> users = fetchAllUsers(conn);
+//        // Assuming you have a method in signInView to display these users:
+//        signInView.displayUsers(users);
+//    }
 
     private void showSignUpView() { 
         SignUpView signUpView = new SignUpView();

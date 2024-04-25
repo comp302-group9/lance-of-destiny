@@ -6,13 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import database.DatabaseConnection;
-import domain.models.User;
 import ui.screens.SignInView;
 import ui.screens.SignUpView;
 
 public class SignUpController {
 
-    private User model;
+    
     private SignUpView signUpView;
 
     public SignUpController(SignUpView view) {
