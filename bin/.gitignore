@@ -15,7 +15,8 @@
 /BarrierElement$1.class
 /BuildingModeController.class
 /BuildingModeModel.class
-/DatabaseConnection.class
-/domain/
+/.vscode/
 /database/
+/domain/
 /ui/
+/mysql-connector-j-8.3.0.jar

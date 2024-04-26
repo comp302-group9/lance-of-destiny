@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 
 import domain.models.User;
 
-public class SignInView extends JPanel {
+public class SignInView extends JPanel { 
     private JFrame frame;
     private JTextField usernameField;
     private JPasswordField passwordField;

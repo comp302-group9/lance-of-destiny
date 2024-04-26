@@ -18,7 +18,7 @@ public class SignInController {
     public SignInController(SignInView view) {
         this.signInView = view;
 
-        setupListeners();
+        setupListeners(); 
     }
 
     private void setupListeners() {
