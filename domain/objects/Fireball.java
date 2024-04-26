@@ -160,18 +160,21 @@ public class Fireball {
             if (ballBounds.intersects(barrierBounds)) { // If the fireball collides with the barrier
 
                 // Determine if the impact is along the top/bottom or sides
-                boolean hitTopBottom = (ballBounds.y + ballBounds.height <= barrierBounds.y-5 + barrierBounds.height / 2) ||
-                                       (ballBounds.y >= barrierBounds.y-5 + barrierBounds.height / 2);
-
+                boolean hitTopBottom = (ballBounds.y + ballBounds.height <= (barrierBounds.y + barrierBounds.height / 2)+5) ||
+                                       (ballBounds.y >= (barrierBounds.y + barrierBounds.height / 2)-5);
+                
+                boolean hitLR = (ballBounds.x + ballBounds.width <= (barrierBounds.x + barrierBounds.width / 2)+5) ||
+                                       (ballBounds.x >= (barrierBounds.x + barrierBounds.width / 2)-5);
                 if (hitTopBottom) {
                     reflectHorizontal(); // If hitting top/bottom, reflect horizontally
-                } else {
+                }else if (hitLR){
                     reflectVertical(); // Otherwise, reflect vertically
                 }
 
                 if (barrier.onHit()) { // If the barrier should be destroyed
                     barriers.remove(barrier); // Safely remove it from the list
                 }
+            break;
             }
         }
     }

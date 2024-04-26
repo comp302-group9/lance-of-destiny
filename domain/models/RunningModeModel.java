@@ -2,7 +2,9 @@ package domain.models;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Random;
 
+import domain.objects.Box;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
@@ -24,13 +26,15 @@ public class RunningModeModel {
     private long lastUpdateTime;
     private boolean paused = false; 
     public static ArrayList<Barrier> barriers = new ArrayList<Barrier>();
+    public static ArrayList<Box> boxes= new ArrayList<Box>();
+    private Random random=new Random();
 
     public RunningModeModel() {
         // Initialize the paddle
         paddle = new Paddle(WIDTH / 2, HEIGHT - 50, WIDTH/10, 20); // Adjust parameters as needed
 
         // Initialize the fireball
-        fireball = new Fireball( WIDTH / 2, 7 * HEIGHT / 8, 20, 20); // Adjust parameters as needed
+        fireball = new Fireball( WIDTH / 2-8, 7 * HEIGHT / 8, 20, 20); // Adjust parameters as needed
 
         lastUpdateTime = System.currentTimeMillis();
     }
@@ -53,7 +57,7 @@ public class RunningModeModel {
     long lastCollisionTime = 0; // Initialize the last collision time
     long lastCollisionTime2 = 0;
     long cooldown = 1000; // Set the cooldown time in milliseconds (adjust as needed)
-    long cooldownbar = 15;
+    long cooldownbar = 10;
 
     public void update(long currentTime, boolean[] keys) {
         // Calculate delta time (time elapsed since last update)
@@ -88,10 +92,19 @@ public class RunningModeModel {
 
         // Check collision of fireball with walls
         fireball.checkCollisionWithWalls(WIDTH, HEIGHT);
-        fireball.checkCollisionWithBarriers(barriers);
+        
         if ((currentTime - lastCollisionTime2) >= cooldownbar) {
         	fireball.checkCollisionWithBarriers(barriers);
         	lastCollisionTime2 = currentTime;
+        }
+
+        for (int i=0; i<boxes.size() ; i++){
+            Box box = boxes.get(i);
+            box.move();
+            if (box.getY() > HEIGHT) {
+                boxes.remove(i);
+                i--;
+            }
         }
         
         // Check collision of fireball with paddle and apply cooldown

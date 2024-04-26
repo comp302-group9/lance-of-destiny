@@ -27,9 +27,9 @@ public class SimpleBarrier extends Barrier {
             double movement = (33 * 900 / 512) / 4 * deltaTime; // L/4 per second
 
             if (direction == 0) {
-                x -= 10; // Move left
+                x -= 1; // Move left
             } else {
-                x += 10; // Move right
+                x += 1; // Move right
             }
 
             // Check for collisions with other barriers
