@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    private static String url = "jdbc:mysql://localhost:3306/LanceOfDestiny";
-    private static String user = "root";
-    private static String password = "bartu1221";
+    private static String url = "jdbc:mysql://lance-of-destiny.cfk044iesems.eu-north-1.rds.amazonaws.com/lance-of-destiny";
+    private static String user = "admin";
+    private static String password = "yp86xb#$Au";
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, user, password);

@@ -44,7 +44,7 @@ public class SignUpController {
                 return;
             }
 
-            String sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+            String sql = "INSERT INTO Users (username, email, password) VALUES (?, ?, ?)";
             try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                 stmt.setString(1, username);
                 stmt.setString(2, email);
@@ -60,7 +60,7 @@ public class SignUpController {
     
     
     private boolean usernameExists(String username, Connection conn) throws SQLException {
-        String sql = "SELECT id FROM users WHERE username = ?";
+        String sql = "SELECT id FROM Users WHERE username = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             try (ResultSet rs = stmt.executeQuery()) {

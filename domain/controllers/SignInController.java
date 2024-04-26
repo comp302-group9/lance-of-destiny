@@ -44,7 +44,7 @@ public class SignInController {
     }
     
     private boolean validateCredentials(String username, String password, Connection conn) throws SQLException {
-        String sql = "SELECT password FROM users WHERE username = ?";
+        String sql = "SELECT password FROM Users WHERE username = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             try (ResultSet rs = stmt.executeQuery()) {
