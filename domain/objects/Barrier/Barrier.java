@@ -1,5 +1,6 @@
 package domain.objects.Barrier;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -140,37 +141,24 @@ public abstract class Barrier {
         if (image != null) {
             g.drawImage(image, x, y, RunningModeModel.barrierWidth,  RunningModeModel.barrierHeight, null);
         } 
+		g.setColor(Color.RED); // Set color to red
+        g.drawLine(x, y, x + width, y); // Draw line for top hitbox
+
+        // Draw the bottom hitbox (for debugging purposes)
+        g.setColor(Color.BLUE); // Set color to blue
+        g.drawLine(x, y + height, x + width, y + height); // Draw line for bottom hitbox
+		
+		g.setColor(Color.GREEN); // Set color to green
+        g.drawLine(x, y, x, y + height); // Draw line for left hitbox
+
+        // Draw the right hitbox (for debugging purposes)
+        g.setColor(Color.YELLOW); // Set color to yellow
+        g.drawLine(x + width, y, x + width, y + height); // Draw line for right hitbox
+    
     }
 	public Rectangle getBounds() {
         return new Rectangle(x, y, width, height); 
     }
-	 public Rectangle getFutureBounds() {
-	        // Calculate the future x-coordinate based on the current direction
-	        int futureX = x;
-	        if (isMoving) {
-	            if (direction == 0) {
-	                //futureX -= L / 4; // Move left
-	            } else {
-	                //futureX += L / 4; // Move right
-	            }
-	        }
-
-	        // Create and return the Rectangle object representing the future bounds
-	        return new Rectangle(futureX, y, width, height);
-	    }
-	 public void destroy() {
-	        System.out.println("Destroying Simple Barrier...");
-	        
-	        ArrayList<Barrier> barrierList = RunningModeModel.barriers;
-	        
-	        if (barrierList != null) {
-	            barrierList.remove(this); // Remove this barrier from the list
-	        }
-
-	        // Optional cleanup logic if needed
-	        this.image = null; // Clear image reference
-	    } 
-
 	public String getMessage(){
 		return message;
 	}

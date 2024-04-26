@@ -102,80 +102,35 @@ public class Fireball {
         return ballBounds.intersects(barrierBounds);
     }
 
-    public void handleCollisionWithBarrier(Barrier barrier) {
-    	
-    	Rectangle ballBounds = getBounds();
-        Rectangle barrierBounds = barrier.getBounds();
-
-        int ballCenterX = ballBounds.x + ballBounds.width / 2;
-        int ballCenterY = ballBounds.y + ballBounds.height / 2;
-
-        int barrierCenterX = barrierBounds.x + barrierBounds.width / 2;
-        int barrierCenterY = barrierBounds.y + barrierBounds.height / 2;
-
-        // Calculate differences in centers
-        int diffX = ballCenterX - barrierCenterX;
-        int diffY = ballCenterY - barrierCenterY;
-
-        boolean isVerticalCollision = Math.abs(ballCenterX - barrierCenterX) > Math.abs(ballCenterY - barrierCenterY);
-
-        if (isVerticalCollision) {
-            reflectVertical(); // If it's a vertical collision, reflect vertically
-        } else {
-            reflectHorizontal(); // If it's a horizontal collision, reflect horizontally
-        }
-        
-        if (barrier.onHit()) { // If barrier should be destroyed
-            barrier.destroy();
-        }
     
-
-        // Handle collision based on barrier type
-        if (barrier instanceof SimpleBarrier) {
-            // Bounce off the simple barrier
-            reflectHorizontal();
-            
-        } else if (barrier instanceof ReinforcedBarrier) {
-        	reflectHorizontal();
-        	
-        	// Handle collision with reinforced barrier
-            // Implement appropriate behavior
-        } else if (barrier instanceof ExplosiveBarrier) {
-        	reflectHorizontal();
-        	
-        } else if (barrier instanceof RewardingBarrier) {
-        	reflectHorizontal();
-        	
-        	// Handle collision with rewarding barrier
-            // Implement appropriate behavior
-        }
-    }
     public void checkCollisionWithBarriers(ArrayList<Barrier> barriers) {
         ArrayList<Barrier> barriersCopy = new ArrayList<>(barriers); // Create a copy of the list
 
         for (Barrier barrier : barriersCopy) { // Iterate over the copy
             Rectangle ballBounds = getBounds();
             Rectangle barrierBounds = barrier.getBounds();
+        
+            Point topLeft = new Point(ballBounds.x, ballBounds.y);
+    Point topRight = new Point(ballBounds.x + ballBounds.width, ballBounds.y);
+    Point bottomLeft = new Point(ballBounds.x, ballBounds.y + ballBounds.height);
+    Point bottomRight = new Point(ballBounds.x + ballBounds.width, ballBounds.y + ballBounds.height);
 
-            if (ballBounds.intersects(barrierBounds)) { // If the fireball collides with the barrier
-
-                // Determine if the impact is along the top/bottom or sides
-                boolean hitTopBottom = (ballBounds.y + ballBounds.height <= (barrierBounds.y + barrierBounds.height / 2)+5) ||
-                                       (ballBounds.y >= (barrierBounds.y + barrierBounds.height / 2)-5);
-                
-                boolean hitLR = (ballBounds.x + ballBounds.width <= (barrierBounds.x + barrierBounds.width / 2)+5) ||
-                                       (ballBounds.x >= (barrierBounds.x + barrierBounds.width / 2)-5);
-                if (hitTopBottom) {
-                    reflectHorizontal(); // If hitting top/bottom, reflect horizontally
-                }else if (hitLR){
-                    reflectVertical(); // Otherwise, reflect vertically
-                }
-
-                if (barrier.onHit()) { // If the barrier should be destroyed
-                    barriers.remove(barrier); // Safely remove it from the list
-                }
-            break;
-            }
+    // Check if any of the corners intersect with the barrier
+    if (barrierBounds.contains(topLeft) || barrierBounds.contains(topRight) || barrierBounds.contains(bottomLeft) || barrierBounds.contains(bottomRight)) {
+        // Determine which side of the barrier it intersects with and reflect accordingly
+        if (topLeft.y >= barrierBounds.y && bottomLeft.y <= barrierBounds.y + barrierBounds.height) {
+            // Intersects with the left or right side of the barrier, reflect horizontally
+            reflectHorizontal();
+        } else {
+            // Intersects with the top or bottom side of the barrier, reflect vertically
+            reflectVertical();
         }
     }
+        }
+        
+    }
+    public void checkAndReflectCorners(Rectangle ballBounds, Rectangle barrierBounds) {
+        
+    }
+    
 }

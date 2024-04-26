@@ -57,7 +57,7 @@ public class RunningModeModel {
     long lastCollisionTime = 0; // Initialize the last collision time
     long lastCollisionTime2 = 0;
     long cooldown = 1000; // Set the cooldown time in milliseconds (adjust as needed)
-    long cooldownbar = 10;
+    long cooldownbar = 15;
 
     public void update(long currentTime, boolean[] keys) {
         // Calculate delta time (time elapsed since last update)
