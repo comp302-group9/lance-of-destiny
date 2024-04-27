@@ -34,7 +34,7 @@ public class RunningModeModel {
         paddle = new Paddle(WIDTH / 2, HEIGHT - 50, WIDTH/10, 20); // Adjust parameters as needed
 
         // Initialize the fireball
-        fireball = new Fireball( WIDTH / 2-8, 7 * HEIGHT / 8, 20, 20); // Adjust parameters as needed
+        fireball = new Fireball( WIDTH / 2-8, 7 * HEIGHT / 8, 16, 16); // Adjust parameters as needed
 
         lastUpdateTime = System.currentTimeMillis();
     }
@@ -56,8 +56,10 @@ public class RunningModeModel {
     }
     long lastCollisionTime = 0; // Initialize the last collision time
     long lastCollisionTime2 = 0;
+    long lastCollisionTime3 = 0;
     long cooldown = 1000; // Set the cooldown time in milliseconds (adjust as needed)
-    long cooldownbar = 15;
+    long cooldownbar = 35;
+    long cooldownWall=20;
 
     public void update(long currentTime, boolean[] keys) {
         // Calculate delta time (time elapsed since last update)
@@ -91,7 +93,10 @@ public class RunningModeModel {
         fireball.move();
 
         // Check collision of fireball with walls
-        fireball.checkCollisionWithWalls(WIDTH, HEIGHT);
+        if ((currentTime - lastCollisionTime3) >= cooldownWall) {
+            fireball.checkCollisionWithWalls(WIDTH, HEIGHT);
+        	lastCollisionTime3 = currentTime;
+        }
         
         if ((currentTime - lastCollisionTime2) >= cooldownbar) {
         	fireball.checkCollisionWithBarriers(barriers);
