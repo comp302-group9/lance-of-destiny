@@ -41,9 +41,7 @@ public abstract class Barrier {
 		this.width= RunningModeModel.barrierWidth;
 		this.height =  RunningModeModel.barrierHeight;
 		this.isMoving = checkIfMoving();
-        if (isMoving) {
-            this.direction = new Random().nextBoolean() ? 0 : 1; // Random initial direction
-        }
+        
 		try {
 			this.image = ImageIO.read(getClass().getResource(this.getImg()));
         } catch (IOException e) {
@@ -52,24 +50,30 @@ public abstract class Barrier {
 	}
 	
 	public boolean hasBarrierOnImmediateLeft(ArrayList<Barrier> barriers) {
-        Rectangle bounds = getBounds();
-        int leftBoundary = bounds.x - bounds.width; // Immediate left
-
-        return barriers.stream().anyMatch(barrier ->
-            barrier != this && barrier.getBounds().x <= leftBoundary &&
-            Math.abs(barrier.getBounds().x - bounds.x) <= bounds.width
-        );
+        for (Barrier barrier: barriers){
+			if(barrier!=this){
+				double distance = this.x - barrier.getBounds().getMaxX();
+				if (distance > 0 && distance <=10)
+				return true;
+			}
+		}
+		this.isMoving = new Random().nextDouble() < 0.2;
+		return false;
     }
 
     // Check if there's a barrier immediately on the right
     public boolean hasBarrierOnImmediateRight(ArrayList<Barrier> barriers) {
-        Rectangle bounds = getBounds();
-        int rightBoundary = bounds.x + bounds.width; // Immediate right
-
-        return barriers.stream().anyMatch(barrier ->
-            barrier != this && barrier.getBounds().x >= rightBoundary &&
-            Math.abs(barrier.getBounds().x - bounds.x) <= bounds.width
-        );
+        for (Barrier barrier: barriers){
+			if(barrier!=this){
+				double distance = this.x - barrier.getBounds().getMaxX();
+				if (distance > 0 && distance <=10)
+				return true;
+			}
+		}
+		if(!isMoving){
+			this.isMoving = new Random().nextDouble() < 0.2;
+		};
+		return false;
     }
 	
 	public boolean checkIfMoving() {
@@ -94,7 +98,7 @@ public abstract class Barrier {
 
 	 // Reverse the movement direction
 	 public void reverseDirection() {
-	     direction = (direction == 0) ? 1 : 0;
+	     direction = (direction == 0) ? 1 : -1;
 	 }
 	
 	
