@@ -79,13 +79,17 @@ public class RunningModeModel {
     long cooldown = 1000; // Set the cooldown time in milliseconds (adjust as needed)
     long cooldownbar = 15;
 
+    //APPLICATION OF OBSERVER PATTERN 
+    // When the RunningModeModel changes state, 
+    // it calls a method such as notifyObservers() in our case update() method
+    // to loop through all registered observers (paddle, fireball, barrier and boxes) and call their own update methods, like paddle.update(this).
+    // We know that observer pattern needs to be implemented using an Interface and we will change our code to do so
+    // but this is the part that we will apply the observer pattern
+
     public void update(long currentTime, boolean[] keys) {
         // Calculate delta time (time elapsed since last update)
     	// If the game is over, return early to stop game logic
-    	
-    	
-       
-    	
+
     	double deltaTime = (currentTime - lastUpdateTime) / 1000.0; // Convert to seconds
         lastUpdateTime = currentTime;
         
