@@ -1,6 +1,8 @@
 package domain.objects.Barrier;
 
 import java.util.Random;
+import domain.models.RunningModeModel;
+import domain.objects.Box;
 
 public class RewardingBarrier extends Barrier {
 	private String containedSpell;
@@ -20,6 +22,7 @@ public class RewardingBarrier extends Barrier {
 	@Override
 	public boolean onHit() {
 		System.out.println("Rewarding Barrier destroyed");
+		RunningModeModel.boxes.add(new Box(x + (RunningModeModel.barrierWidth/2),y + (RunningModeModel.barrierWidth/2)));
 		return true;
 	}
 

@@ -2,7 +2,9 @@ package domain.models;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Random;
 
+import domain.objects.Box;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
@@ -24,6 +26,8 @@ public class RunningModeModel {
     private long lastUpdateTime;
     private boolean paused = false; 
     public static ArrayList<Barrier> barriers = new ArrayList<Barrier>();
+    public static ArrayList<Box> boxes= new ArrayList<Box>();
+    private Random random=new Random();
     private boolean gameOver = false; // State to track if the game is over
     private String gameOverMessage = "Game Over!"; // Game over message
 
@@ -85,7 +89,14 @@ public class RunningModeModel {
     	double deltaTime = (currentTime - lastUpdateTime) / 1000.0; // Convert to seconds
         lastUpdateTime = currentTime;
         
-        
+        for (int i=0; i<boxes.size() ; i++){
+            Box box = boxes.get(i);
+            box.move();
+            if (box.getY() > HEIGHT) {
+                boxes.remove(i);
+                i--;
+            }
+        }
         
         for (Barrier barrier : barriers) {
             if (barrier.isMoving) {

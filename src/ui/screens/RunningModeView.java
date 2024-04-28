@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import domain.models.RunningModeModel;
+import domain.objects.Box;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
@@ -122,6 +123,12 @@ public class RunningModeView extends JPanel {
 
             Fireball fireball = model.getFireball();
             fireball.draw(g);
+
+            for (Box i: RunningModeModel.boxes){
+                if (i!=null){
+                i.draw(g);
+                }
+            }
 
             for (Barrier i: RunningModeModel.barriers){
                 if (i!=null){
