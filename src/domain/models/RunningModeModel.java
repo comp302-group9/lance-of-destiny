@@ -17,8 +17,8 @@ import ui.screens.BuildingModeView;
 public class RunningModeModel {
     public static final int WIDTH = BuildingModeView.WIDTH;
     public static final int HEIGHT = BuildingModeView.HEIGHT;
-    public static int barrierWidth = 33 * WIDTH / 512;
-	public static int barrierHeight = HEIGHT / 30;
+    public static int barrierWidth = 51;
+	public static int barrierHeight =15;
     private static final int ROWS = BuildingModeModel.ROWS;
     private static final int COLUMNS = BuildingModeModel.COLUMNS;
     private Paddle paddle;
@@ -36,7 +36,7 @@ public class RunningModeModel {
         paddle = new Paddle(WIDTH / 2, HEIGHT - 50, WIDTH/10, 20); // Adjust parameters as needed
 
         // Initialize the fireball
-        fireball = new Fireball( WIDTH / 2, 7 * HEIGHT / 8, 20, 20); // Adjust parameters as needed
+        fireball = new Fireball( WIDTH / 2, 7 * HEIGHT / 8, 16, 16); // Adjust parameters as needed
 
         lastUpdateTime = System.currentTimeMillis();
     }

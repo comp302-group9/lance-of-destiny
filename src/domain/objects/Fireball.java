@@ -163,61 +163,6 @@ public class Fireball {
         return ballBounds.intersects(barrierBounds);
     }
 
-    
-    public void handleCollisionWithBarrier(Barrier barrier) {
-        Rectangle ballBounds = getBounds();
-        Rectangle barrierBounds = barrier.getBounds();
-
-        // Calculate the center points to determine collision type
-        int ballCenterX = ballBounds.x + ballBounds.width / 2;
-        int ballCenterY = ballBounds.y + ballBounds.height / 2;
-
-        int barrierCenterX = barrierBounds.x + barrierBounds.width / 2;
-        int barrierCenterY = barrierBounds.y + barrierBounds.height / 2;
-
-        boolean isHorizontalCollision = Math.abs(ballCenterX - barrierCenterX) > Math.abs(ballCenterY - barrierCenterY);
-
-        if (isHorizontalCollision) {
-            reflectVertical(); // Reflect vertically if collision is horizontal
-        } else {
-            reflectHorizontal(); // Reflect horizontally if collision is vertical
-        }
-
-        // Additional checks to prevent passing through barriers
-        if (barrierBounds.contains(ballBounds)) {
-            // Correct the fireball's position to prevent overlapping
-            if (isHorizontalCollision) {
-                if (ballBounds.x > barrierCenterX) {
-                    x += Math.abs(ballCenterX - barrierCenterX); // Adjust position to the right
-                } else {
-                    x -= Math.abs(ballCenterX - barrierCenterX); // Adjust position to the left
-                }
-            } else {
-                if (ballBounds.y > barrierCenterY) {
-                    y += Math.abs(ballCenterY - barrierCenterY); // Adjust position downward
-                } else {
-                    y -= Math.abs(ballCenterY - barrierCenterY); // Adjust position upward
-                }
-            }
-        }
-
-        // Apply specific logic based on barrier type
-        if (barrier instanceof SimpleBarrier) {
-            // Additional behavior for simple barriers
-            reflectHorizontal(); // Reflect horizontally by default
-        } else if (barrier instanceof ReinforcedBarrier) {
-            reflectHorizontal(); // Example logic for reinforced barriers
-        } else if (barrier instanceof ExplosiveBarrier) {
-            reflectVertical(); // Example logic for explosive barriers
-        } else if (barrier instanceof RewardingBarrier) {
-            reflectHorizontal(); // Example logic for rewarding barriers
-        }
-
-        // Handle barrier destruction if required
-        if (barrier.onHit()) {
-            barrier.destroy(); // Safely remove it
-        }
-    }
     public void checkCollisionWithBarriers(ArrayList<Barrier> barriers) {
         ArrayList<Barrier> barriersCopy = new ArrayList<>(barriers); // Create a copy of the list
 

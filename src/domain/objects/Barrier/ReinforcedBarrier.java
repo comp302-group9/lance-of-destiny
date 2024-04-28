@@ -71,8 +71,6 @@ public class ReinforcedBarrier extends Barrier {
 	public boolean onHit() {
 		hitCount--;
 		if (hitCount <= 0) {
-			System.out.println("Reinforced Barrier destroyed");
-			destroy();
 			return true;
 		}
 		return false;

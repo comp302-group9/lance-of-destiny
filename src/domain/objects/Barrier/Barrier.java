@@ -37,8 +37,8 @@ public abstract class Barrier {
 	public Barrier(int x, int y) {
 		this.x=x;
 		this.y=y;
-		this.width= 33 * 900 / 512;
-		this.height =  600 / 30;
+		this.width= RunningModeModel.barrierWidth;
+		this.height =  RunningModeModel.barrierHeight;
 		this.isMoving = checkIfMoving();
         if (isMoving) {
             this.direction = new Random().nextBoolean() ? 0 : 1; // Random initial direction
@@ -147,32 +147,6 @@ public abstract class Barrier {
 	public Rectangle getBounds() {
         return new Rectangle(x, y, width, height); 
     }
-	 public Rectangle getFutureBounds() {
-	        // Calculate the future x-coordinate based on the current direction
-	        int futureX = x;
-	        if (isMoving) {
-	            if (direction == 0) {
-	                //futureX -= L / 4; // Move left
-	            } else {
-	                //futureX += L / 4; // Move right
-	            }
-	        }
-
-	        // Create and return the Rectangle object representing the future bounds
-	        return new Rectangle(futureX, y, width, height);
-	    }
-	 public void destroy() {
-	        System.out.println("Destroying Simple Barrier...");
-	        
-	        ArrayList<Barrier> barrierList = RunningModeModel.barriers;
-	        
-	        if (barrierList != null) {
-	            barrierList.remove(this); // Remove this barrier from the list
-	        }
-
-	        // Optional cleanup logic if needed
-	        this.image = null; // Clear image reference
-	    } 
 
 	public String getMessage(){
 		return message;

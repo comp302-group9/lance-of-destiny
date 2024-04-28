@@ -27,8 +27,8 @@ import ui.screens.BModeUI.BarrierButton;
 import ui.screens.BModeUI.BarrierElement;
 
 public class BuildingModeView extends JPanel {
-	public static final int WIDTH = 900;
 	public static final int HEIGHT = 600;
+	public static final int WIDTH = HEIGHT * 16/9;
 	private BufferedImage backgroundImage;
 	private BuildingModeModel model;
     private JButton playButton;

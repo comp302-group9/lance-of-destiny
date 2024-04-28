@@ -13,8 +13,8 @@ import domain.objects.Barrier.RewardingBarrier;
 import domain.objects.Barrier.SimpleBarrier;
 
 public class BuildingModeModel {
-    public static final int ROWS = 10;
-    public static final int COLUMNS = 14;
+    public static final int ROWS = 11;
+    public static final int COLUMNS = 19;
 
     public int number_simple = 0;
     public int number_reinforced = 0;
