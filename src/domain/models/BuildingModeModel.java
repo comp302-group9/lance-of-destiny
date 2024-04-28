@@ -66,7 +66,7 @@ public class BuildingModeModel {
 
     public int[][] readTxt(String fileName){
         int[][] matrix = new int[ROWS][COLUMNS];
-        try (BufferedReader br = new BufferedReader(new FileReader("domain\\txtData\\Test.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("src\\domain\\txtData\\Test.txt"))) {
             String line;
             int row = 0;
             

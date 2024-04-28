@@ -162,6 +162,7 @@ public class BuildingModeView extends JPanel {
 		frame.revalidate();
 		frame.repaint();
 	
+		view.requestFocusInWindow();
 		Thread gameThread = new Thread(controller);
 		gameThread.start();
 	}	
@@ -330,7 +331,7 @@ public class BuildingModeView extends JPanel {
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.writeTxt("domain\\txtData\\Test.txt", grid);
+				model.writeTxt("src\\domain\\txtData\\Test.txt", grid);
 			}
 		});
 		
@@ -342,7 +343,7 @@ public class BuildingModeView extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				resetCurrent();
-				grid = model.readTxt("/domain/txtData/Test.txt");
+				grid = model.readTxt("src\\domain\\txtData\\Test.txt"); // src/domain/txtData/Test.txt
 				readGrid(grid);
 				updateCurrent();
 

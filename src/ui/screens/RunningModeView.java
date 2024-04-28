@@ -35,6 +35,8 @@ public class RunningModeView extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        setFocusable(true);  // Make the JPanel focusable
+        requestFocusInWindow();
         setupUIComponents();
     }
 
