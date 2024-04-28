@@ -20,6 +20,7 @@ public class Paddle {
     private int paddleSpeed = 6;
     private double rotationAngle = 0;
     private double rotationSpeed = 20; // degrees per second
+    private int direction = 0;
 
     public Paddle(int x, int y, int width, int height) {
         this.x = x;
@@ -40,6 +41,8 @@ public class Paddle {
     public int getWidth() {return width;}
     public int getHeight() {return height;}
     public double getRotationAngle() {return rotationAngle;}
+    public int getDirection() {return direction;}
+    public void setDirection(int direction) {this.direction= direction;}
 
     // Responsible for left-right movement
     public void setDeltaX(int xDirection, int gameWidth) {
