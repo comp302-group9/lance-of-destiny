@@ -15,7 +15,7 @@ public class RunningModeController implements KeyListener, Runnable {
 
     public RunningModeController(RunningModeModel model, RunningModeView view, int[][] grid) {
         this.model = model;
-        this.view = view; 
+        this.view = view;
         view.addKeyListener(this);
         view.setFocusable(true);
         keys = new boolean[256];  // Array to keep track of key states

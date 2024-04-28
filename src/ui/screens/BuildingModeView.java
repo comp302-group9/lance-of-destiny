@@ -1,10 +1,14 @@
 package ui.screens;
 
+import javax.swing.*;
+import domain.models.RunningModeModel;
+import domain.controllers.RunningModeController;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -15,18 +19,9 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
-import domain.controllers.RunningModeController;
 import domain.models.BuildingModeModel;
-import domain.models.RunningModeModel;
 import domain.objects.Barrier.Barrier;
 import ui.screens.BModeUI.BarrierButton;
 import ui.screens.BModeUI.BarrierElement;
@@ -35,7 +30,7 @@ public class BuildingModeView extends JPanel {
 	public static final int WIDTH = 900;
 	public static final int HEIGHT = 600;
 	private BufferedImage backgroundImage;
-	private BuildingModeModel model; 
+	private BuildingModeModel model;
     private JButton playButton;
 	public int[][] grid;
 	//int buttonWidth = 21 * WIDTH / 256;
@@ -43,7 +38,7 @@ public class BuildingModeView extends JPanel {
 	int buttonHeight = RunningModeModel.barrierHeight;
 	private JLabel simpleLabel;
 	private JLabel reinforcedLabel;
-	private JLabel explosiveLabel; 
+	private JLabel explosiveLabel;
 	private JLabel rewardingLabel;
 	private BarrierElement[] elements = new BarrierElement[4];
 	
@@ -133,6 +128,44 @@ public class BuildingModeView extends JPanel {
 		return null;
 	}
 
+	public void showErrorDialog() {
+    // Show error dialog
+    JOptionPane.showMessageDialog(this, "You gived wrong barrier numbers! Check for the barrier numbers! (Before try to play again, first place the barriers.)", "Barrier Number Validation Error", JOptionPane.ERROR_MESSAGE);
+    
+    // Create a timer to close the dialog after 5 seconds
+    Timer closeDialogTimer = new Timer(5000, e -> {
+        Window win = SwingUtilities.getWindowAncestor(this);
+        if (win instanceof JDialog) {
+            JDialog dialog = (JDialog) win;
+            dialog.dispose();
+        }
+    });
+    closeDialogTimer.setRepeats(false);
+    closeDialogTimer.start();
+    }
+
+	private void switchToRunningMode() {
+		// Validate barriers before switching to the running mode
+		if (!model.validateBarriers()) {
+			showErrorDialog();
+			return;
+		}
+		
+		// Create the running mode components and switch views
+		RunningModeModel model = new RunningModeModel();
+		RunningModeView view = new RunningModeView(model);
+		RunningModeController controller = new RunningModeController(model, view, grid);
+	
+		JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+		frame.getContentPane().removeAll();
+		frame.getContentPane().add(view);
+		frame.revalidate();
+		frame.repaint();
+	
+		Thread gameThread = new Thread(controller);
+		gameThread.start();
+	}	
+
 	public void addEmptyButtons() {
 		int xStart = HEIGHT / 32;
 		int yStart = WIDTH / 32;
@@ -219,30 +252,30 @@ public class BuildingModeView extends JPanel {
 	public void switchBarrier(BarrierButton button) {
 		int row = button.getRow();
 		int col = button.getCol();
-
+	
 		if (button.getIcon() == empty) {
 			button.setIcon(simple);
-			model.number_simple++;
-			grid[row][col]=1;
+			model.setNumber_simple(model.getNumber_simple() + 1);
+			grid[row][col] = 1;
 		} else if (button.getIcon() == simple) {
 			button.setIcon(firm);
-			model.number_simple--;
-			model.number_reinforced++;
-			grid[row][col]=2;
+			model.setNumber_simple(model.getNumber_simple() - 1);
+			model.setNumber_reinforced(model.getNumber_reinforced() + 1);
+			grid[row][col] = 2;
 		} else if (button.getIcon() == firm) {
 			button.setIcon(explosive);
-			model.number_reinforced--;
-			model.number_explosive++;
-			grid[row][col]=3;
+			model.setNumber_reinforced(model.getNumber_reinforced() - 1);
+			model.setNumber_explosive(model.getNumber_explosive() + 1);
+			grid[row][col] = 3;
 		} else if (button.getIcon() == explosive) {
 			button.setIcon(rewarding);
-			model.number_explosive--;
-			model.number_rewarding++;
-			grid[row][col]=4;
+			model.setNumber_explosive(model.getNumber_explosive() - 1);
+			model.setNumber_rewarding(model.getNumber_rewarding() + 1);
+			grid[row][col] = 4;
 		} else if (button.getIcon() == rewarding) {
 			button.setIcon(empty);
-			model.number_rewarding--;
-			grid[row][col]=0;
+			model.setNumber_rewarding(model.getNumber_rewarding() - 1);
+			grid[row][col] = 0;
 		}
 	}
 
@@ -369,10 +402,11 @@ public class BuildingModeView extends JPanel {
     }
 
 	private void initializeUI() {
-        playButton = new JButton("Play");
-        playButton.addActionListener(createPlayButtonListener());
-        add(playButton);
-    }
+		JButton switchPanelButton = new JButton("Play");
+		switchPanelButton.setBounds(600, 490, 120, 30); // Adjust the position and size as needed
+		switchPanelButton.addActionListener(e -> switchToRunningMode());
+		add(switchPanelButton);
+	}
 
     private ActionListener createPlayButtonListener() {
         return e -> {
@@ -394,5 +428,4 @@ public class BuildingModeView extends JPanel {
         };
     }
 	
-    
 }

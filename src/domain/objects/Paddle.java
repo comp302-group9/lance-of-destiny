@@ -1,13 +1,14 @@
 package domain.objects;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Shape;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
+import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 
+import javax.swing.*;
+import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import java.io.IOException;
 
 public class Paddle {
 
@@ -21,7 +22,7 @@ public class Paddle {
     private double rotationSpeed = 20; // degrees per second
 
     public Paddle(int x, int y, int width, int height) {
-        this.x = x; 
+        this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
@@ -41,9 +42,16 @@ public class Paddle {
     public double getRotationAngle() {return rotationAngle;}
 
     // Responsible for left-right movement
-    public void setDeltaX(int xDirection) {
+    public void setDeltaX(int xDirection, int gameWidth) {
         int dx = xDirection * paddleSpeed;
         x += dx;
+        
+     // Constrain the paddle within the game boundaries
+        if (x < 0) {
+            x = 0;
+        } else if (x + width > gameWidth) {
+            x = gameWidth - width;
+        }
     }
 
     // Responsible for right rotation
@@ -67,6 +75,7 @@ public class Paddle {
         Graphics2D g2d = (Graphics2D) g.create();
         g2d.rotate(Math.toRadians(rotationAngle), x + width / 2, y + height / 2);
         g2d.drawImage(image, x, y, width, height, null);
+        g2d.dispose(); 
     }
 
     // To get the boundries of the rotated paddle

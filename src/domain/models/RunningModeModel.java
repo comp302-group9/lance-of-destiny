@@ -21,9 +21,11 @@ public class RunningModeModel {
     private static final int COLUMNS = BuildingModeModel.COLUMNS;
     private Paddle paddle;
     private Fireball fireball;
-    private long lastUpdateTime; 
+    private long lastUpdateTime;
     private boolean paused = false; 
     public static ArrayList<Barrier> barriers = new ArrayList<Barrier>();
+    private boolean gameOver = false; // State to track if the game is over
+    private String gameOverMessage = "Game Over!"; // Game over message
 
     public RunningModeModel() {
         // Initialize the paddle
@@ -42,6 +44,24 @@ public class RunningModeModel {
     public boolean isPaused() {
         return paused;
     }
+    
+    public boolean isGameOver() {
+        return gameOver; // Return the game-over state
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver; // Set the game-over state
+    }
+    
+    public String gameOverMessage() { // New method to return the game-over message
+        return gameOverMessage; // Return the game-over message
+    }
+    
+    public void restart() {
+        // Logic to restart the game (reset positions, scores, etc.)
+        setGameOver(false); // Reset game-over state
+        fireball.setPosition(100, 100);
+    }
 
     public Paddle getPaddle() {
         return paddle;
@@ -51,19 +71,64 @@ public class RunningModeModel {
         return fireball;
     }
     long lastCollisionTime = 0; // Initialize the last collision time
+    long lastCollisionTime2 = 0;
     long cooldown = 1000; // Set the cooldown time in milliseconds (adjust as needed)
+    long cooldownbar = 15;
 
     public void update(long currentTime, boolean[] keys) {
         // Calculate delta time (time elapsed since last update)
-        double deltaTime = (currentTime - lastUpdateTime) / 1000.0; // Convert to seconds
+    	// If the game is over, return early to stop game logic
+    	
+    	
+       
+    	
+    	double deltaTime = (currentTime - lastUpdateTime) / 1000.0; // Convert to seconds
         lastUpdateTime = currentTime;
+        
+        
+        
+        for (Barrier barrier : barriers) {
+            if (barrier.isMoving) {
+                barrier.move(barriers, deltaTime); // Move barrier and check for collisions
+            }
+        }
+        
+        if (!fireball.isLaunched()) {
+            // Align fireball's x-coordinate to the paddle's center
+            int fireballX = paddle.getX() + (paddle.getWidth() - fireball.getWidth()) / 2;
+            // Align fireball's y-coordinate to the top edge of the paddle
+            int fireballY = paddle.getY() - fireball.getHeight()-10;
+
+            fireball.setPosition(fireballX, fireballY); // Position above the paddle
+        }
+        
+     // Check if fireball has fallen below the game area
+        if (fireball.getY() >= HEIGHT) { // If the fireball is below the bottom edge
+            setGameOver(true); // Set the game-over state
+            return;
+        }
+       
+        
+        
+        
+        if (keys[KeyEvent.VK_SPACE] && !fireball.isLaunched()) {
+            fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
+        }
+
+        // Move the fireball if it's launched
+        if (fireball.isLaunched()) {
+            fireball.move(); // Update fireball's position if launched
+        } else {
+            // Keep fireball above the paddle if not launched
+            fireball.setPosition(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
+        }
 
         // Continuous movement logic for the paddle
         if (keys[KeyEvent.VK_LEFT]) {
-            paddle.setDeltaX(-1); // Move paddle left
+            paddle.setDeltaX(-1, WIDTH); // Move paddle left
         }
         if (keys[KeyEvent.VK_RIGHT]) {
-            paddle.setDeltaX(1); // Move paddle right
+            paddle.setDeltaX(1, WIDTH); // Move paddle right
         }
 
         // Continuous rotation logic for the paddle
@@ -73,18 +138,36 @@ public class RunningModeModel {
         if (keys[KeyEvent.VK_D]) {
             paddle.rotateClockwise(deltaTime); // Rotate paddle clockwise
         }
+        
+        
+        
 
         // Move the fireball
         fireball.move();
 
         // Check collision of fireball with walls
         fireball.checkCollisionWithWalls(WIDTH, HEIGHT);
-
+        if ((currentTime - lastCollisionTime2) >= cooldownbar) {
+        	fireball.checkCollisionWithBarriers(barriers);
+        	lastCollisionTime2 = currentTime;
+        }
         
         // Check collision of fireball with paddle and apply cooldown
         if (fireball.collidesWithPaddle(paddle) && (currentTime - lastCollisionTime) >= cooldown) {
             fireball.reflectFromPaddle(paddle); // Reflect fireball when colliding with paddle
             lastCollisionTime = currentTime; // Update the last collision time
+        }
+        
+        if (keys[KeyEvent.VK_SPACE] && !fireball.isLaunched()) {
+            fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
+        }
+
+        // Move the fireball if it's launched
+        if (fireball.isLaunched()) {
+            fireball.move(); // Update fireball's position if launched
+        } else {
+            // Keep fireball above the paddle if not launched
+            fireball.setPosition(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
         }
     }
 

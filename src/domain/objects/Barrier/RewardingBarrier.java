@@ -13,7 +13,7 @@ public class RewardingBarrier extends Barrier {
 	}
 
 	public RewardingBarrier(int x, int y) {
-		super(x,y); 
+		super(x,y);
 		this.containedSpell=spells[new Random().nextInt(spells.length)];
 	}
 

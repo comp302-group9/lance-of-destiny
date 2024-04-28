@@ -4,6 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.Random;
 
 import domain.models.RunningModeModel;
 
@@ -14,18 +17,62 @@ public class ReinforcedBarrier extends Barrier {
 	public ReinforcedBarrier(int hitCount) {
 		this.hitCount = hitCount;
 		this.message="*At least 10*";
+		
+		
+		
 	}
 
-	public ReinforcedBarrier(int x,int y) { 
-		super(x,y); 
+	public ReinforcedBarrier(int x,int y) {
+		super(x,y);
 		//this.hitCount=new Random().nextInt(3)+2;
+		updateMovementState(RunningModeModel.barriers); // Update whether it should move
+		
 	}
+	
+	private void updateMovementState(ArrayList<Barrier> barriers) {
+        if (!hasBarrierOnImmediateLeft(barriers) && !hasBarrierOnImmediateRight(barriers)) {
+            this.isMoving = new Random().nextDouble() < 0.2; // 20% chance of moving if there's free space
+        } else {
+            this.isMoving = false; // Don't move if barriers are on the immediate left or right
+        }
+    }
+    
+	
+	
+	public void move(ArrayList<Barrier> barriers, double deltaTime) {
+		if (isMoving) {
+			if (hasBarrierOnImmediateLeft(barriers) && hasBarrierOnImmediateRight(barriers)) {
+                return; // Don't move if barriers on both sides
+            }
+        
+            double movement = (33 * 900 / 512) / 4 * deltaTime; // L/4 per second
+            
+            
+
+            if (direction == 0) {
+                x -= 1; // Move left
+            } else {
+                x += 1; // Move right
+            }
+
+            // Check for collisions with other barriers
+            if (isCollidingWithOtherBarriers(barriers) || x < 0 || x + width > RunningModeModel.WIDTH) {
+                reverseDirection(); // Reverse if collision or hitting boundaries
+                x = Math.min(Math.max(x, 0), RunningModeModel.WIDTH - width); // Clamp within boundaries
+            }
+         
+        }
+    }
+	
+	
+	
 
 	@Override
 	public boolean onHit() {
 		hitCount--;
 		if (hitCount <= 0) {
 			System.out.println("Reinforced Barrier destroyed");
+			destroy();
 			return true;
 		}
 		return false;

@@ -1,11 +1,16 @@
 package domain.objects;
-import java.awt.Graphics;
-import java.awt.Rectangle;
+import java.awt.*;
 import java.awt.geom.Area;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 
+import javax.swing.*;
+
+import domain.objects.Paddle;
+
+import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import java.io.IOException;
+import java.util.ArrayList;
+import domain.objects.Barrier.*;
 
 public class Fireball {
 
@@ -13,12 +18,14 @@ public class Fireball {
     private int x, y;
     private double dx, dy;
     private int width, height;
+    private boolean isLaunched = false; // Track if the fireball is launched
 
     public Fireball(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = width;
-        this.height = height; 
+        this.height = height;
+        
 
         // Load the image from the class's resources
         try {
@@ -28,10 +35,34 @@ public class Fireball {
         }
         setDefaultVelocity();
     }
+    
+
+	public int getHeight() {
+		return height;
+	
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+
+	public int getY() {
+		return y;
+	}
+	
+	public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+	
+	public void resetPosition(int paddleX, int paddleY) {
+        setPosition(paddleX, paddleY); // Reset to a given position
+    }
 
     private void setDefaultVelocity(){
-        dx = 5;
-        dy = -5;
+		dx = 1;
+        dy = -1;
     }
 
     //updates the fireball location
@@ -45,6 +76,24 @@ public class Fireball {
     
     public Rectangle getBounds() {
         return new Rectangle(x, y, width, height); 
+    }
+    
+    public void launch(int paddleX, int paddleY) {
+        if (!isLaunched) { // Launch only if not already launched
+        	// Center the fireball horizontally on the paddle
+            int fireballX = paddleX + (width / 2); // Make sure 'width' is accessible
+            // Place the fireball just above the paddle
+            int fireballY = paddleY - height; // Ensure 'height' is defined
+
+            // Set the fireball's position
+            setPosition(fireballX, fireballY); // Call to set the new position
+
+            isLaunched = true; // Update launch status
+        }
+    }
+
+    public boolean isLaunched() {
+        return isLaunched; // Check if the fireball is launched
     }
     
     // Check collision with paddle
@@ -79,7 +128,7 @@ public class Fireball {
         if (x <= 0 || x + width >= screenWidth) {//right, left walls
             reflectVertical();
         }
-        if (y <= 0 || y + height >= screenHeight) {//up, down walls (if want to drop ball, just add "y <= 0" in if statment)
+        if (y <= 0) {//up, down walls (if want to drop ball, just add "y <= 0" in if statment)
             reflectHorizontal();
         }
     }
@@ -90,4 +139,96 @@ public class Fireball {
             g.drawImage(image, x, y, width, height, null);
         } 
     }
+    // Check collision with barriers
+    public boolean collidesWithBarrier(Barrier barrier) {
+        Rectangle ballBounds = getBounds();
+        Rectangle barrierBounds = barrier.getBounds();
+        return ballBounds.intersects(barrierBounds);
+    }
+
+    
+    public void handleCollisionWithBarrier(Barrier barrier) {
+        Rectangle ballBounds = getBounds();
+        Rectangle barrierBounds = barrier.getBounds();
+
+        // Calculate the center points to determine collision type
+        int ballCenterX = ballBounds.x + ballBounds.width / 2;
+        int ballCenterY = ballBounds.y + ballBounds.height / 2;
+
+        int barrierCenterX = barrierBounds.x + barrierBounds.width / 2;
+        int barrierCenterY = barrierBounds.y + barrierBounds.height / 2;
+
+        boolean isHorizontalCollision = Math.abs(ballCenterX - barrierCenterX) > Math.abs(ballCenterY - barrierCenterY);
+
+        if (isHorizontalCollision) {
+            reflectVertical(); // Reflect vertically if collision is horizontal
+        } else {
+            reflectHorizontal(); // Reflect horizontally if collision is vertical
+        }
+
+        // Additional checks to prevent passing through barriers
+        if (barrierBounds.contains(ballBounds)) {
+            // Correct the fireball's position to prevent overlapping
+            if (isHorizontalCollision) {
+                if (ballBounds.x > barrierCenterX) {
+                    x += Math.abs(ballCenterX - barrierCenterX); // Adjust position to the right
+                } else {
+                    x -= Math.abs(ballCenterX - barrierCenterX); // Adjust position to the left
+                }
+            } else {
+                if (ballBounds.y > barrierCenterY) {
+                    y += Math.abs(ballCenterY - barrierCenterY); // Adjust position downward
+                } else {
+                    y -= Math.abs(ballCenterY - barrierCenterY); // Adjust position upward
+                }
+            }
+        }
+
+        // Apply specific logic based on barrier type
+        if (barrier instanceof SimpleBarrier) {
+            // Additional behavior for simple barriers
+            reflectHorizontal(); // Reflect horizontally by default
+        } else if (barrier instanceof ReinforcedBarrier) {
+            reflectHorizontal(); // Example logic for reinforced barriers
+        } else if (barrier instanceof ExplosiveBarrier) {
+            reflectVertical(); // Example logic for explosive barriers
+        } else if (barrier instanceof RewardingBarrier) {
+            reflectHorizontal(); // Example logic for rewarding barriers
+        }
+
+        // Handle barrier destruction if required
+        if (barrier.onHit()) {
+            barrier.destroy(); // Safely remove it
+        }
+    }
+    public void checkCollisionWithBarriers(ArrayList<Barrier> barriers) {
+        ArrayList<Barrier> barriersCopy = new ArrayList<>(barriers); // Create a copy of the list
+
+        for (Barrier barrier : barriersCopy) { // Iterate over the copy
+            Rectangle ballBounds = getBounds();
+            Rectangle barrierBounds = barrier.getBounds();
+
+            if (ballBounds.intersects(barrierBounds)) { // If the fireball collides with the barrier
+
+                // Determine if the impact is along the top/bottom or sides
+                boolean hitTopBottom = (ballBounds.y + ballBounds.height <= barrierBounds.y-5 + barrierBounds.height / 2) ||
+                                       (ballBounds.y >= barrierBounds.y-5 + barrierBounds.height / 2);
+
+                if (hitTopBottom) {
+                    reflectHorizontal(); // If hitting top/bottom, reflect horizontally
+                } else {
+                    reflectVertical(); // Otherwise, reflect vertically
+                }
+
+                if (barrier.onHit()) { // If the barrier should be destroyed
+                    barriers.remove(barrier); // Safely remove it from the list
+                }
+            }
+        }
+    }
+
+
+
+
+
 }

@@ -18,12 +18,12 @@ public class BuildingModeModel {
 
     public int number_simple = 0;
     public int number_reinforced = 0;
-    public int number_explosive = 0; 
+    public int number_explosive = 0;
     public int number_rewarding = 0; 
 
 	private ArrayList<Barrier> BarrierList = new ArrayList<Barrier>();
 
-	Barrier a = new SimpleBarrier(); 
+	Barrier a = new SimpleBarrier();
 	Barrier b = new ReinforcedBarrier(4);
 	Barrier c = new ExplosiveBarrier(4);
 	Barrier d = new RewardingBarrier();
@@ -46,8 +46,12 @@ public class BuildingModeModel {
 		BarrierList = barrierList;
 	}
 
-	public void validate() {
-
+	public boolean validateBarriers() {
+		// Validate the counts against required minimums
+		if (number_simple < 75 || number_reinforced < 10 || number_explosive < 5 || number_rewarding < 10) {
+			return false;
+		}
+		return true;
 	}
 
     public int[][] createEmptyGrid(){

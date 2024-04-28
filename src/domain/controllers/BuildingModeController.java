@@ -13,8 +13,8 @@ public class BuildingModeController implements Runnable {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override 
-	public void run() { 
+	@Override
+	public void run() {
 		while (true) {
 			long currentTime = System.currentTimeMillis();
 			model.update(currentTime, keys, BuildingModeView.WIDTH, BuildingModeView.HEIGHT);

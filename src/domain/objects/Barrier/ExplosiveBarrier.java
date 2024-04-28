@@ -1,5 +1,7 @@
 package domain.objects.Barrier;
 
+import java.awt.Graphics;
+
 public class ExplosiveBarrier extends Barrier {
 
 	private int explosionRadius;
@@ -7,7 +9,7 @@ public class ExplosiveBarrier extends Barrier {
 	public ExplosiveBarrier(int explosionRadius) {
 		super();
 		this.explosionRadius = explosionRadius;
-		this.message="*At least 5*"; 
+		this.message="*At least 5*";
 	}
 
 	public ExplosiveBarrier(int x, int y) {
