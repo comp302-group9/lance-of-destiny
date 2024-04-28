@@ -22,9 +22,7 @@ public abstract class Barrier {
 	protected String img;
 	protected BufferedImage image;
 	protected String message;
-	public boolean isMoving = false;
-    protected int direction; // 0 for left, 1 for right (for horizontal movement)
-
+    protected int direction = 0;
 
 	// Constructor
 	public Barrier() {
@@ -40,7 +38,6 @@ public abstract class Barrier {
 		this.y=y;
 		this.width= RunningModeModel.barrierWidth;
 		this.height =  RunningModeModel.barrierHeight;
-		this.isMoving = checkIfMoving();
         
 		try {
 			this.image = ImageIO.read(getClass().getResource(this.getImg()));
@@ -57,12 +54,14 @@ public abstract class Barrier {
 				return true;
 			}
 		}
-		this.isMoving = new Random().nextDouble() < 0.2;
 		return false;
     }
 
     // Check if there's a barrier immediately on the right
+	static int xo=0;
     public boolean hasBarrierOnImmediateRight(ArrayList<Barrier> barriers) {
+		System.out.println(xo);
+		xo++;
         for (Barrier barrier: barriers){
 			if(barrier!=this){
 				double distance = this.x - barrier.getBounds().getMaxX();
@@ -70,17 +69,9 @@ public abstract class Barrier {
 				return true;
 			}
 		}
-		if(!isMoving){
-			this.isMoving = new Random().nextDouble() < 0.2;
-		};
 		return false;
     }
 	
-	public boolean checkIfMoving() {
-        // Check if there is free space around the barrier in the x-axis
-        // If there is free space, return true with a probability of 0.2
-        return (new Random().nextDouble() < 0.2);
-    }
 	
 	public void move(ArrayList<Barrier> barriers, double deltaTime) {
         
@@ -130,6 +121,14 @@ public abstract class Barrier {
 
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	public int getDirection() {
+		return direction;
+	}
+
+	public void setDirection(int x) {
+		this.direction = x;
 	}
 
 	public String getName() {

@@ -22,10 +22,9 @@ public class SimpleBarrier extends Barrier {
 	}
 	public void move(ArrayList<Barrier> barriers, double deltaTime) {
 		
-			
             double movement = (33 * 900 / 512) / 4 * deltaTime; // L/4 per second
 
-            x += direction;
+            x += movement*direction;
 
             // Check for collisions with other barriers
             if (isCollidingWithOtherBarriers(barriers) || x < 0 || x + width > RunningModeModel.WIDTH) {

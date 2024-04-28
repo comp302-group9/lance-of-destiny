@@ -68,9 +68,7 @@ public class RunningModeModel {
         
         
         for (Barrier barrier : barriers) {
-            if (barrier.isMoving) {
-                barrier.move(barriers, deltaTime); // Move barrier and check for collisions
-            }
+            barrier.move(barriers, deltaTime); // Move barrier and check for collisions
         }
 
         // Continuous movement logic for the paddle
@@ -150,5 +148,28 @@ public class RunningModeModel {
                 }
 			}
 		}
+        checkMovement();
+    }
+static int xo=0;
+    public void checkMovement(){    
+        System.out.println("test");
+        for (Barrier barrier:barriers){
+            System.out.println(xo);
+			xo++;
+            if(!barrier.hasBarrierOnImmediateRight(barriers)){
+                System.out.println(xo);
+                int i = random.nextInt(5);
+                if(i==1){
+                    System.out.println(i);
+                    barrier.setDirection(1);
+                }
+            }
+            if(!barrier.hasBarrierOnImmediateLeft(barriers)){
+                if(random.nextInt(5)==4){
+                    barrier.setDirection(0);
+                }
+            }
+        
+        }
     }
 }
