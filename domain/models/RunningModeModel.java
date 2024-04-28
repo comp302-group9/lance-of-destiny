@@ -17,8 +17,8 @@ import ui.screens.BuildingModeView;
 public class RunningModeModel {
     public static final int WIDTH = BuildingModeView.WIDTH;
     public static final int HEIGHT = BuildingModeView.HEIGHT;
-    public static int barrierWidth = 33 * WIDTH / 512;
-	public static int barrierHeight = HEIGHT / 30;
+    public static int barrierWidth = 51;
+	public static int barrierHeight = 15;
     private static final int ROWS = BuildingModeModel.ROWS;
     private static final int COLUMNS = BuildingModeModel.COLUMNS;
     private Paddle paddle;
@@ -58,7 +58,7 @@ public class RunningModeModel {
     long lastCollisionTime2 = 0;
     long lastCollisionTime3 = 0;
     long cooldown = 1000; // Set the cooldown time in milliseconds (adjust as needed)
-    long cooldownbar = 35;
+    long cooldownbar = 50;
     long cooldownWall=20;
 
     public void update(long currentTime, boolean[] keys) {

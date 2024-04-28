@@ -38,8 +38,8 @@ public abstract class Barrier {
 	public Barrier(int x, int y) {
 		this.x=x;
 		this.y=y;
-		this.width= 33 * 900 / 512;
-		this.height =  600 / 30;
+		this.width= RunningModeModel.barrierWidth;
+		this.height =  RunningModeModel.barrierHeight;
 		this.isMoving = checkIfMoving();
         if (isMoving) {
             this.direction = new Random().nextBoolean() ? 0 : 1; // Random initial direction
