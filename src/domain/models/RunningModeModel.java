@@ -141,12 +141,11 @@ public class RunningModeModel {
         // Continuous rotation logic for the paddle
         if (keys[KeyEvent.VK_A]) {
             paddle.rotateAntiClockwise(deltaTime); // Rotate paddle anti-clockwise
-        }
-        if (keys[KeyEvent.VK_D]) {
+        } else if (keys[KeyEvent.VK_D]) {
             paddle.rotateClockwise(deltaTime); // Rotate paddle clockwise
+        } else {
+            paddle.resetRotation(deltaTime); // Automatically rotate back to the horizontal position
         }
-        
-        
         
 
         // Move the fireball

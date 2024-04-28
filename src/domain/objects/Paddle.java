@@ -73,6 +73,16 @@ public class Paddle {
         }
     }
 
+    public void resetRotation(double deltaTime) {
+        if (rotationAngle > 0) {
+            rotationAngle -= rotationSpeed * deltaTime;
+            if (rotationAngle < 0) rotationAngle = 0; // Prevent overshooting
+        } else if (rotationAngle < 0) {
+            rotationAngle += rotationSpeed * deltaTime;
+            if (rotationAngle > 0) rotationAngle = 0;
+        }
+    }
+
     // Draws the paddle
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
