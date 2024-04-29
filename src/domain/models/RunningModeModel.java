@@ -123,9 +123,6 @@ public class RunningModeModel {
             return;
         }
        
-        
-        
-        
         if (keys[KeyEvent.VK_SPACE] && !fireball.isLaunched()) {
             fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
         }
@@ -161,10 +158,6 @@ public class RunningModeModel {
         } else {
             paddle.resetRotation(deltaTime); // Automatically rotate back to the horizontal position
         }
-        
-
-        // Move the fireball
-        fireball.move();
 
         // Check collision of fireball with walls
         fireball.checkCollisionWithWalls(WIDTH, HEIGHT);
@@ -182,14 +175,6 @@ public class RunningModeModel {
         
         if (keys[KeyEvent.VK_SPACE] && !fireball.isLaunched()) {
             fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
-        }
-
-        // Move the fireball if it's launched
-        if (fireball.isLaunched()) {
-            fireball.move(); // Update fireball's position if launched
-        } else {
-            // Keep fireball above the paddle if not launched
-            fireball.setPosition(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
         }
     }
 
