@@ -2,7 +2,6 @@ package domain.models;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Random;
 
 import domain.objects.Box;
 import domain.objects.Fireball;
@@ -27,7 +26,6 @@ public class RunningModeModel {
     private boolean paused = false; 
     public static ArrayList<Barrier> barriers = new ArrayList<Barrier>();
     public static ArrayList<Box> boxes= new ArrayList<Box>();
-    private Random random=new Random();
     private boolean gameOver = false; // State to track if the game is over
     private String gameOverMessage = "Game Over!"; // Game over message
 

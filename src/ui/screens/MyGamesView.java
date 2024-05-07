@@ -1,6 +1,5 @@
 package ui.screens;
 
-import java.awt.Dimension;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
@@ -10,64 +9,33 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class SignInView extends JPanel { 
+import domain.models.GameSession;
+import ui.screens.BModeUI.GameElement;
+
+public class MyGamesView extends JPanel { 
     private JFrame frame;
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton signInButton, signUpButton;
     private JLabel statusLabel;
     
-    public SignInView() {
+    public MyGamesView() {
         this.setLayout(null);
-        //this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         initUI();
-        frameSetup();
     }
     
     private void initUI() {
-        JLabel usernameLabel = new JLabel("Username:");
-        usernameLabel.setBounds(50, 50, 100, 25);
-        this.add(usernameLabel); 
-
-        usernameField = new JTextField();
-        usernameField.setBounds(150, 50, 200, 25);
-        this.add(usernameField);
+    	
+    	GameSession g = new GameSession();
+        GameElement gameItem = new GameElement(g);
+        gameItem.setBounds(50, 150, 250, 100);
+        this.add(gameItem);
+        JLabel b = new JLabel("bartu");
+        b.setBounds(50, 50, 150, 30);
+        this.add(b);
         
-        // Password label and field
-        JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setBounds(50, 100, 100, 25);
-        this.add(passwordLabel);
-
-        passwordField = new JPasswordField();
-        passwordField.setBounds(150, 100, 200, 25);
-        this.add(passwordField);
-
-        // Similar for other components...
-        signInButton = new JButton("Sign In");
-        signInButton.setBounds(150, 150, 100, 30);
-        this.add(signInButton);
-        
-        signUpButton = new JButton("Sign Up");
-        signUpButton.setBounds(260, 150, 100, 30);
-        this.add(signUpButton);
-
-        statusLabel = new JLabel();
-        statusLabel.setBounds(50, 200, 300, 25);
-        this.add(statusLabel);
     }
     
-    private void frameSetup() {
-    	frame = new JFrame("Sign In");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setContentPane(this);
-
-        // Set size and location before making the frame visible
-        frame.setSize(new Dimension(600*16/9, 600));
-        frame.setLocationRelativeTo(null);
-
-        // Finally, make the frame visible after all properties are set
-        frame.setVisible(true);
-    }
     
     public void display() {
         frame.setVisible(true);

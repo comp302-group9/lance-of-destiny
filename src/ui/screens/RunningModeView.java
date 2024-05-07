@@ -1,14 +1,20 @@
 package ui.screens;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -30,7 +36,7 @@ public class RunningModeView extends JPanel {
 
     public RunningModeView(RunningModeModel model) {
         this.model = model;
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        //setPreferredSize(new Dimension(WIDTH, HEIGHT));
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/ui/images/Background.png"));
         } catch (IOException e) {
@@ -59,7 +65,14 @@ public class RunningModeView extends JPanel {
         JPanel topLeftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topLeftPanel.setOpaque(false);
         topLeftPanel.add(pauseLabel);
+         
+        JButton saveButton = new JButton("Save");
+        saveButton.setFont(new Font("Arial", Font.BOLD, 18));
+        saveButton.setForeground(Color.BLACK);
+        topLeftPanel.add(saveButton);
+        
         add(topLeftPanel, BorderLayout.NORTH);
+        
     }
 
     // Method to toggle the pause screen
