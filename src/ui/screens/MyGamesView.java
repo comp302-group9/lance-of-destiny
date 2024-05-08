@@ -10,13 +10,14 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import domain.models.GameSession;
+import domain.models.User;
 import ui.screens.BModeUI.GameElement;
 
 public class MyGamesView extends JPanel { 
     private JFrame frame;
     private JTextField usernameField;
     private JPasswordField passwordField;
-    private JButton signInButton, signUpButton;
+    private JButton backButton;
     private JLabel statusLabel;
     
     public MyGamesView() {
@@ -26,13 +27,19 @@ public class MyGamesView extends JPanel {
     
     private void initUI() {
     	
-    	GameSession g = new GameSession();
+    	GameSession g = new GameSession(new User("cem", "123", "cem@gmail.com"));
         GameElement gameItem = new GameElement(g);
         gameItem.setBounds(50, 150, 250, 100);
         this.add(gameItem);
+        
+        
         JLabel b = new JLabel("bartu");
         b.setBounds(50, 50, 150, 30);
         this.add(b);
+        
+        backButton= new JButton("back");
+        backButton.setBounds(50, 100, 150, 30);
+        this.add(backButton);
         
     }
     
@@ -75,13 +82,8 @@ public class MyGamesView extends JPanel {
         statusLabel.setText(message);
     }
 
-    public void addSignInButtonListener(ActionListener listener) {
-        signInButton.addActionListener(listener);
+    public void addBackButtonListener(ActionListener listener) {
+        backButton.addActionListener(listener);
     }
-    
-    public void addSignUpButtonListener(ActionListener listener) {
-        signUpButton.addActionListener(listener);
-    }
-
 
 }

@@ -31,6 +31,7 @@ import javax.swing.Timer;
 import domain.controllers.MyGamesController;
 import domain.controllers.RunningModeController;
 import domain.models.BuildingModeModel;
+import domain.models.GameSession;
 import domain.models.RunningModeModel;
 import domain.objects.Barrier.Barrier;
 import ui.screens.BModeUI.BarrierButton;
@@ -345,7 +346,7 @@ public class BuildingModeView extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				model.writeTxt("src\\domain\\txtData\\Test.txt", grid);
-			}
+				model.writeGrid(grid);			}
 		});
 		
 		add(saveButton);
@@ -370,7 +371,8 @@ public class BuildingModeView extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				MyGamesView myGamesView = new MyGamesView();
-		        MyGamesController controller = new MyGamesController(myGamesView);
+				GameSession g = new GameSession(model.getUser());
+		        MyGamesController controller = new MyGamesController(myGamesView, g);
 		        
 		        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(BuildingModeView.this);
 		        frame.getContentPane().removeAll();

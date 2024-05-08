@@ -8,8 +8,8 @@ public class GameSession {
 	private int score;
 	private String grid;
 	
-	public GameSession() {
-		
+	public GameSession(User user) {
+		this.user = user;
 	}
 
 	public void setGameId(int gameId) {

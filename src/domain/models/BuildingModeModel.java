@@ -19,7 +19,8 @@ public class BuildingModeModel {
     public int number_simple = 0;
     public int number_reinforced = 0;
     public int number_explosive = 0;
-    public int number_rewarding = 0; 
+    public int number_rewarding = 0;
+    private User user;
 
 	private ArrayList<Barrier> BarrierList = new ArrayList<Barrier>();
 
@@ -28,11 +29,12 @@ public class BuildingModeModel {
 	Barrier c = new ExplosiveBarrier(4);
 	Barrier d = new RewardingBarrier();
 
-	public BuildingModeModel() {
+	public BuildingModeModel(User user) {
 		BarrierList.add(a);
 		BarrierList.add(b);
 		BarrierList.add(c);
 		BarrierList.add(d);
+		this.user = user;
 	}
 
 	public void update(long currentTime, boolean[] keys, int WIDTH, int HEIGHT) {
@@ -97,6 +99,19 @@ public class BuildingModeModel {
 		}
 		
 	}
+	
+	public void writeGrid(int[][] matrix) {
+	    StringBuilder gridStringBuilder = new StringBuilder();
+	    for (int i = 0; i < matrix.length; i++) {
+	        for (int j = 0; j < matrix[i].length; j++) {
+	            gridStringBuilder.append(matrix[i][j]).append(" ");
+	        }
+	    }
+	    String gridString = gridStringBuilder.toString().trim(); // Remove trailing space
+	    System.out.println(gridString); // Print grid to console
+	}
+
+
 
 	public int getNumber_simple() {
 		return number_simple;
@@ -109,6 +124,17 @@ public class BuildingModeModel {
 	public int getNumber_reinforced() {
 		return number_reinforced;
 	}
+	
+	
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 
 	public void setNumber_reinforced(int number_reinforced) {
 		this.number_reinforced = number_reinforced;

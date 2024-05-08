@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 import database.DatabaseConnection;
 import domain.models.BuildingModeModel;
@@ -22,7 +21,6 @@ public class SignInController {
 
     public SignInController(SignInView view) {
         this.signInView = view;
-
         setupListeners(); 
     }
 
@@ -38,7 +36,9 @@ public class SignInController {
         try (Connection conn = DatabaseConnection.getConnection()) {
             if (validateCredentials(username, password, conn)) {
                 signInView.setSignInStatus("Sign in successful.");
-                BuildingModeModel model2 = new BuildingModeModel();
+                
+                user = new User(username, password);
+                BuildingModeModel model2 = new BuildingModeModel(user);
                 BuildingModeView view2 = new BuildingModeView(model2);
                 BuildingModeController controller2 = new BuildingModeController(model2, view2);
                 
@@ -85,10 +85,10 @@ public class SignInController {
         //controller.getSignInView().setVisible(false);
     }
     
-    
+    /*
     private void showBuildingMode() {
     	SwingUtilities.invokeLater(() -> {
-    		BuildingModeModel model2 = new BuildingModeModel();
+    		BuildingModeModel model2 = new BuildingModeModel(user);
             BuildingModeView view2 = new BuildingModeView(model2);
             BuildingModeController controller2 = new BuildingModeController(model2, view2);
             
@@ -100,4 +100,5 @@ public class SignInController {
             frame.setVisible(true);
         });
     }
+    */
 }
