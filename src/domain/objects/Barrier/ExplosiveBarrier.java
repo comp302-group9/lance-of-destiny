@@ -1,10 +1,12 @@
 package domain.objects.Barrier;
 
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 public class ExplosiveBarrier extends Barrier {
 
 	private int explosionRadius;
+	private boolean fall=true;
 
 	public ExplosiveBarrier(int explosionRadius) {
 		super();
@@ -18,8 +20,14 @@ public class ExplosiveBarrier extends Barrier {
 
 	@Override
 	public boolean onHit() {
-		System.out.println("Explosive barrier destroyed");
+		fall=true;
 		return true;
+	}
+
+	public void move(ArrayList<Barrier> barriers, double deltaTime){
+		if(fall){
+			setY(getY()+5);
+		}	
 	}
 
 	@Override

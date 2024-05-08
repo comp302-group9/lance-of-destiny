@@ -12,7 +12,7 @@ import domain.objects.Barrier.ReinforcedBarrier;
 import domain.objects.Barrier.RewardingBarrier;
 import domain.objects.Barrier.SimpleBarrier;
 
-public class BuildingModeModel {
+public class BuildingModeModel{
     public static final int ROWS = 11;
     public static final int COLUMNS = 19;
 
@@ -128,6 +128,12 @@ public class BuildingModeModel {
 
 	public void setNumber_rewarding(int number_rewarding) {
 		this.number_rewarding = number_rewarding;
+	}
+
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

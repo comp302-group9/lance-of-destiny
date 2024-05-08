@@ -18,6 +18,7 @@ import domain.objects.Box;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
+import ui.screens.RModeUI.SpellIcon;
 
 
 public class RunningModeView extends JPanel {
@@ -135,9 +136,12 @@ public class RunningModeView extends JPanel {
                 i.draw(g);
                 }
             }
+
+            for (int i = 0;i<RunningModeModel.spells.size(); i++){
+                SpellIcon SI = RunningModeModel.spells.get(i);
+                    SI.setBounds(10 ,HEIGHT-120-i * 65,50,50);
+                    add(SI);
+            }
         }
-
-        
-
     }
 }

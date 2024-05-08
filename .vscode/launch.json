@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "main",
+            "request": "launch",
+            "mainClass": "src.main",
+            "projectName": "lance-of-destiny_5c60696c"
+        },
+        {
+            "type": "java",
+            "name": "SpellIcon",
+            "request": "launch",
+            "mainClass": "ui.screens.RModeUI.SpellIcon",
+            "projectName": "lance-of-destiny"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"

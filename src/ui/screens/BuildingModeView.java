@@ -2,6 +2,7 @@ package ui.screens;
 
 import javax.swing.*;
 import domain.models.RunningModeModel;
+import domain.controllers.MyMouseListener;
 import domain.controllers.RunningModeController;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -189,18 +190,7 @@ public class BuildingModeView extends JPanel {
 						updateCurrent();
 					}
 				});
-				button.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseEntered(MouseEvent e) {
-						button.setContentAreaFilled(true);
-						button.setBackground(Color.white);
-					}
-
-					@Override
-					public void mouseExited(MouseEvent e) {
-						button.setContentAreaFilled(false);
-					}
-				});
+				button.addMouseListener(new MyMouseListener());
 				add(button);
 				buttons[BuildingModeModel.COLUMNS * row + col] = button;
 			}

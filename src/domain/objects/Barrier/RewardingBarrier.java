@@ -21,7 +21,6 @@ public class RewardingBarrier extends Barrier {
 
 	@Override
 	public boolean onHit() {
-		System.out.println("Rewarding Barrier destroyed");
 		RunningModeModel.boxes.add(new Box(x + (RunningModeModel.barrierWidth/2),y + (RunningModeModel.barrierWidth/2)));
 		return true;
 	}

@@ -2,6 +2,7 @@ package domain.models;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Random;
 
 import domain.objects.Box;
@@ -13,8 +14,11 @@ import domain.objects.Barrier.ReinforcedBarrier;
 import domain.objects.Barrier.RewardingBarrier;
 import domain.objects.Barrier.SimpleBarrier;
 import ui.screens.BuildingModeView;
+import ui.screens.RModeUI.SpellIcon;
+import domain.objects.Spells.Expension;
+import domain.objects.Spells.Spell;
 
-public class RunningModeModel {
+public class RunningModeModel extends Observable {
     public static final int WIDTH = BuildingModeView.WIDTH;
     public static final int HEIGHT = BuildingModeView.HEIGHT;
     public static int barrierWidth = 51;
@@ -30,8 +34,15 @@ public class RunningModeModel {
     private Random random=new Random();
     private boolean gameOver = false; // State to track if the game is over
     private String gameOverMessage = "Game Over!"; // Game over message
+    public static ArrayList<SpellIcon> spells= new ArrayList<SpellIcon>();
 
     public RunningModeModel() {
+        spells.add(new SpellIcon(new Expension()));
+        //spells.add(new SpellIcon("src\\ui\\images\\extend.png"));
+        //spells.add(new SpellIcon("src\\ui\\images\\fireballSpell.png"));
+        //spells.add(new SpellIcon("src\\ui\\images\\Hex.png"));
+        //spells.add(new SpellIcon("src\\ui\\images\\extend.png"));
+
         // Initialize the paddle
         paddle = new Paddle(WIDTH / 2, HEIGHT - 50, WIDTH/10, 20); // Adjust parameters as needed
 
@@ -87,35 +98,11 @@ public class RunningModeModel {
     // but this is the part that we will apply the observer pattern
 
     public void update(long currentTime, boolean[] keys) {
-        // Calculate delta time (time elapsed since last update)
-    	// If the game is over, return early to stop game logic
-
     	double deltaTime = (currentTime - lastUpdateTime) / 1000.0; // Convert to seconds
         lastUpdateTime = currentTime;
         
-        for (int i=0; i<boxes.size() ; i++){
-            Box box = boxes.get(i);
-            box.move();
-            if (box.getY() > HEIGHT) {
-                boxes.remove(i);
-                i--;
-            }
-        }
-        
-        for (Barrier barrier : barriers) {
-            if (barrier.isMoving) {
-                barrier.move(barriers, deltaTime); // Move barrier and check for collisions
-            }
-        }
-        
-        if (!fireball.isLaunched()) {
-            // Align fireball's x-coordinate to the paddle's center
-            int fireballX = paddle.getX() + (paddle.getWidth() - fireball.getWidth()) / 2;
-            // Align fireball's y-coordinate to the top edge of the paddle
-            int fireballY = paddle.getY() - fireball.getHeight()-10;
-
-            fireball.setPosition(fireballX, fireballY); // Position above the paddle
-        }
+       updateGameElements(deltaTime);
+       handleCollisions(currentTime);
         
      // Check if fireball has fallen below the game area
         if (fireball.getY() >= HEIGHT) { // If the fireball is below the bottom edge
@@ -127,14 +114,6 @@ public class RunningModeModel {
             fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
         }
 
-        // Move the fireball if it's launched
-        if (fireball.isLaunched()) {
-            fireball.move(); // Update fireball's position if launched
-        } else {
-            // Keep fireball above the paddle if not launched
-            fireball.setPosition(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
-        }
-
         // Continuous movement logic for the paddle
         if (keys[KeyEvent.VK_LEFT]) {
             paddle.setDeltaX(-1, WIDTH); // Move paddle left
@@ -144,11 +123,9 @@ public class RunningModeModel {
             paddle.setDeltaX(1, WIDTH); // Move paddle right
             paddle.setDirection(1);
         }
-
         else{
             paddle.setDirection(0);
         }
-
 
         // Continuous rotation logic for the paddle
         if (keys[KeyEvent.VK_A]) {
@@ -159,6 +136,36 @@ public class RunningModeModel {
             paddle.resetRotation(deltaTime); // Automatically rotate back to the horizontal position
         }
 
+        if (keys[KeyEvent.VK_SPACE] && !fireball.isLaunched()) {
+            fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
+        }
+    }
+
+    private void updateGameElements(double deltaTime) {
+        if (fireball.isLaunched()) {
+            fireball.move(); // Update fireball's position if launched
+        } else {
+            // Keep fireball above the paddle if not launched
+            fireball.setPosition(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
+        }
+
+        for (Barrier barrier : barriers) {
+            if (barrier.isMoving) {
+                barrier.move(barriers, deltaTime); // Move barrier and check for collisions
+            }
+        }
+        
+        for (int i=0; i<boxes.size() ; i++){
+            Box box = boxes.get(i);
+            box.move();
+            if (box.getY() > HEIGHT) {
+                boxes.remove(i);
+                i--;
+            }
+        }
+    }
+
+    private void handleCollisions(long currentTime) {
         // Check collision of fireball with walls
         fireball.checkCollisionWithWalls(WIDTH, HEIGHT);
         if ((currentTime - lastCollisionTime2) >= cooldownbar) {
@@ -171,10 +178,6 @@ public class RunningModeModel {
             fireball.reflectFromPaddle(paddle); // Reflect fireball when colliding with paddle
             fireball.validateSpeed(paddle);
             lastCollisionTime = currentTime; // Update the last collision time
-        }
-        
-        if (keys[KeyEvent.VK_SPACE] && !fireball.isLaunched()) {
-            fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
         }
     }
 
