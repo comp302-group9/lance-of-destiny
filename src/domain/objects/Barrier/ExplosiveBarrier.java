@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class ExplosiveBarrier extends Barrier {
 
 	private int explosionRadius;
-	private boolean fall=true;
+	private boolean fall=false;
 
 	public ExplosiveBarrier(int explosionRadius) {
 		super();

@@ -219,12 +219,12 @@ public class Fireball {
 
         if(isMiddleBottomInside||isMiddleTopInside){
             reflectHorizontal();
-            if (barrier.onHit()) { // If the barrier should be destroyed
+            if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                 barriers.remove(barrier); // Safely remove it from the list
             }break;
         }
         else if(isMiddleLeftInside||isMiddleRightInside){
-            if (barrier.onHit()) { // If the barrier should be destroyed
+            if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                 barriers.remove(barrier); // Safely remove it from the list
             }
             reflectVertical();            
@@ -232,31 +232,26 @@ public class Fireball {
         }
         else if (isTopLeftInside || isTopRightInside){
             if(ballBounds.getMaxY()<barrierBounds.getMaxY()+ballBounds.getHeight()-py){
-                reflectVertical();if (barrier.onHit()) { // If the barrier should be destroyed
+                reflectVertical();if (!barrier.getFrozen() &&barrier.onHit()) { // If the barrier should be destroyed
                     barriers.remove(barrier); // Safely remove it from the list
                 }break;
             }else if((ballBounds.getMaxX()<barrierBounds.getMaxX()+ballBounds.getWidth()-px)||ballBounds.getX()>barrierBounds.getX()-ballBounds.getWidth()+px){
-                reflectHorizontal();if (barrier.onHit()) { // If the barrier should be destroyed
+                reflectHorizontal();if (!barrier.getFrozen() &&barrier.onHit()) { // If the barrier should be destroyed
                     barriers.remove(barrier); // Safely remove it from the list
                 }break;
             }
             
         }else if(isBottomLeftInside || isBottomRightInside){
             if(ballBounds.getY()>barrierBounds.getY()-ballBounds.getHeight()+py){
-                reflectVertical();if (barrier.onHit()) { // If the barrier should be destroyed
+                reflectVertical();if (!barrier.getFrozen() &&barrier.onHit()) { // If the barrier should be destroyed
                     barriers.remove(barrier); // Safely remove it from the list
                 }break;
             }else if((ballBounds.getMaxX()<barrierBounds.getMaxX()+ballBounds.getWidth()-px)||ballBounds.getX()>barrierBounds.getX()-ballBounds.getWidth()+px){
-                reflectHorizontal();if (barrier.onHit()) { // If the barrier should be destroyed
+                reflectHorizontal();if (!barrier.getFrozen() &&barrier.onHit()) { // If the barrier should be destroyed
                     barriers.remove(barrier); // Safely remove it from the list
                 }break;
             }
         }
         }
     }
-
-
-
-
-
 }

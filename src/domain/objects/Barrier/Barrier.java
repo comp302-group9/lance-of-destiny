@@ -159,6 +159,10 @@ public abstract class Barrier {
 		name = name;
 	}
 
+	public Boolean getFrozen() {
+		return frozen;
+	}
+
 	public void draw(Graphics g) {
         // Draw the fireball
         if (image != null) {
@@ -170,8 +174,6 @@ public abstract class Barrier {
     if(frozen){
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
 		g2d.drawImage(freezeImage, x, y, RunningModeModel.barrierWidth, RunningModeModel.barrierHeight, null);
-	}
-	if (frozen) {
         // Calculate position and size of the timer circle
         int circleSize = 12; // Size of the circle
         int padding = 4; // Padding from top and right edges
@@ -182,6 +184,8 @@ public abstract class Barrier {
         double fillPercentage = (double) secondsElapsed / 15;
         int fillAngle = (int) Math.round(fillPercentage * 360);
 
+		g2d.setColor(Color.BLACK);
+        g2d.drawArc(circleX, circleY, circleSize, circleSize, 90, 360);
         // Draw the filled arc
         g2d.setColor(Color.BLUE);
         g2d.fillArc(circleX, circleY, circleSize, circleSize, 90, -fillAngle);

@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import domain.DEFAULT;
+
 public class Expension extends Spell{
     public Expension(){
         super();
@@ -16,5 +18,13 @@ public class Expension extends Spell{
             e.printStackTrace();
         }
     }
+ 
+    public void Activate(){
+        DEFAULT.paddleWidth=DEFAULT.screenWidth/5;
+    }
 
+    @Override
+    protected void deActivate() {
+        DEFAULT.paddleWidth=DEFAULT.screenWidth/10;
+    }
 }

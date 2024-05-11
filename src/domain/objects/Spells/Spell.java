@@ -11,13 +11,13 @@ public abstract class Spell {
     private Timer timer;
     private int secondsElapsed;
     private int duration = 30; // Duration of the spell in seconds
-    private Boolean active=false;
+    protected Boolean active=false;
     private int num=2;
     
     public Spell(){
         this.secondsElapsed = 0;
         this.duration = 30; // Set the duration of the spell
-
+        
         // Create a timer to track the spell duration
         this.timer = new Timer(1000, e -> {
             if (secondsElapsed < duration) {
@@ -27,6 +27,7 @@ public abstract class Spell {
                 // Stop the timer when spell duration is reached
                 num--;
                 resetTimer();
+                deActivate();
                 if(num<0){resetTimer();}
                 else {
                     stopTimer();
@@ -36,6 +37,9 @@ public abstract class Spell {
         });
 
     }
+
+    public abstract void Activate();
+    abstract protected void deActivate();
     
     public void startTimer() {
         timer.start();

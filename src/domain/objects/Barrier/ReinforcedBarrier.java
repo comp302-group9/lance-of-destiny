@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 
+import domain.DEFAULT;
 import domain.models.RunningModeModel;
 
 public class ReinforcedBarrier extends Barrier {
@@ -52,9 +53,9 @@ public class ReinforcedBarrier extends Barrier {
             x+=direction;
 
             // Check for collisions with other barriers
-            if (isCollidingWithOtherBarriers(barriers) || x < 0 || x + width > RunningModeModel.WIDTH) {
+            if (isCollidingWithOtherBarriers(barriers) || x < 0 || x + width > DEFAULT.screenWidth) {
                 reverseDirection(); // Reverse if collision or hitting boundaries
-                x = Math.min(Math.max(x, 0), RunningModeModel.WIDTH - width); // Clamp within boundaries
+                x = Math.min(Math.max(x, 0), DEFAULT.screenWidth - width); // Clamp within boundaries
             }
          
         }

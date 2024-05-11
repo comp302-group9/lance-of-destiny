@@ -93,6 +93,7 @@ public class SpellIcon extends JPanel implements MouseListener {
         if (spell.getNum() > 0) {
             spell.setActive(true);
             spell.startTimer();
+            spell.Activate();
             repaint();
         }
     }
