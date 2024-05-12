@@ -10,6 +10,8 @@ public class GameSession {
 	
 	public GameSession(User user) {
 		this.user = user;
+		this.setLife(3);
+		this.setScore(0);
 	}
 
 	public void setGameId(int gameId) {

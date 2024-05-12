@@ -1,5 +1,7 @@
 package domain.controllers;
 
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
 
 import domain.models.BuildingModeModel;
@@ -11,6 +13,7 @@ public class MyGamesController {
 
 	private MyGamesView myGamesView;
 	private GameSession g;
+	private ArrayList<GameSession> games = new ArrayList<>();
 
 	public MyGamesController(MyGamesView myGamesView, GameSession g) {
 		this.myGamesView = myGamesView;

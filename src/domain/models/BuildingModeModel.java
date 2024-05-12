@@ -4,8 +4,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import database.DatabaseConnection;
 import domain.objects.Barrier.Barrier;
 import domain.objects.Barrier.ExplosiveBarrier;
 import domain.objects.Barrier.ReinforcedBarrier;
@@ -108,8 +112,35 @@ public class BuildingModeModel {
 	        }
 	    }
 	    String gridString = gridStringBuilder.toString().trim(); // Remove trailing space
-	    System.out.println(gridString); // Print grid to console
+	    
 	}
+	
+	public void saveGridToDatabase(String fileName, int[][] matrix) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(
+                 "INSERT INTO SavedGames (gameId, username, life, score, grid) VALUES (?, ?, ?, ?, ?)")) {
+            // Convert the 2D array into a single string
+            StringBuilder gridBuilder = new StringBuilder();
+            StringBuilder gridStringBuilder = new StringBuilder();
+    	    for (int i = 0; i < matrix.length; i++) {
+    	        for (int j = 0; j < matrix[i].length; j++) {
+    	            gridStringBuilder.append(matrix[i][j]).append(" ");
+    	        }
+    	    }
+    	    String gridString = gridStringBuilder.toString().trim(); // Remove trailing space
+            
+            // Assuming gameId is auto-incremented or otherwise generated
+            pstmt.setNull(1, java.sql.Types.INTEGER); // Use NULL or provide a value if not auto-increment
+            pstmt.setString(2, this.user.getUsername()); // Replace with your User class's method to get user ID
+            pstmt.setInt(3, 3); // Set life as 3
+            pstmt.setInt(4, 0); // Set score as 0
+            pstmt.setString(5, gridString); // Set grid as the constructed string
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
