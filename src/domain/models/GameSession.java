@@ -7,6 +7,7 @@ public class GameSession {
 	private int life;
 	private int score;
 	private String grid;
+	private int[][] gridArrayVar;
 	
 	public GameSession(User user) {
 		this.user = user;
@@ -21,6 +22,7 @@ public class GameSession {
 		this.gameId = gameId;
 		this.life = life;
 		this.score = score;
+		this.grid = grid;
 	}
 
 	public void setGameId(int gameId) {
@@ -54,6 +56,24 @@ public class GameSession {
 	public int getScore() {
 		return score;
 	}
+	
+
+	public int[][] getGridArrayVar() {
+		return gridArrayVar;
+	}
+
+	public void setGridArrayVar(int[][] gridArrayVar) {
+		this.gridArrayVar = gridArrayVar;
+	}
+
+	public String getGrid() {
+		return grid;
+	}
+
+	public void setGrid(String grid) {
+		this.grid = grid;
+	}
+	
 	
 	
 }

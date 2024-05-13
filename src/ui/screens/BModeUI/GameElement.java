@@ -2,6 +2,7 @@ package ui.screens.BModeUI;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -14,9 +15,11 @@ import domain.models.GameSession;
 public class GameElement extends JPanel {
 	 
 	JTextField textField = new JTextField();
-	private JButton displayButton;
+	private JButton playButton;
+	private GameSession g;
 
-	public GameElement(GameSession b) {
+	public GameElement(GameSession g) {
+		this.g = g;
 		// setBackground(Color.BLACK); // Set the background color to black
 		// setPreferredSize(new Dimension(500, 500)); // Set preferred size for the
 		// panel
@@ -39,18 +42,34 @@ public class GameElement extends JPanel {
         add(lifeLeftLabel);
         
         // Play Button
-        JButton playButton = new JButton("Play");
+        playButton = new JButton("Play");
         playButton.setBounds(130, 50, 70, 20);
         add(playButton);
 
         // Set border around the panel
         setBorder(new LineBorder(Color.BLACK, 2));
         //setPreferredSize(getPreferredSize()); // Set preferred size
+        
+        
 	
 	}
 
 	public String getTextFieldText() {
 		return textField.getText();
 	}
+	
+	public void addPlayButtonListener(ActionListener listener) {
+        playButton.addActionListener(listener);
+    }
+
+	public GameSession getGameSession() {
+		return g;
+	}
+
+	public void setG(GameSession g) {
+		this.g = g;
+	}
+	
+	
 
 }

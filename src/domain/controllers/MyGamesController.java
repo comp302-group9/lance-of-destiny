@@ -26,14 +26,14 @@ public class MyGamesController {
 		this.myGamesView = myGamesView; 
 		this.user = user;
 		setupListeners();
-		fetchGameStatsForUser();
+		fetchSavedGamesForUser();
 	}
 	
 	private void setupListeners() {
         myGamesView.addBackButtonListener(e -> returnToBuildingMode());
     }
 	
-	private void fetchGameStatsForUser() {
+	private void fetchSavedGamesForUser() {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(
                  "SELECT gameId, username, life, score, grid FROM SavedGames WHERE username = ?")) {
@@ -48,10 +48,12 @@ public class MyGamesController {
                 String grid = rs.getString("grid");
 
                 GameSession session = new GameSession(new User(this.user.getUsername(), this.user.getPassword(), this.user.getEmail()), gameId, life, score, grid);
+                
                 games.add(session);
                 
                 // Inform the view about this game session
                 GameElement gameElement = new GameElement(session);
+                new GameElementController(gameElement);
                 myGamesView.addGameElement(gameElement, games.size());
             }
         } catch (SQLException e) {
