@@ -48,6 +48,11 @@ public class SignInView extends JPanel {
     }
     
     private void initUI() {
+        Color original = new Color(173, 206, 235);
+        Color oncolor = new Color(173, 206, 255,200);
+        LineBorder offBord = new LineBorder(Color.black,1);
+        LineBorder onBord = new LineBorder(Color.black, 3);
+
         JLabel usernameLabel = new JLabel("Username:");
         usernameLabel.setFont(new Font("Bauhaus 93", Font.PLAIN, 16));
         usernameLabel.setForeground(Color.BLACK);
@@ -58,6 +63,7 @@ public class SignInView extends JPanel {
         usernameField.setFont(new Font("Bauhaus 93", Font.ROMAN_BASELINE, 14));
         usernameField.setBounds(370, 210, 200, 25);
         usernameField.setBorder(new LineBorder(Color.BLACK)); // 2 is the thickness
+        //usernameField.setBackground(original);
         usernameField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}
@@ -84,6 +90,7 @@ public class SignInView extends JPanel {
         passwordField.setFont(new Font("Bauhaus 93", Font.PLAIN, 14));
         passwordField.setBounds(370, 260, 200, 25);
         passwordField.setBorder(new LineBorder(Color.BLACK));
+        //passwordField.setBackground(original);
         passwordField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}
@@ -102,10 +109,7 @@ public class SignInView extends JPanel {
         // Similar for other components...
         signInButton = new JButton("Sign In");
         signInButton.setBounds(370, 310, 100, 30);
-        Color original = new Color(173, 216, 230);
-        Color oncolor = new Color(173, 216, 230,200);
-        LineBorder offBord = new LineBorder(Color.black,1);
-        LineBorder onBord = new LineBorder(Color.black, 3);
+        
         signInButton.setBackground(original);
         signInButton.setBorder(offBord);
         signInButton.setForeground(Color.BLACK);
