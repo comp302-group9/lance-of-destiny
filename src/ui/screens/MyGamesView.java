@@ -9,8 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import domain.models.GameSession;
-import domain.models.User;
 import ui.screens.BModeUI.GameElement;
 
 public class MyGamesView extends JPanel { 
@@ -19,6 +17,7 @@ public class MyGamesView extends JPanel {
     private JPasswordField passwordField;
     private JButton backButton;
     private JLabel statusLabel;
+    private int yOffset = 150;
     
     public MyGamesView() {
         this.setLayout(null);
@@ -27,10 +26,10 @@ public class MyGamesView extends JPanel {
     
     private void initUI() {
     	
-    	GameSession g = new GameSession(new User("cem", "123", "cem@gmail.com"));
-        GameElement gameItem = new GameElement(g);
-        gameItem.setBounds(50, 150, 250, 100);
-        this.add(gameItem);
+//    	GameSession g = new GameSession(new User("cem", "123", "cem@gmail.com"));
+//        GameElement gameItem = new GameElement(g);
+//        gameItem.setBounds(50, 150, 250, 100);
+//        this.add(gameItem);
         
         
         JLabel b = new JLabel("bartu");
@@ -53,6 +52,14 @@ public class MyGamesView extends JPanel {
             frame.setVisible(false);
             frame.dispose();  // Close the frame when switching views
         }
+    }
+    
+    public void addGameElement(GameElement gameElement, int gameIndex) {
+        int yPosition = yOffset + (gameIndex - 1) * 110; // Calculate the vertical position
+        gameElement.setBounds(50, yPosition, 250, 100); // Set bounds with dynamic Y
+        this.add(gameElement);
+        this.revalidate();
+        this.repaint();
     }
     
 //    public void displayUsers(List<User> users) {

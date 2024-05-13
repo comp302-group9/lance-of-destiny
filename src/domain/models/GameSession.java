@@ -13,6 +13,15 @@ public class GameSession {
 		this.setLife(3);
 		this.setScore(0);
 	}
+	
+	public GameSession(User user, int gameId, int life, int score, String grid) {
+		this.setLife(3);
+		this.setScore(0);
+		this.user = user;
+		this.gameId = gameId;
+		this.life = life;
+		this.score = score;
+	}
 
 	public void setGameId(int gameId) {
 		this.gameId = gameId;
