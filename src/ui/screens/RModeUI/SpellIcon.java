@@ -4,9 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
+
 import javax.swing.*;
 
 import domain.objects.Spells.Spell;
@@ -78,10 +76,10 @@ public class SpellIcon extends JPanel implements MouseListener {
                 text = String.valueOf(spell.getNum());
             }
 
-            int textWidth = g2d.getFontMetrics().stringWidth(text); // Get width of the text
-            int textHeight = g2d.getFontMetrics().getHeight(); // Get height of the text
-            int x = (int) (whiteCircle.getX() + (whiteCircle.getWidth() - textWidth) / 2); // Center the text horizontally
-            int y = (int) (whiteCircle.getY() + (whiteCircle.getHeight() + textHeight) / 2); // Center the text vertically
+            int textWidth = g2d.getFontMetrics().stringWidth(text);
+            int textHeight = g2d.getFontMetrics().getHeight();
+            int x = (int) (whiteCircle.getX() + (whiteCircle.getWidth() - textWidth) / 2);
+            int y = (int) (whiteCircle.getY() + (whiteCircle.getHeight() + textHeight) / 2);
             g2d.drawString(text, x, y - 5);
 
             g2d.dispose();

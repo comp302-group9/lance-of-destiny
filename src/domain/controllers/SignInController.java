@@ -27,10 +27,10 @@ public class SignInController {
     }
 
     private void setupListeners() {
-        signInView.addSignInButtonListener(e -> open());
+        signInView.addSignInButtonListener(e -> signIn());
         signInView.addSignUpButtonListener(e -> showSignUpView());
     }
-
+    /*
     private void open(){
         signInView.setSignInStatus("Sign in successful.");
                 BuildingModeModel model2 = new BuildingModeModel();
@@ -47,7 +47,7 @@ public class SignInController {
                 frame.setLocationRelativeTo(null);
                 
                 signInView.closeFrame();
-    }
+    }*/
 
     private void signIn() {
         String username = signInView.getUsername();

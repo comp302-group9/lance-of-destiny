@@ -16,7 +16,6 @@ public abstract class Spell {
     
     public Spell(){
         this.secondsElapsed = 0;
-        this.duration = 30; // Set the duration of the spell
         
         // Create a timer to track the spell duration
         this.timer = new Timer(1000, e -> {

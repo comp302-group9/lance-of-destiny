@@ -6,6 +6,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -17,6 +20,10 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
+
+
+import java.awt.event.MouseEvent;
 
 import domain.models.User;
 
@@ -50,6 +57,20 @@ public class SignInView extends JPanel {
         usernameField = new JTextField();
         usernameField.setFont(new Font("Bauhaus 93", Font.ROMAN_BASELINE, 14));
         usernameField.setBounds(370, 210, 200, 25);
+        usernameField.setBorder(new LineBorder(Color.BLACK)); // 2 is the thickness
+        usernameField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+            @Override
+            public void keyPressed(KeyEvent e) {
+                usernameField.setBorder(new LineBorder(Color.BLACK, 2));
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // Reset border thickness when the key is released
+                usernameField.setBorder(new LineBorder(Color.BLACK, 1));
+            }
+        });
         this.add(usernameField);
         
         // Password label and field
@@ -62,15 +83,69 @@ public class SignInView extends JPanel {
         passwordField = new JPasswordField();
         passwordField.setFont(new Font("Bauhaus 93", Font.PLAIN, 14));
         passwordField.setBounds(370, 260, 200, 25);
+        passwordField.setBorder(new LineBorder(Color.BLACK));
+        passwordField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+            @Override
+            public void keyPressed(KeyEvent e) {
+                passwordField.setBorder(new LineBorder(Color.BLACK, 2));
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // Reset border thickness when the key is released
+                passwordField.setBorder(new LineBorder(Color.BLACK));
+            }
+        });
         this.add(passwordField);
 
         // Similar for other components...
         signInButton = new JButton("Sign In");
         signInButton.setBounds(370, 310, 100, 30);
+        Color original = new Color(173, 216, 230);
+        Color oncolor = new Color(173, 216, 230,200);
+        LineBorder offBord = new LineBorder(Color.black,1);
+        LineBorder onBord = new LineBorder(Color.black, 3);
+        signInButton.setBackground(original);
+        signInButton.setBorder(offBord);
+        signInButton.setForeground(Color.BLACK);
+        signInButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // Change background to white when mouse enters
+                signInButton.setBackground(oncolor);
+                signInButton.setBorder(onBord);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // Revert background to original color when mouse exits
+                signInButton.setBackground(original);
+                signInButton.setBorder(offBord);
+            }
+        });
         this.add(signInButton);
         
         signUpButton = new JButton("Sign Up");
         signUpButton.setBounds(480, 310, 100, 30);
+        signUpButton.setBackground(original);
+        signUpButton.setBorder(offBord);
+        signUpButton.setForeground(Color.BLACK);
+        signUpButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // Change background to white when mouse enters
+                signUpButton.setBackground(oncolor);
+                signUpButton.setBorder(onBord);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // Revert background to original color when mouse exits
+                signUpButton.setBackground(original);
+                signUpButton.setBorder(offBord);
+            }
+        });
         this.add(signUpButton);
 
         statusLabel = new JLabel();
