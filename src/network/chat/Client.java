@@ -48,8 +48,8 @@ public class Client extends JFrame {
             }
         });
 
-        new Thread(() -> {
-            try {
+    new Thread(() -> {
+    try {
                 String response = fromServer.readUTF();
 if ("ALL_READY".equals(response)) {
     // Receive grid configuration from the server

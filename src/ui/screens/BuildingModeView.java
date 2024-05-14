@@ -395,7 +395,7 @@ public class BuildingModeView extends JPanel {
     new Thread(() -> {
         try {
             Server server = new Server(1234, grid);
-            server.execute();
+        	server.execute();
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Failed to start the server: " + e.getMessage(), "Server Error", JOptionPane.ERROR_MESSAGE);
