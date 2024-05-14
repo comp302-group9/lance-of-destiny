@@ -18,7 +18,7 @@ public class RunningModeModel {
     public static final int WIDTH = BuildingModeView.WIDTH;
     public static final int HEIGHT = BuildingModeView.HEIGHT;
     public static int barrierWidth = 51;
-	public static int barrierHeight =15;
+    public static int barrierHeight =15;
     private static final int ROWS = BuildingModeModel.ROWS;
     private static final int COLUMNS = BuildingModeModel.COLUMNS;
     private Paddle paddle;
@@ -30,6 +30,12 @@ public class RunningModeModel {
     private Random random=new Random();
     private boolean gameOver = false; // State to track if the game is over
     private String gameOverMessage = "Game Over!"; // Game over message
+    private int chances = 3; // Add this line to keep track of player's chances
+
+    private long lastCollisionTime = 0; // Initialize the last collision time
+    private long lastCollisionTime2 = 0;
+    private long cooldown = 1000; // Set the cooldown time in milliseconds (adjust as needed)
+    private long cooldownbar = 15;
 
     public RunningModeModel() {
         // Initialize the paddle
@@ -64,7 +70,8 @@ public class RunningModeModel {
     public void restart() {
         // Logic to restart the game (reset positions, scores, etc.)
         setGameOver(false); // Reset game-over state
-        fireball.setPosition(100, 100);
+        fireball.setPosition(paddle.getX() + paddle.getWidth() / 2 - fireball.getWidth() / 2, paddle.getY() - fireball.getHeight());
+        fireball.setLaunched(false); // Ensure fireball is not launched
     }
 
     public Paddle getPaddle() {
@@ -74,17 +81,19 @@ public class RunningModeModel {
     public Fireball getFireball() {
         return fireball;
     }
-    long lastCollisionTime = 0; // Initialize the last collision time
-    long lastCollisionTime2 = 0;
-    long cooldown = 1000; // Set the cooldown time in milliseconds (adjust as needed)
-    long cooldownbar = 15;
 
-    //APPLICATION OF OBSERVER PATTERN 
-    // When the RunningModeModel changes state, 
-    // it calls a method such as notifyObservers() in our case update() method
-    // to loop through all registered observers (paddle, fireball, barrier and boxes) and call their own update methods, like paddle.update(this).
-    // We know that observer pattern needs to be implemented using an Interface and we will change our code to do so
-    // but this is the part that we will apply the observer pattern
+    public int getChances() {
+        return chances;
+    }
+
+    public void decreaseChance() {
+        chances--;
+        if (chances <= 0) {
+            setGameOver(true);
+        } else {
+            restart(); // Restart the fireball position when a chance is lost
+        }
+    }
 
     public void update(long currentTime, boolean[] keys) {
         // Calculate delta time (time elapsed since last update)
@@ -119,7 +128,7 @@ public class RunningModeModel {
         
      // Check if fireball has fallen below the game area
         if (fireball.getY() >= HEIGHT) { // If the fireball is below the bottom edge
-            setGameOver(true); // Set the game-over state
+            decreaseChance(); // Decrease the player's chance
             return;
         }
        

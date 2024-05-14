@@ -24,11 +24,12 @@ public class RunningModeController implements KeyListener, Runnable {
     
     @Override
     public void run() {
-        while (true) {
-            if (!model.isPaused()) {
+        while (running) {
+            if (!model.isPaused() && !model.isGameOver()) {
                 long currentTime = System.currentTimeMillis();
                 model.update(currentTime, keys);
                 view.repaint(); // Repaint the view
+                view.updateChances(); // Update the chances label
             }
         
             try {

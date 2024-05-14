@@ -1,8 +1,6 @@
 package ui.screens;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -19,7 +17,6 @@ import domain.objects.Fireball;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
 
-
 public class RunningModeView extends JPanel {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
@@ -27,6 +24,7 @@ public class RunningModeView extends JPanel {
     private BufferedImage backgroundImage;
     private JPanel pausePanel;  // Panel for pause screen
     private JLabel pauseLabel;
+    private JLabel chancesLabel; // Add this line to display remaining chances
 
     public RunningModeView(RunningModeModel model) {
         this.model = model;
@@ -60,6 +58,20 @@ public class RunningModeView extends JPanel {
         topLeftPanel.setOpaque(false);
         topLeftPanel.add(pauseLabel);
         add(topLeftPanel, BorderLayout.NORTH);
+
+        // Add the chances label to the top right
+        chancesLabel = new JLabel("Chances: " + model.getChances());
+        chancesLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        chancesLabel.setForeground(Color.WHITE);
+
+        JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        topRightPanel.setOpaque(false);
+        topRightPanel.add(chancesLabel);
+        add(topRightPanel, BorderLayout.NORTH);
+    }
+
+    public void updateChances() {
+        chancesLabel.setText("Chances: " + model.getChances());
     }
 
     // Method to toggle the pause screen
@@ -93,7 +105,6 @@ public class RunningModeView extends JPanel {
             pausePanel.add(resumeButton, gbc);
             add(pausePanel, BorderLayout.CENTER);
         }
-
     }
 
     private void removePauseScreen() {
@@ -118,7 +129,7 @@ public class RunningModeView extends JPanel {
             int textHeight = metrics.getAscent(); // Ascent for text height
             g.drawString(gameOverMessage, (WIDTH - textWidth) / 2, (HEIGHT - textHeight) / 2); // Centered text
         } else {
-        	Paddle paddle = model.getPaddle();
+            Paddle paddle = model.getPaddle();
             paddle.draw(g);
 
             Fireball fireball = model.getFireball();
@@ -136,8 +147,5 @@ public class RunningModeView extends JPanel {
                 }
             }
         }
-
-        
-
     }
 }

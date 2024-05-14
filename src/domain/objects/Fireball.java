@@ -1,11 +1,6 @@
 package domain.objects;
 import java.awt.*;
 import java.awt.geom.Area;
-
-import javax.swing.*;
-
-import domain.objects.Paddle;
-
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -54,6 +49,10 @@ public class Fireball {
 	public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public void setLaunched(boolean launched) {
+        isLaunched = launched;
     }
 	
 	public void resetPosition(int paddleX, int paddleY) {
@@ -255,9 +254,5 @@ boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && 
         }
         }
     }
-
-
-
-
 
 }
