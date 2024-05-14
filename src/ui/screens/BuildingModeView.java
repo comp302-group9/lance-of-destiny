@@ -25,6 +25,8 @@ import javax.imageio.ImageIO;
 
 import domain.models.BuildingModeModel;
 import domain.objects.Barrier.Barrier;
+import network.chat.Client;
+import network.chat.Server;
 import ui.screens.BModeUI.BarrierButton;
 import ui.screens.BModeUI.BarrierElement;
 
@@ -272,29 +274,6 @@ public class BuildingModeView extends JPanel {
 	}
 
 	public void addButton() {
-		JButton switchPanelButton = new JButton("Play");
-		switchPanelButton.setBounds(600, 490, 120, 30); // Adjust the position and size as needed
-		switchPanelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				RunningModeModel model = new RunningModeModel();
-				RunningModeView view = new RunningModeView(model);
-				RunningModeController controller = new RunningModeController(model, view, grid);
-
-				JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(BuildingModeView.this);
-
-				frame.getContentPane().removeAll();
-				frame.getContentPane().add(view);
-				frame.revalidate();
-				frame.repaint();
-
-				Thread gameThread = new Thread(controller);
-				gameThread.start();
-			}
-		});
-		add(switchPanelButton);
-		
-		
 		JButton placeButton = new JButton("Place");
 		placeButton.setBounds(600, 525, 120, 30);
 		placeButton.addActionListener(new ActionListener() {
@@ -398,26 +377,30 @@ public class BuildingModeView extends JPanel {
 		switchPanelButton.setBounds(600, 490, 120, 30); // Adjust the position and size as needed
 		switchPanelButton.addActionListener(e -> switchToRunningMode());
 		add(switchPanelButton);
+
+		JButton hostPanelButton = new JButton("Host");
+		hostPanelButton.setBounds(730, 490, 120, 30); // Adjust the position and size as needed
+		hostPanelButton.addActionListener(e -> hostMenu()
+		);
+		add(hostPanelButton);
+
+		JButton clientPanelButton = new JButton("Client");
+		clientPanelButton.setBounds(730, 525, 120, 30); // Adjust the position and size as needed
+		clientPanelButton.addActionListener(e -> new Client("localhost", 1234, grid)
+		);
+		add(clientPanelButton);
 	}
 
-    private ActionListener createPlayButtonListener() {
-        return e -> {
-            // Create the running mode model, view, and controller
-            RunningModeModel runningModel = new RunningModeModel();
-            RunningModeView runningView = new RunningModeView(runningModel);
-            RunningModeController runningController = new RunningModeController(runningModel, runningView, grid);
+	private void hostMenu() {
+    new Thread(() -> {
+        try {
+            Server server = new Server(1234, grid);
+            server.execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to start the server: " + e.getMessage(), "Server Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }).start();
+}
 
-            // Get the parent frame of this panel to switch content
-            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            frame.getContentPane().removeAll();
-            frame.getContentPane().add(runningView);
-            frame.revalidate();
-            frame.repaint();
-
-            // Start the game loop in a new thread
-            Thread gameThread = new Thread(runningController);
-            gameThread.start();
-        };
-    }
-	
 }

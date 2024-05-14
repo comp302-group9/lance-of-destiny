@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Client",
+            "request": "launch",
+            "mainClass": "network.chat.Client",
+            "projectName": "lance-of-destiny"
+        },
+        {
+            "type": "java",
+            "name": "Server",
+            "request": "launch",
+            "mainClass": "network.chat.Server",
+            "projectName": "lance-of-destiny"
+        },
+        {
+            "type": "java",
             "name": "main",
             "request": "launch",
             "mainClass": "src.main",
