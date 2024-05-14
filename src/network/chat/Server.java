@@ -55,7 +55,7 @@ public class Server extends JFrame {
     public void execute() {
         try {
             // Accept client connections for other players
-            for (int i = 0; i < clients.length - 1; i++) { // Accept only one client connection
+            for (int i = 0; i < clients.length - 1 ; i++) { // Accept only one client connection
                 clients[i] = serverSocket.accept();
                 toClients[i] = new DataOutputStream(clients[i].getOutputStream());
                 fromClients[i] = new DataInputStream(clients[i].getInputStream());
@@ -127,7 +127,7 @@ public class Server extends JFrame {
     public static void main(String[] args) throws IOException {
         Server server = new Server(1234, null);
         server.execute();
-        server.actLikeClient("localhost", 1234); // Connect to itself as a client
+        server.actLikeClient("172.21.171.114", 1234); // Connect to itself as a client
     }
 
     private void actLikeClient(String serverAddress, int serverPort) {

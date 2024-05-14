@@ -99,6 +99,6 @@ if ("ALL_READY".equals(response)) {
     });    }
 
     public static void main(String[] args) {
-        new Client("localhost", 1234, null);
+        new Client("172.21.171.114", 1234, null);
     }
 }

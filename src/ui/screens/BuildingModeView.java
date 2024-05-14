@@ -386,7 +386,7 @@ public class BuildingModeView extends JPanel {
 
 		JButton clientPanelButton = new JButton("Client");
 		clientPanelButton.setBounds(730, 525, 120, 30); // Adjust the position and size as needed
-		clientPanelButton.addActionListener(e -> new Client("localhost", 1234, grid)
+		clientPanelButton.addActionListener(e -> new Client("172.21.171.114", 1234, grid)
 		);
 		add(clientPanelButton);
 	}
@@ -395,6 +395,7 @@ public class BuildingModeView extends JPanel {
     new Thread(() -> {
         try {
             Server server = new Server(1234, grid);
+			//new Client("localhost", 1234, grid);
         	server.execute();
         } catch (IOException e) {
             e.printStackTrace();
