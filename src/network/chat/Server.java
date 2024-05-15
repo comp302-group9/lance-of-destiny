@@ -76,6 +76,7 @@ public class Server extends JFrame {
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(toClients[i]);
                 objectOutputStream.writeObject(grid); // Replace 'gridConfiguration' with your actual grid data
                 objectOutputStream.flush();
+                toClients[i].writeUTF("ALL_READY");
 
                 // Optionally, send player ID
                 // toClients[i].writeInt(playerID); // Replace 'playerID' with a unique identifier for each client
@@ -127,7 +128,7 @@ public class Server extends JFrame {
     public static void main(String[] args) throws IOException {
         Server server = new Server(1234, null);
         server.execute();
-        server.actLikeClient("172.21.171.114", 1234); // Connect to itself as a client
+        server.actLikeClient("localhost", 1234); // Connect to itself as a client
     }
 
     private void actLikeClient(String serverAddress, int serverPort) {

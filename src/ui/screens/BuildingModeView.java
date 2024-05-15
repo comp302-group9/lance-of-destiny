@@ -25,6 +25,12 @@ import javax.imageio.ImageIO;
 
 import domain.models.BuildingModeModel;
 import domain.objects.Barrier.Barrier;
+import network.ClientController;
+import network.ClientModel;
+import network.ClientView;
+import network.ServerController;
+import network.ServerModel;
+import network.ServerView;
 import network.chat.Client;
 import network.chat.Server;
 import ui.screens.BModeUI.BarrierButton;
@@ -386,7 +392,7 @@ public class BuildingModeView extends JPanel {
 
 		JButton clientPanelButton = new JButton("Client");
 		clientPanelButton.setBounds(730, 525, 120, 30); // Adjust the position and size as needed
-		clientPanelButton.addActionListener(e -> new Client("172.21.171.114", 1234, grid)
+		clientPanelButton.addActionListener(e -> clientPage()
 		);
 		add(clientPanelButton);
 	}
@@ -394,14 +400,44 @@ public class BuildingModeView extends JPanel {
 	private void hostMenu() {
     new Thread(() -> {
         try {
-            Server server = new Server(1234, grid);
-			//new Client("localhost", 1234, grid);
-        	server.execute();
+            ServerModel model = new ServerModel(1234, grid);
+            ServerView view = new ServerView();
+            ServerController controller = new ServerController(model, view);
+
+			JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+			frame.getContentPane().removeAll();
+			frame.getContentPane().add(view);
+			frame.revalidate();
+			frame.repaint();
+		
+			view.requestFocusInWindow();
+
+			controller.execute();
+            controller.actLikeClient("172.21.171.114", 1234);
         } catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Failed to start the server: " + e.getMessage(), "Server Error", JOptionPane.ERROR_MESSAGE);
         }
     }).start();
-}
+	}
+
+	private void clientPage(){
+		try {
+            int[][] grid = null; // Replace with actual grid data
+            ClientModel model = new ClientModel("localhost", 1234, grid);
+            ClientView view = new ClientView();
+            ClientController controller = new ClientController(model, view);
+			
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+			frame.getContentPane().removeAll();
+			frame.getContentPane().add(view);
+			frame.revalidate();
+			frame.repaint();
+		
+			view.requestFocusInWindow();
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error connecting to server: " + e.getMessage());
+        }
+	}
 
 }

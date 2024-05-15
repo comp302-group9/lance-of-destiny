@@ -25,12 +25,32 @@ public class Client extends JFrame {
             fromServer = new DataInputStream(socket.getInputStream());
 
             setupUI();
+            startListening(); // Start listening after everything is set up
         } catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error connecting to server: " + e.getMessage());
         }
     }
-
+    private void startListening() {
+        new Thread(() -> {
+            try {
+                while (true) {
+                    String response = fromServer.readUTF();
+                    if ("ALL_READY".equals(response)) {
+                        ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+                        int[][] receivedGrid = (int[][]) objectInputStream.readObject();
+                        SwingUtilities.invokeLater(() -> {
+                            //statusLabel.setText("All players are ready! Starting...");
+                            switchToRunningMode(receivedGrid);
+                        });
+                        break; // Exit the loop after receiving the start signal
+                    }
+                }
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
     private void setupUI() {
         JButton readyButton = new JButton("I'm Ready");
         JLabel statusLabel = new JLabel("Not ready");
@@ -78,7 +98,7 @@ if ("ALL_READY".equals(response)) {
 
     
 
-    private void switchToRunningMode(int[][] grid) {
+    private void switchToRunningMode(int[][] grid) {System.out.println("All players ready");
         // TODO Auto-generated method stub
     // Create the running mode components and switch views
     RunningModeModel runningModeModel = new RunningModeModel();
@@ -99,6 +119,6 @@ if ("ALL_READY".equals(response)) {
     });    }
 
     public static void main(String[] args) {
-        new Client("172.21.171.114", 1234, null);
+        new Client("localhost", 1234, null);
     }
 }
