@@ -20,7 +20,7 @@ public class main {
         SignInView signInView = new SignInView();
         SignInController controller = new SignInController(signInView); 
     }
-    
+	
 	/*
 	private static JFrame frame;
     private static User model;

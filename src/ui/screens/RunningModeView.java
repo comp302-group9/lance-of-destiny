@@ -1,6 +1,8 @@
 package ui.screens;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -10,6 +12,7 @@ import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import domain.models.RunningModeModel;
 import domain.objects.Box;
@@ -22,15 +25,16 @@ public class RunningModeView extends JPanel {
     public static final int HEIGHT = 600;
     private RunningModeModel model;
     private BufferedImage backgroundImage;
+    private BufferedImage heartImage; // Add this line to load the heart image
     private JPanel pausePanel;  // Panel for pause screen
     private JLabel pauseLabel;
-    private JLabel chancesLabel; // Add this line to display remaining chances
 
     public RunningModeView(RunningModeModel model) {
         this.model = model;
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/ui/images/Background.png"));
+            heartImage = ImageIO.read(getClass().getResource("/ui/images/heart.png")); // Load the heart image
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,20 +62,10 @@ public class RunningModeView extends JPanel {
         topLeftPanel.setOpaque(false);
         topLeftPanel.add(pauseLabel);
         add(topLeftPanel, BorderLayout.NORTH);
-
-        // Add the chances label to the top right
-        chancesLabel = new JLabel("Chances: " + model.getChances());
-        chancesLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        chancesLabel.setForeground(Color.WHITE);
-
-        JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        topRightPanel.setOpaque(false);
-        topRightPanel.add(chancesLabel);
-        add(topRightPanel, BorderLayout.NORTH);
     }
 
     public void updateChances() {
-        chancesLabel.setText("Chances: " + model.getChances());
+        // No need to update text label anymore, handled in paintComponent
     }
 
     // Method to toggle the pause screen
@@ -128,6 +122,7 @@ public class RunningModeView extends JPanel {
             int textWidth = metrics.stringWidth(gameOverMessage);
             int textHeight = metrics.getAscent(); // Ascent for text height
             g.drawString(gameOverMessage, (WIDTH - textWidth) / 2, (HEIGHT - textHeight) / 2); // Centered text
+                        
         } else {
             Paddle paddle = model.getPaddle();
             paddle.draw(g);
@@ -135,17 +130,27 @@ public class RunningModeView extends JPanel {
             Fireball fireball = model.getFireball();
             fireball.draw(g);
 
-            for (Box i: RunningModeModel.boxes){
-                if (i!=null){
-                i.draw(g);
+            for (Box i : RunningModeModel.boxes) {
+                if (i != null) {
+                    i.draw(g);
                 }
             }
 
-            for (Barrier i: RunningModeModel.barriers){
-                if (i!=null){
-                i.draw(g);
+            for (Barrier i : RunningModeModel.barriers) {
+                if (i != null) {
+                    i.draw(g);
                 }
+            }
+
+            // Draw the hearts for lives
+            int lives = model.getChances();
+            g.setFont(new Font("Arial", Font.BOLD, 18));
+            g.setColor(Color.WHITE);
+            g.drawString("Lives:", WIDTH - 150, 30); // Adjust the position as needed
+            for (int i = 0; i < lives; i++) {
+                g.drawImage(heartImage, WIDTH - 80 + i * 25, 10, 20, 20, this);
             }
         }
     }
 }
+
