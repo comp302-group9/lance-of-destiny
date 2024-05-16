@@ -115,7 +115,7 @@ public class BuildingModeModel {
 	    
 	}
 	
-	public void saveGridToDatabase(String fileName, int[][] matrix) {
+	public void saveGridToDatabase(int[][] matrix) {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(
                  "INSERT INTO SavedGames (gameId, username, life, score, grid) VALUES (?, ?, ?, ?, ?)")) {

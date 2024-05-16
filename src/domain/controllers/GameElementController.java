@@ -38,7 +38,7 @@ public class GameElementController {
         
         
         //BURADAKI UI 'IN DEĞİŞTİRİLMESİ GEREKİYOR ÇOK KİRİTK BAŞIMIZ AĞRIR
-        frame.setSize(1067, 600);
+        frame.setSize(600*16/9, 600);
         frame.setVisible(true);
 
         // Start the game logic in a new thread

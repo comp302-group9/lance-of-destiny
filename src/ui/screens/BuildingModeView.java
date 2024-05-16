@@ -345,7 +345,7 @@ public class BuildingModeView extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				model.writeTxt("src\\domain\\txtData\\Test.txt", grid);
-				model.saveGridToDatabase("src\\domain\\txtData\\Test.txt", grid);			}
+				model.saveGridToDatabase(grid);			}
 		});
 		
 		add(saveButton);
