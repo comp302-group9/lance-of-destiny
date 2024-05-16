@@ -107,6 +107,15 @@ public class RunningModeView extends JPanel {
             pausePanel = null;
         }
     }
+    /**
+    * Requires: A valid Graphics object `g` that is not null.
+    * Modifies: This method modifies the visual output of the `RunningModeView` JPanel.
+    * Effects: 
+    *  - Draws the background image on the JPanel.
+    *  - If the game is over, displays a "Game Over" message centered on the JPanel.
+    *  - If the game is not over, it draws the paddle, fireball, boxes, and barriers.
+    *  - Displays the number of lives left as heart images on the top right corner of the JPanel.
+    */
 
     @Override
     protected void paintComponent(Graphics g) {
