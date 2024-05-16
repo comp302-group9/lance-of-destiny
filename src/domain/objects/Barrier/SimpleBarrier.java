@@ -58,6 +58,10 @@ public class SimpleBarrier extends Barrier {
 		System.out.println("Reinforced Barrier destroyed");
 		return true;
 	}
+	public void setMoving() {
+		this.isMoving = true;
+		
+	}
 
 	@Override
 	public String getName() {

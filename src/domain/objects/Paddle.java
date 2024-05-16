@@ -6,15 +6,22 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.*;
+
+import PhysicsEngines.PhysicsObject;
+import PhysicsEngines.Vector;
+
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
 
-public class Paddle {
+public class Paddle implements PhysicsObject{
 
     private BufferedImage image;
     private int x;
     private int y;
+    private Vector position;
+    private Vector velocity;
+    
     private int width;
     private int height;
     private int paddleSpeed = 6;
@@ -22,9 +29,11 @@ public class Paddle {
     private double rotationSpeed = 20; // degrees per second
     private int direction = 0;
 
-    public Paddle(int x, int y, int width, int height) {
+    public Paddle (int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
+        position = new Vector(x, y);
+        velocity = new Vector(0,0);
         this.width = width;
         this.height = height;
         
@@ -43,17 +52,30 @@ public class Paddle {
     public double getRotationAngle() {return rotationAngle;}
     public int getDirection() {return direction;}
     public void setDirection(int direction) {this.direction= direction;}
+    public Vector getPosition() {
+        return position;
+    }
+    public boolean isMoving() {
+        return velocity.getMagnitude()!=0;// Check if paddle is moving
+    }
+    public Vector getVelocity() {
+        return velocity;
+    }
 
     // Responsible for left-right movement
     public void setDeltaX(int xDirection, int gameWidth) {
         int dx = xDirection * paddleSpeed;
+        velocity.setX(dx);
         x += dx;
+        position.setX(x);
         
      // Constrain the paddle within the game boundaries
         if (x < 0) {
             x = 0;
+            position.setX(x);
         } else if (x + width > gameWidth) {
             x = gameWidth - width;
+            position.setX(x);
         }
     }
 

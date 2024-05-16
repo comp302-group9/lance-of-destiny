@@ -13,7 +13,7 @@ import domain.objects.Barrier.ReinforcedBarrier;
 import domain.objects.Barrier.RewardingBarrier;
 import domain.objects.Barrier.SimpleBarrier;
 import ui.screens.BuildingModeView;
-
+import PhysicsEngines.*;
 public class RunningModeModel {
     public static final int WIDTH = BuildingModeView.WIDTH;
     public static final int HEIGHT = BuildingModeView.HEIGHT;
@@ -26,6 +26,7 @@ public class RunningModeModel {
     private long lastUpdateTime;
     private boolean paused = false; 
     public static ArrayList<Barrier> barriers = new ArrayList<Barrier>();
+    public static ArrayList<PhysicsObject> gameObjects = new ArrayList<PhysicsObject>();
     public static ArrayList<Box> boxes= new ArrayList<Box>();
     private Random random=new Random();
     private boolean gameOver = false; // State to track if the game is over
@@ -164,17 +165,17 @@ public class RunningModeModel {
 
         // Check collision of fireball with walls
         fireball.checkCollisionWithWalls(WIDTH, HEIGHT);
-        if ((currentTime - lastCollisionTime2) >= cooldownbar) {
-        	fireball.checkCollisionWithBarriers(barriers);
-        	lastCollisionTime2 = currentTime;
+        if ((currentTime - lastCollisionTime) >= cooldownbar) {
+        	Collision.narrowPhaseCollision(Collision.broadPhaseCollision(gameObjects));
+        	lastCollisionTime = currentTime;
         }
         
         // Check collision of fireball with paddle and apply cooldown
-        if (fireball.collidesWithPaddle(paddle) && (currentTime - lastCollisionTime) >= cooldown) {
+        /*if (fireball.collidesWithPaddle(paddle) && (currentTime - lastCollisionTime) >= cooldown) {
             fireball.reflectFromPaddle(paddle); // Reflect fireball when colliding with paddle
             fireball.validateSpeed(paddle);
             lastCollisionTime = currentTime; // Update the last collision time
-        }
+        }*/
         
         if (keys[KeyEvent.VK_SPACE] && !fireball.isLaunched()) {
             fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
@@ -218,7 +219,17 @@ public class RunningModeModel {
                         barriers.add(rewarding);
                         break;
                 }
+				
 			}
+			
 		}
+        initializeGameObjects(barriers);
+    }
+    public void initializeGameObjects(ArrayList<Barrier> barriers) {
+    	for (Barrier b: barriers) {
+    		gameObjects.add(b);
+    	}
+    	gameObjects.add(fireball);
+    	gameObjects.add(paddle);
     }
 }
