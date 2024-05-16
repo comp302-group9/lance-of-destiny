@@ -47,6 +47,7 @@ public class ServerController {
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(model.getToClients()[i]);
                 objectOutputStream.writeObject(model.getGrid());
                 objectOutputStream.flush();
+                model.getToClients()[i].writeUTF("ALL_READY");
             } catch (IOException e) {
                 e.printStackTrace();
             }

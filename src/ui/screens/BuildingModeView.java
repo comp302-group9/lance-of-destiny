@@ -413,7 +413,7 @@ public class BuildingModeView extends JPanel {
 			view.requestFocusInWindow();
 
 			controller.execute();
-            controller.actLikeClient("172.21.171.114", 1234);
+            controller.actLikeClient("192.168.1.4", 1234);
         } catch (IOException e) {
             e.printStackTrace();
         }
