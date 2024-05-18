@@ -1,44 +1,41 @@
 package ui.screens;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-
-import java.io.IOException;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.Timer;
+import javax.swing.*;
 
 import domain.models.RunningModeModel;
-import domain.objects.Box;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class RunningModeView extends JPanel {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
     private RunningModeModel model;
     private BufferedImage backgroundImage;
-    private BufferedImage heartImage; // Add this line to load the heart image
-    private JPanel pausePanel;  // Panel for pause screen
+    private BufferedImage heartImage;
+    private JPanel pausePanel;
     private JLabel pauseLabel;
+    private JButton pauseButton;
+    private JButton saveButton;
+    private JButton loadButton;
+    private JButton quitButton;
 
     public RunningModeView(RunningModeModel model) {
         this.model = model;
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/ui/images/Background.png"));
-            heartImage = ImageIO.read(getClass().getResource("/ui/images/heart.png")); // Load the heart image
+            heartImage = ImageIO.read(getClass().getResource("/ui/images/heart.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        setFocusable(true);  // Make the JPanel focusable
+        setFocusable(true);
         requestFocusInWindow();
         setupUIComponents();
     }
@@ -64,11 +61,6 @@ public class RunningModeView extends JPanel {
         add(topLeftPanel, BorderLayout.NORTH);
     }
 
-    public void updateChances() {
-        // No need to update text label anymore, handled in paintComponent
-    }
-
-    // Method to toggle the pause screen
     public void setPaused(boolean paused) {
         if (paused) {
             addPauseScreen();
@@ -90,13 +82,27 @@ public class RunningModeView extends JPanel {
             pauseLabel.setFont(new Font("Arial", Font.BOLD, 22));
             pauseLabel.setForeground(Color.WHITE);
 
-            JButton resumeButton = new JButton("Resume");
-            resumeButton.addActionListener(e -> setPaused(false));
+            pauseButton = new JButton("Resume");
+            pauseButton.addActionListener(e -> setPaused(false));
+
+            saveButton = new JButton("Save");
+            saveButton.addActionListener(e -> saveGame());
+
+            loadButton = new JButton("Load");
+            loadButton.addActionListener(e -> loadGame());
+
+            quitButton = new JButton("Quit");
+            quitButton.addActionListener(e -> quitGame());
+
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridwidth = GridBagConstraints.REMAINDER;
             gbc.fill = GridBagConstraints.HORIZONTAL;
+
             pausePanel.add(pauseLabel, gbc);
-            pausePanel.add(resumeButton, gbc);
+            pausePanel.add(pauseButton, gbc);
+            pausePanel.add(saveButton, gbc);
+            pausePanel.add(loadButton, gbc);
+            pausePanel.add(quitButton, gbc);
             add(pausePanel, BorderLayout.CENTER);
         }
     }
@@ -107,31 +113,34 @@ public class RunningModeView extends JPanel {
             pausePanel = null;
         }
     }
-    /**
-    * Requires: A valid Graphics object `g` that is not null.
-    * Modifies: This method modifies the visual output of the `RunningModeView` JPanel.
-    * Effects: 
-    *  - Draws the background image on the JPanel.
-    *  - If the game is over, displays a "Game Over" message centered on the JPanel.
-    *  - If the game is not over, it draws the paddle, fireball, boxes, and barriers.
-    *  - Displays the number of lives left as heart images on the top right corner of the JPanel.
-    */
+
+    private void saveGame() {
+        // Implement save game logic here
+    }
+
+    private void loadGame() {
+        // Implement load game logic here
+    }
+
+    private void quitGame() {
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        frame.dispose();
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-        
-        if (model.isGameOver()) { // Check if the game is over
-            Font font = new Font("Arial", Font.BOLD, 36); // Font for game-over message
+
+        if (model.isGameOver()) {
+            Font font = new Font("Arial", Font.BOLD, 36);
             g.setFont(font);
-            g.setColor(Color.WHITE); // Red color for emphasis
-            String gameOverMessage = model.gameOverMessage(); // Game over message text
-            FontMetrics metrics = g.getFontMetrics(font); // Font metrics for centering
+            g.setColor(Color.WHITE);
+            String gameOverMessage = model.gameOverMessage();
+            FontMetrics metrics = g.getFontMetrics(font);
             int textWidth = metrics.stringWidth(gameOverMessage);
-            int textHeight = metrics.getAscent(); // Ascent for text height
-            g.drawString(gameOverMessage, (WIDTH - textWidth) / 2, (HEIGHT - textHeight) / 2); // Centered text
-                        
+            int textHeight = metrics.getAscent();
+            g.drawString(gameOverMessage, (WIDTH - textWidth) / 2, (HEIGHT - textHeight) / 2);
         } else {
             Paddle paddle = model.getPaddle();
             paddle.draw(g);
@@ -139,7 +148,7 @@ public class RunningModeView extends JPanel {
             Fireball fireball = model.getFireball();
             fireball.draw(g);
 
-            for (Box i : RunningModeModel.boxes) {
+            for (domain.objects.Box i : RunningModeModel.boxes) {
                 if (i != null) {
                     i.draw(g);
                 }
@@ -151,15 +160,13 @@ public class RunningModeView extends JPanel {
                 }
             }
 
-            // Draw the hearts for lives
             int lives = model.getChances();
             g.setFont(new Font("Arial", Font.BOLD, 18));
             g.setColor(Color.WHITE);
-            g.drawString("Lives:", WIDTH - 150, 30); // Adjust the position as needed
+            g.drawString("Lives:", WIDTH - 150, 30);
             for (int i = 0; i < lives; i++) {
                 g.drawImage(heartImage, WIDTH - 80 + i * 25, 10, 20, 20, this);
             }
         }
     }
 }
-
