@@ -28,7 +28,7 @@ public class GameElement extends JPanel {
 		setLayout(null); 
 
 		// Title Label
-        JLabel titleLabel = new JLabel("Game1");
+        JLabel titleLabel = new JLabel("Game: ");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
         titleLabel.setBounds(10, 10, 200, 20);
         titleLabel.setForeground(Color.BLACK);

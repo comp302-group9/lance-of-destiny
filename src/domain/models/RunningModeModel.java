@@ -37,6 +37,23 @@ public class RunningModeModel {
         fireball = new Fireball( WIDTH / 2, 7 * HEIGHT / 8, 16, 16); // Adjust parameters as needed
 
         lastUpdateTime = System.currentTimeMillis();
+        
+        initializeGame();
+        
+    }
+    
+    
+    private void initializeGame() {
+        // Clear existing barriers before setting up a new game
+        barriers.clear();
+        
+        // Initialize the paddle
+        paddle = new Paddle(WIDTH / 2, HEIGHT - 50, WIDTH/10, 20);
+
+        // Initialize the fireball
+        fireball = new Fireball(WIDTH / 2, 7 * HEIGHT / 8, 16, 16);
+
+        lastUpdateTime = System.currentTimeMillis();
     }
 
     public void setPaused(boolean paused) {

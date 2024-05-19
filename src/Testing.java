@@ -1,5 +1,6 @@
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -26,6 +27,24 @@ public class Testing {
 	private User user = new User("test1", "123", "123");
 	private GameSession session;
 	BuildingModeModel model = new BuildingModeModel(user);
+	
+	
+	@Test
+	void testBarrierInitialization() {
+	    assertEquals(4, model.getBarrierList().size(), "Should have 4 barriers initialized.");
+	}
+
+	@Test
+	//GB Testing
+	void testValidateBarriers() {
+	    // Assuming initial counts are all zero
+	    assertFalse(model.validateBarriers(), "Validation should fail with initial counts.");
+	    model.setNumber_simple(75);
+	    model.setNumber_reinforced(10);
+	    model.setNumber_explosive(5);
+	    model.setNumber_rewarding(10);
+	    assertTrue(model.validateBarriers(), "Validation should pass with correct counts.");
+	}
     
 	@Test
 	//BB testing
@@ -112,6 +131,19 @@ public class Testing {
 	        // Further checks can be added to parse and verify the grid string
 	    } catch (SQLException e) {
 	        fail("Database access failed", e);
+	    } finally {
+	        // Cleanup: delete the test data
+	        deleteTestData(model.getUser().getUsername());
+	    }
+	}
+	
+	private void deleteTestData(String username) {
+	    try (Connection conn = DatabaseConnection.getConnection();
+	         PreparedStatement pstmt = conn.prepareStatement("DELETE FROM SavedGames WHERE username = ?")) {
+	        pstmt.setString(1, username);
+	        pstmt.executeUpdate();
+	    } catch (SQLException e) {
+	        System.out.println("Failed to delete test data: " + e.getMessage());
 	    }
 	}
 	

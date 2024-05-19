@@ -162,9 +162,9 @@ public class BuildingModeView extends JPanel {
 		}
 		
 		// Create the running mode components and switch views
-		RunningModeModel model = new RunningModeModel();
-		RunningModeView view = new RunningModeView(model);
-		RunningModeController controller = new RunningModeController(model, view, grid);
+		RunningModeModel rmodel = new RunningModeModel();
+		RunningModeView view = new RunningModeView(rmodel);
+		RunningModeController controller = new RunningModeController(model.getUser(), rmodel, view, grid);
 	
 		JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
 		frame.getContentPane().removeAll();
@@ -296,9 +296,9 @@ public class BuildingModeView extends JPanel {
 		switchPanelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				RunningModeModel model = new RunningModeModel();
-				RunningModeView view = new RunningModeView(model);
-				RunningModeController controller = new RunningModeController(model, view, grid);
+				RunningModeModel rmodel = new RunningModeModel();
+				RunningModeView view = new RunningModeView(rmodel);
+				RunningModeController controller = new RunningModeController(model.getUser(), rmodel, view, grid);
 				
 				
 				///////////////////////////////////////////////////////////////////////////////7
@@ -378,6 +378,21 @@ public class BuildingModeView extends JPanel {
 				frame.getContentPane().add(myGamesView);
 				frame.revalidate();
 				frame.repaint();
+				
+//				BuildingModeModel model2 = new BuildingModeModel(user);
+//                BuildingModeView view2 = new BuildingModeView(model2);
+//                BuildingModeController controller2 = new BuildingModeController(model2, view2);
+//                
+//                JFrame frame = new JFrame();
+//                frame.add(view2);
+//                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//                frame.pack();
+//                frame.setVisible(true);
+//                
+//                //frame.setSize(SignInPage.WIDTH, SignInPage.HEIGHT);
+//                frame.setLocationRelativeTo(null);
+//                
+//                signInView.closeFrame();
 			}
 		});
 		add(myGamesButton);
@@ -449,7 +464,7 @@ public class BuildingModeView extends JPanel {
             // Create the running mode model, view, and controller
             RunningModeModel runningModel = new RunningModeModel();
             RunningModeView runningView = new RunningModeView(runningModel);
-            RunningModeController runningController = new RunningModeController(runningModel, runningView, grid);
+            RunningModeController runningController = new RunningModeController(model.getUser(), runningModel, runningView, grid);
 
             // Get the parent frame of this panel to switch content
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);

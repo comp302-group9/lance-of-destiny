@@ -1,19 +1,23 @@
 package domain.controllers;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import domain.models.GameSession;
 import domain.models.RunningModeModel;
+import ui.screens.MyGamesView;
 import ui.screens.RunningModeView;
 import ui.screens.BModeUI.GameElement;
 
 public class GameElementController {
     private GameElement gameElement;
     private GameSession gameSession;
+    private MyGamesView myGamesView;
 
-    public GameElementController(GameElement gameElement) {
+    public GameElementController(GameElement gameElement, MyGamesView myGamesView) {
         this.gameElement = gameElement;
         this.gameSession = gameElement.getGameSession();
+        this.myGamesView = myGamesView;
         setupListeners();
     }
 
@@ -23,27 +27,31 @@ public class GameElementController {
 
     private void playGame() {
         // Create the running mode model and view based on the game session grid
-    	this.writeSomething("hi " + gameSession.getGrid());
+    	//this.writeSomething("hi " + gameSession.getGrid());
     	
     	
+    	// First, setup and display the new RunningModeView in a new JFrame
+        JFrame newFrame = new JFrame("Running Mode - Game: " + gameSession.getGameId());
         RunningModeModel runningModel = new RunningModeModel();
         RunningModeView runningView = new RunningModeView(runningModel);
-        RunningModeController runningController = new RunningModeController(runningModel, runningView, setGridToArray());
+        RunningModeController runningController = new RunningModeController(gameSession.getUser(), runningModel, runningView, setGridToArray());
 
-        // Set up the frame for the running mode view
-        JFrame frame = new JFrame("Running Mode - Game: " + gameSession.getGameId());
-        frame.setContentPane(runningView);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        
-        
-        //BURADAKI UI 'IN DEĞİŞTİRİLMESİ GEREKİYOR ÇOK KİRİTK BAŞIMIZ AĞRIR
-        frame.setSize(600*16/9, 600);
-        frame.setVisible(true);
+        newFrame.setContentPane(runningView);
+        newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        newFrame.pack();
+        newFrame.setSize(600 * 16 / 9, 600); // Ensure aspect ratio is maintained
+        newFrame.setLocationRelativeTo(null); // Center on screen
+        newFrame.setVisible(true);
 
         // Start the game logic in a new thread
         Thread gameThread = new Thread(runningController);
         gameThread.start();
+
+        // After setting up the new frame, dispose the old frame
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(myGamesView);
+        if (frame != null) {
+            frame.dispose();
+        }
         
     }
     

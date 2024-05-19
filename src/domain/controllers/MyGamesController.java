@@ -53,7 +53,7 @@ public class MyGamesController {
                 
                 // Inform the view about this game session
                 GameElement gameElement = new GameElement(session);
-                new GameElementController(gameElement);
+                new GameElementController(gameElement, myGamesView);
                 myGamesView.addGameElement(gameElement, games.size());
             }
         } catch (SQLException e) {

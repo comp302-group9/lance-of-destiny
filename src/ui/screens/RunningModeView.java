@@ -9,6 +9,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -33,6 +34,7 @@ public class RunningModeView extends JPanel {
     private BufferedImage backgroundImage;
     private JPanel pausePanel;  // Panel for pause screen
     private JLabel pauseLabel;
+    private JButton quitButton;
 
     public RunningModeView(RunningModeModel model) {
         this.model = model;
@@ -45,6 +47,10 @@ public class RunningModeView extends JPanel {
         setFocusable(true);  // Make the JPanel focusable
         requestFocusInWindow();
         setupUIComponents();
+    }
+    
+    public void addQuitButtonListener(ActionListener listener) {
+        quitButton.addActionListener(listener);
     }
 
     private void setupUIComponents() {
@@ -66,10 +72,10 @@ public class RunningModeView extends JPanel {
         topLeftPanel.setOpaque(false);
         topLeftPanel.add(pauseLabel);
          
-        JButton saveButton = new JButton("Save");
-        saveButton.setFont(new Font("Arial", Font.BOLD, 18));
-        saveButton.setForeground(Color.BLACK);
-        topLeftPanel.add(saveButton);
+        quitButton = new JButton("Quit");
+        quitButton.setFont(new Font("Arial", Font.BOLD, 18));
+        quitButton.setForeground(Color.BLACK);
+        topLeftPanel.add(quitButton);
         
         add(topLeftPanel, BorderLayout.NORTH);
         
