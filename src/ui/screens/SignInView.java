@@ -221,5 +221,27 @@ public class SignInView extends JPanel {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
+    //ONLY FOR TESTİNG!!!
+    public void setUsername(String username) {
+        usernameField.setText(username);
+    }
+
+    public void setPassword(String password) {
+        passwordField.setText(password);
+    }
+
+    public String getSignInStatus() {
+        return statusLabel.getText();
+    }
+
+   
+
+    public JButton getSignInButton() {
+        return signInButton;
+    }
+
+    public JButton getSignUpButton() {
+        return signUpButton;
+    }
 
 }
