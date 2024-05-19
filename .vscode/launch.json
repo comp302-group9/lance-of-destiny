@@ -6,6 +6,34 @@
     "configurations": [
         {
             "type": "java",
+            "name": "ClientMain",
+            "request": "launch",
+            "mainClass": "network.newchat.ClientMain",
+            "projectName": "lance-of-destiny"
+        },
+        {
+            "type": "java",
+            "name": "ServerMain",
+            "request": "launch",
+            "mainClass": "network.newchat.ServerMain",
+            "projectName": "lance-of-destiny"
+        },
+        {
+            "type": "java",
+            "name": "Server",
+            "request": "launch",
+            "mainClass": "network.newchat.Server",
+            "projectName": "lance-of-destiny"
+        },
+        {
+            "type": "java",
+            "name": "Client",
+            "request": "launch",
+            "mainClass": "network.newchat.Client",
+            "projectName": "lance-of-destiny"
+        },
+        {
+            "type": "java",
             "name": "ClientView",
             "request": "launch",
             "mainClass": "network.ClientView",
