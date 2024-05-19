@@ -52,7 +52,7 @@ public class Fireball {
 	}
 	
 	public int getX() {
-		return y;
+		return x;
 	}
 	
 	public void setPosition(int x, int y) {
