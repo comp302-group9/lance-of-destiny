@@ -20,6 +20,6 @@ public class Overwhelm extends Spell{
     }
 
     @Override
-    protected void deActivate() {
+    public void deActivate() {
     }
 }

@@ -21,10 +21,12 @@ public class Expension extends Spell{
  
     public void Activate(){
         DEFAULT.paddleWidth=DEFAULT.screenWidth/5;
+        setActive(true);
     }
 
     @Override
-    protected void deActivate() {
+    public void deActivate() {
         DEFAULT.paddleWidth=DEFAULT.screenWidth/10;
+        setActive(false);
     }
 }

@@ -24,6 +24,8 @@ public class RunningModeModel{
 	public static int barrierHeight =15;
     private static final int ROWS = DEFAULT.ROWS;
     private static final int COLUMNS = DEFAULT.COLUMNS;
+    public static final int HEIGHT = DEFAULT.screenHeight;
+    public static final int WIDTH = DEFAULT.screenWidth;
     private Paddle paddle;
     private Fireball fireball;
     private long lastUpdateTime;

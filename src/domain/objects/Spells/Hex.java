@@ -23,6 +23,6 @@ public class Hex extends Spell{
     }
 
     @Override
-    protected void deActivate() {
+    public void deActivate() {
     }
 }

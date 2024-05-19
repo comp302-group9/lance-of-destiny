@@ -38,13 +38,15 @@ public abstract class Spell {
     }
 
     public abstract void Activate();
-    abstract protected void deActivate();
+    public abstract void deActivate();
     
     public void startTimer() {
+        setActive(true);
         timer.start();
     }
 
     public void stopTimer() {
+        setActive(false);
         timer.stop();
     }
 
@@ -69,6 +71,11 @@ public abstract class Spell {
     public int getNum() {
         // TODO Auto-generated method stub
         return num;
+    }
+
+    public Timer getTimer() {
+        // TODO Auto-generated method stub
+        return timer;
     }
 
     public boolean getActive() {
