@@ -6,15 +6,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import domain.DEFAULT;
 import domain.objects.Barrier.Barrier;
 import domain.objects.Barrier.ExplosiveBarrier;
 import domain.objects.Barrier.ReinforcedBarrier;
 import domain.objects.Barrier.RewardingBarrier;
 import domain.objects.Barrier.SimpleBarrier;
 
-public class BuildingModeModel {
-    public static final int ROWS = 11;
-    public static final int COLUMNS = 19;
+public class BuildingModeModel{
+    public static final int ROWS = DEFAULT.ROWS;
+    public static final int COLUMNS = DEFAULT.COLUMNS;
 
     public int number_simple = 0;
     public int number_reinforced = 0;
@@ -129,5 +130,4 @@ public class BuildingModeModel {
 	public void setNumber_rewarding(int number_rewarding) {
 		this.number_rewarding = number_rewarding;
 	}
-
 }

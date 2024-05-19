@@ -9,30 +9,38 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 import java.io.IOException;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import domain.DEFAULT;
 import domain.models.RunningModeModel;
 import domain.objects.Box;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
+import ui.screens.RModeUI.SpellIcon;
 
 
 public class RunningModeView extends JPanel {
-    public static final int WIDTH = 800;
-    public static final int HEIGHT = 600;
+    private int HEIGHT=DEFAULT.screenHeight;    
+    private int WIDTH=DEFAULT.screenWidth;
     private RunningModeModel model;
     private BufferedImage backgroundImage;
+    private ImageIcon gifIcon;
     private JPanel pausePanel;  // Panel for pause screen
     private JLabel pauseLabel;
+    private boolean gameStarted = false;
+    private JLabel gifLabel;
 
     public RunningModeView(RunningModeModel model) {
         this.model = model;
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        setPreferredSize(new Dimension(DEFAULT.screenWidth, DEFAULT.screenHeight));
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/ui/images/Background.png"));
+            gifIcon = new ImageIcon(getClass().getResource("/ui/gifs/W.gif"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,6 +68,10 @@ public class RunningModeView extends JPanel {
         topLeftPanel.setOpaque(false);
         topLeftPanel.add(pauseLabel);
         add(topLeftPanel, BorderLayout.NORTH);
+
+        gifLabel = new JLabel(gifIcon);
+        add(gifLabel,BorderLayout.CENTER);
+
     }
 
     // Method to toggle the pause screen
@@ -77,7 +89,7 @@ public class RunningModeView extends JPanel {
     private void addPauseScreen() {
         if (pausePanel == null) {
             pausePanel = new JPanel(new GridBagLayout());
-            pausePanel.setBounds(0, 0, WIDTH, HEIGHT);
+            pausePanel.setBounds(0, 0, DEFAULT.screenWidth, DEFAULT.screenWidth);
             pausePanel.setOpaque(false);
 
             JLabel pauseLabel = new JLabel("Game is paused");
@@ -107,6 +119,10 @@ public class RunningModeView extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+
+        if (model.getFireball().isLaunched()) {gifLabel.setVisible(false);}
+        else {gifLabel.setVisible(true);}
+
         
         if (model.isGameOver()) { // Check if the game is over
             Font font = new Font("Arial", Font.BOLD, 36); // Font for game-over message
@@ -135,9 +151,12 @@ public class RunningModeView extends JPanel {
                 i.draw(g);
                 }
             }
+
+            for (int i = 0;i<RunningModeModel.spells.size(); i++){
+                SpellIcon SI = RunningModeModel.spells.get(i);
+                    SI.setBounds(10 ,HEIGHT-120-i * 65,50,50);
+                    add(SI);
+            }
         }
-
-        
-
     }
 }

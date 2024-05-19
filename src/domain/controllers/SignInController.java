@@ -30,6 +30,24 @@ public class SignInController {
         signInView.addSignInButtonListener(e -> signIn());
         signInView.addSignUpButtonListener(e -> showSignUpView());
     }
+    /*
+    private void open(){
+        signInView.setSignInStatus("Sign in successful.");
+                BuildingModeModel model2 = new BuildingModeModel();
+                BuildingModeView view2 = new BuildingModeView(model2);
+                BuildingModeController controller2 = new BuildingModeController(model2, view2);
+                
+                JFrame frame = new JFrame();
+                frame.add(view2);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.pack();
+                frame.setVisible(true);
+                
+                //frame.setSize(SignInPage.WIDTH, SignInPage.HEIGHT);
+                frame.setLocationRelativeTo(null);
+                
+                signInView.closeFrame();
+    }*/
 
     private void signIn() {
         String username = signInView.getUsername();

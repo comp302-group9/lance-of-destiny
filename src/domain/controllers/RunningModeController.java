@@ -28,6 +28,9 @@ public class RunningModeController implements KeyListener, Runnable {
             if (!model.isPaused()) {
                 long currentTime = System.currentTimeMillis();
                 model.update(currentTime, keys);
+                
+                
+                
                 view.repaint(); // Repaint the view
             }
         

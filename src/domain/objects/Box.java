@@ -13,8 +13,6 @@ public class Box {
     private int y;
     private int width=45;
     private int height=55;
-    private int barrierWidth = RunningModeModel.barrierWidth;
-    private int barrierHeight = RunningModeModel.barrierHeight;
     //private int width=58;
     //private int height=72;
     private int boxSpeed=2;

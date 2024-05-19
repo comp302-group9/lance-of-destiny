@@ -191,8 +191,6 @@ public class Fireball {
             double px = 0;
             double py = 0;
 
-
-            
             double middleTopX = ballBounds.getCenterX();
             double middleTopY = ballBounds.getMinY();
             
@@ -207,39 +205,40 @@ public class Fireball {
             
             double offsetx = -2;
             double offsety =  -2;
-boolean isMiddleTopInside = (middleTopX >= barrierBounds.getMinX() + offsetx && middleTopX <= barrierBounds.getMaxX() - offsetx)
+
+            boolean isMiddleTopInside = (middleTopX >= barrierBounds.getMinX() + offsetx && middleTopX <= barrierBounds.getMaxX() - offsetx)
         && (middleTopY >= barrierBounds.getMinY() + offsety && middleTopY <= barrierBounds.getMaxY() - offsety);
 
-boolean isMiddleLeftInside = (middleLeftX >= barrierBounds.getMinX() + offsetx && middleLeftX <= barrierBounds.getMaxX() - offsetx)
+            boolean isMiddleLeftInside = (middleLeftX >= barrierBounds.getMinX() + offsetx && middleLeftX <= barrierBounds.getMaxX() - offsetx)
         && (middleLeftY >= barrierBounds.getMinY() + offsety && middleLeftY <= barrierBounds.getMaxY() - offsety);
 
-boolean isMiddleRightInside = (middleRightX >= barrierBounds.getMinX() + offsetx && middleRightX <= barrierBounds.getMaxX() - offsetx)
+            boolean isMiddleRightInside = (middleRightX >= barrierBounds.getMinX() + offsetx && middleRightX <= barrierBounds.getMaxX() - offsetx)
         && (middleRightY >= barrierBounds.getMinY() + offsety && middleRightY <= barrierBounds.getMaxY() - offsety);
 
-boolean isMiddleBottomInside = (middleBottomX >= barrierBounds.getMinX() + offsetx && middleBottomX <= barrierBounds.getMaxX() - offsetx)
+            boolean isMiddleBottomInside = (middleBottomX >= barrierBounds.getMinX() + offsetx && middleBottomX <= barrierBounds.getMaxX() - offsetx)
         && (middleBottomY >= barrierBounds.getMinY() + offsety && middleBottomY <= barrierBounds.getMaxY() - offsety);
 
 
             boolean isTopLeftInside = (topLeft.getX() >= barrierBounds.getMinX() && topLeft.getX() <= barrierBounds.getMaxX())
         && (topLeft.getY() >= barrierBounds.getMinY() && topLeft.getY() <= barrierBounds.getMaxY());
 
-boolean isTopRightInside = (topRight.getX() >= barrierBounds.getMinX() && topRight.getX() <= barrierBounds.getMaxX())
+            boolean isTopRightInside = (topRight.getX() >= barrierBounds.getMinX() && topRight.getX() <= barrierBounds.getMaxX())
         && (topRight.getY() >= barrierBounds.getMinY() && topRight.getY() <= barrierBounds.getMaxY());
 
-boolean isBottomLeftInside = (bottomLeft.getX() >= barrierBounds.getMinX() && bottomLeft.getX() <= barrierBounds.getMaxX())
+            boolean isBottomLeftInside = (bottomLeft.getX() >= barrierBounds.getMinX() && bottomLeft.getX() <= barrierBounds.getMaxX())
         && (bottomLeft.getY() >= barrierBounds.getMinY() && bottomLeft.getY() <= barrierBounds.getMaxY());
 
-boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && bottomRight.getX() <= barrierBounds.getMaxX())
+            boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && bottomRight.getX() <= barrierBounds.getMaxX())
         && (bottomRight.getY() >= barrierBounds.getMinY() && bottomRight.getY() <= barrierBounds.getMaxY());
 
         if(isMiddleBottomInside||isMiddleTopInside){
             reflectHorizontal();
-            if (barrier.onHit()) { // If the barrier should be destroyed
+            if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                 barriers.remove(barrier); // Safely remove it from the list
             }break;
         }
         else if(isMiddleLeftInside||isMiddleRightInside){
-            if (barrier.onHit()) { // If the barrier should be destroyed
+            if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                 barriers.remove(barrier); // Safely remove it from the list
             }
             reflectVertical();            
@@ -247,31 +246,26 @@ boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && 
         }
         else if (isTopLeftInside || isTopRightInside){
             if(ballBounds.getMaxY()<barrierBounds.getMaxY()+ballBounds.getHeight()-py){
-                reflectVertical();if (barrier.onHit()) { // If the barrier should be destroyed
+                reflectVertical();if (!barrier.getFrozen() &&barrier.onHit()) { // If the barrier should be destroyed
                     barriers.remove(barrier); // Safely remove it from the list
                 }break;
             }else if((ballBounds.getMaxX()<barrierBounds.getMaxX()+ballBounds.getWidth()-px)||ballBounds.getX()>barrierBounds.getX()-ballBounds.getWidth()+px){
-                reflectHorizontal();if (barrier.onHit()) { // If the barrier should be destroyed
+                reflectHorizontal();if (!barrier.getFrozen() &&barrier.onHit()) { // If the barrier should be destroyed
                     barriers.remove(barrier); // Safely remove it from the list
                 }break;
             }
             
         }else if(isBottomLeftInside || isBottomRightInside){
             if(ballBounds.getY()>barrierBounds.getY()-ballBounds.getHeight()+py){
-                reflectVertical();if (barrier.onHit()) { // If the barrier should be destroyed
+                reflectVertical();if (!barrier.getFrozen() &&barrier.onHit()) { // If the barrier should be destroyed
                     barriers.remove(barrier); // Safely remove it from the list
                 }break;
             }else if((ballBounds.getMaxX()<barrierBounds.getMaxX()+ballBounds.getWidth()-px)||ballBounds.getX()>barrierBounds.getX()-ballBounds.getWidth()+px){
-                reflectHorizontal();if (barrier.onHit()) { // If the barrier should be destroyed
+                reflectHorizontal();if (!barrier.getFrozen() &&barrier.onHit()) { // If the barrier should be destroyed
                     barriers.remove(barrier); // Safely remove it from the list
                 }break;
             }
         }
         }
     }
-
-
-
-
-
 }

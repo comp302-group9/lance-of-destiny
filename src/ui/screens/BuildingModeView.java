@@ -2,6 +2,8 @@ package ui.screens;
 
 import javax.swing.*;
 import domain.models.RunningModeModel;
+import domain.DEFAULT;
+import domain.controllers.MyMouseListener;
 import domain.controllers.RunningModeController;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -27,8 +29,8 @@ import ui.screens.BModeUI.BarrierButton;
 import ui.screens.BModeUI.BarrierElement;
 
 public class BuildingModeView extends JPanel {
-	public static final int HEIGHT = 600;
-	public static final int WIDTH = HEIGHT * 16/9;
+	private int WIDTH=DEFAULT.screenWidth;
+	private int HEIGHT=DEFAULT.screenHeight;
 	private BufferedImage backgroundImage;
 	private BuildingModeModel model;
     private JButton playButton;
@@ -43,7 +45,7 @@ public class BuildingModeView extends JPanel {
 	private BarrierElement[] elements = new BarrierElement[4];
 	
 
-	public static BarrierButton[] buttons = new BarrierButton[BuildingModeModel.ROWS * BuildingModeModel.COLUMNS];
+	public static BarrierButton[] buttons = new BarrierButton[DEFAULT.ROWS * DEFAULT.COLUMNS];
 	
 	private ImageIcon empty = scaleImage("/ui/images/Empty3.png");
 	private ImageIcon simple = scaleImage("/ui/images/simpleBarrierIcon.png");
@@ -85,27 +87,27 @@ public class BuildingModeView extends JPanel {
 	}
 
     protected void readGrid(int[][] grid){
-        for (int i=0; i<BuildingModeModel.ROWS ;i++){
-            for (int j=0; j<BuildingModeModel.COLUMNS ;j++){
+        for (int i=0; i<DEFAULT.ROWS ;i++){
+            for (int j=0; j<DEFAULT.COLUMNS ;j++){
                 switch (grid[i][j]) {
 					case 0:
-                        buttons[BuildingModeModel.COLUMNS*i+j].setIcon(empty);
+                        buttons[DEFAULT.COLUMNS*i+j].setIcon(empty);
                         break;
                     case 1:
                         model.number_simple++;
-                        buttons[BuildingModeModel.COLUMNS*i+j].setIcon(simple);
+                        buttons[DEFAULT.COLUMNS*i+j].setIcon(simple);
                         break;
                     case 2:
                         model.number_reinforced++;
-                        buttons[BuildingModeModel.COLUMNS*i+j].setIcon(firm);
+                        buttons[DEFAULT.COLUMNS*i+j].setIcon(firm);
                         break;
                     case 3:
                         model.number_explosive++;
-                        buttons[BuildingModeModel.COLUMNS*i+j].setIcon(explosive);
+                        buttons[DEFAULT.COLUMNS*i+j].setIcon(explosive);
                         break;
                     case 4:
                         model.number_rewarding++;
-                        buttons[BuildingModeModel.COLUMNS*i+j].setIcon(rewarding);
+                        buttons[DEFAULT.COLUMNS*i+j].setIcon(rewarding);
                         break;
                     }
                 
@@ -189,18 +191,7 @@ public class BuildingModeView extends JPanel {
 						updateCurrent();
 					}
 				});
-				button.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseEntered(MouseEvent e) {
-						button.setContentAreaFilled(true);
-						button.setBackground(Color.white);
-					}
-
-					@Override
-					public void mouseExited(MouseEvent e) {
-						button.setContentAreaFilled(false);
-					}
-				});
+				button.addMouseListener(new MyMouseListener());
 				add(button);
 				buttons[BuildingModeModel.COLUMNS * row + col] = button;
 			}

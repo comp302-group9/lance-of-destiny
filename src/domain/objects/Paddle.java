@@ -6,6 +6,9 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
 import javax.swing.*;
+
+import domain.DEFAULT;
+
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -15,8 +18,8 @@ public class Paddle {
     private BufferedImage image;
     private int x;
     private int y;
-    private int width;
-    private int height;
+    private int width=DEFAULT.paddleWidth;
+    private int height=DEFAULT.paddleHeight;
     private int paddleSpeed = 6;
     private double rotationAngle = 0;
     private double rotationSpeed = 20; // degrees per second
@@ -25,8 +28,6 @@ public class Paddle {
     public Paddle(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
         
         // Load the image from the class's resources
         try {
@@ -86,17 +87,17 @@ public class Paddle {
     // Draws the paddle
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g.create();
-        g2d.rotate(Math.toRadians(rotationAngle), x + width / 2, y + height / 2);
-        g2d.drawImage(image, x, y, width, height, null);
+        g2d.rotate(Math.toRadians(rotationAngle), x + DEFAULT.paddleWidth / 2, y + DEFAULT.paddleHeight / 2);
+        g2d.drawImage(image, x, y, DEFAULT.paddleWidth, DEFAULT.paddleHeight, null);
         g2d.dispose(); 
     }
 
     // To get the boundries of the rotated paddle
     public Shape getBounds() {
         AffineTransform transform = new AffineTransform();
-        transform.translate(x + width / 2, y + height / 2);// Translating transform object to the center of paddle
+        transform.translate(x + DEFAULT.paddleWidth / 2, y + DEFAULT.paddleHeight / 2);// Translating transform object to the center of paddle
         transform.rotate(Math.toRadians(rotationAngle), 0, 0); // Rotate around the center
-        Rectangle2D paddleRectangle = new Rectangle2D.Double(-width / 2, -height / 2, width, height); // Centered rectangle
+        Rectangle2D paddleRectangle = new Rectangle2D.Double(-DEFAULT.paddleWidth / 2, -DEFAULT.paddleHeight / 2, DEFAULT.paddleWidth, DEFAULT.paddleHeight); // Centered rectangle
         Shape transformedRect = transform.createTransformedShape(paddleRectangle);// Apply transformation to new rectangle
         return transformedRect;
     }
