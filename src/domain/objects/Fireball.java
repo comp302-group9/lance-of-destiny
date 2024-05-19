@@ -51,6 +51,10 @@ public class Fireball {
 		return y;
 	}
 	
+	public int getX() {
+		return x;
+	}
+	
 	public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
@@ -63,6 +67,16 @@ public class Fireball {
     private void setDefaultVelocity(){
 		dx = 3;
         dy = 3;
+    }
+    
+    public void setVelocity(double dx, double dy){
+		this.dx = dx;
+        this.dy = dy;
+    }
+    
+    public double getVelocityX(){
+		return dx;
+        
     }
 
     //updates the fireball location
