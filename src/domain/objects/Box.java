@@ -38,4 +38,33 @@ public class Box {
     public int getY(){
         return y;
     }
+    
+    public int getX() {
+        return x;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public BufferedImage getImage() {
+        return image;
+    }
+    
+    public boolean repOk() {
+        if (x < 0 || x > RunningModeModel.WIDTH || y < 0 || y > RunningModeModel.HEIGHT) {
+            return false;
+        }
+        if (width <= 0 || height <= 0) {
+            return false;
+        }
+        if (image == null) {
+            return false;
+        }
+        return true;
+    }
 }
