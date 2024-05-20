@@ -108,13 +108,21 @@ public class RunningModeView extends JPanel {
         }
     }
     /**
-    * Requires: A valid Graphics object `g` that is not null.
-    * Modifies: This method modifies the visual output of the `RunningModeView` JPanel.
-    * Effects: 
-    *  - Draws the background image on the JPanel.
-    *  - If the game is over, displays a "Game Over" message centered on the JPanel.
-    *  - If the game is not over, it draws the paddle, fireball, boxes, and barriers.
-    *  - Displays the number of lives left as heart images on the top right corner of the JPanel.
+    Requires
+    * Model is not null.
+    * BackgroundImage and heartImage are valid images.
+    * Model.getPaddle(), model.getFireball(), RunningModeModel.boxes, and RunningModeModel.barriers are correctly initialized.
+    * Model.gameOverMessage() returns a non-null string if the game is over.
+    Modifies
+    * The Graphics object g passed as an argument.
+    Effects
+    * Paints the background image to cover the entire panel.
+    * If the game is over, displays the game over message centered in the panel.
+    * If the game is not over:
+    * Draws the paddle at its current position.
+    * Draws the fireball at its current position.
+    * Draws all the non-null boxes and barriers.
+    * Displays the number of lives remaining in the top right corner using heart images.
     */
 
     @Override

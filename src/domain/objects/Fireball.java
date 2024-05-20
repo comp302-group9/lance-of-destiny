@@ -1,4 +1,5 @@
 package domain.objects;
+
 import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
@@ -6,6 +7,7 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.ArrayList;
 import domain.objects.Barrier.*;
+import domain.models.RunningModeModel;
 
 public class Fireball {
 
@@ -20,7 +22,6 @@ public class Fireball {
         this.y = y;
         this.width = width;
         this.height = height;
-        
 
         // Load the image from the class's resources
         try {
@@ -30,23 +31,20 @@ public class Fireball {
         }
         setDefaultVelocity();
     }
-    
 
-	public int getHeight() {
-		return height;
-	
-	}
-	
-	public int getWidth() {
-		return width;
-	}
-	
+    public int getHeight() {
+        return height;
+    }
 
-	public int getY() {
-		return y;
-	}
-	
-	public void setPosition(int x, int y) {
+    public int getWidth() {
+        return width;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -54,24 +52,29 @@ public class Fireball {
     public void setLaunched(boolean launched) {
         isLaunched = launched;
     }
-	
-	public void resetPosition(int paddleX, int paddleY) {
+
+    public void resetPosition(int paddleX, int paddleY) {
         setPosition(paddleX, paddleY); // Reset to a given position
     }
 
     private void setDefaultVelocity(){
-		dx = 3;
+        dx = 3;
         dy = 3;
     }
 
-    //updates the fireball location
+    // updates the fireball location
     public void move() {
         x += dx;
         y += dy;
     }
 
-    public void reflectHorizontal() {dy = -dy;}
-    public void reflectVertical() {dx = -dx;}
+    public void reflectHorizontal() {
+        dy = -dy;
+    }
+
+    public void reflectVertical() {
+        dx = -dx;
+    }
     
     public Rectangle getBounds() {
         return new Rectangle(x, y, width, height); 
@@ -79,7 +82,7 @@ public class Fireball {
     
     public void launch(int paddleX, int paddleY) {
         if (!isLaunched) { // Launch only if not already launched
-        	// Center the fireball horizontally on the paddle
+            // Center the fireball horizontally on the paddle
             int fireballX = paddleX + (width / 2); // Make sure 'width' is accessible
             // Place the fireball just above the paddle
             int fireballY = paddleY - height; // Ensure 'height' is defined
@@ -130,21 +133,21 @@ public class Fireball {
         if((dx>0&&paddle.getDirection()>0)||(dx<0&&paddle.getDirection()<0)){
             double currentSpeed = Math.sqrt(dx * dx + dy * dy);
 
-        // Calculate the ratio of the new speed to the current speed
-        double ratio = (currentSpeed + increase) / currentSpeed;
+            // Calculate the ratio of the new speed to the current speed
+            double ratio = (currentSpeed + increase) / currentSpeed;
 
-        // Increase the speed while maintaining direction
-        dx *= ratio;
-        dy *= ratio;
+            // Increase the speed while maintaining direction
+            dx *= ratio;
+            dy *= ratio;
         }
     }
     
     // Check collision with walls
     public void checkCollisionWithWalls(int screenWidth, int screenHeight) {
-        if (x <= 0 || x + width >= screenWidth) {//right, left walls
+        if (x <= 0 || x + width >= screenWidth) { // right, left walls
             reflectVertical();
         }
-        if (y <= 0) {//up, down walls (if want to drop ball, just add "y <= 0" in if statment)
+        if (y <= 0) { // up, down walls (if want to drop ball, just add "y <= 0" in if statement)
             reflectHorizontal();
         }
     }
@@ -155,6 +158,7 @@ public class Fireball {
             g.drawImage(image, x, y, width, height, null);
         } 
     }
+    
     // Check collision with barriers
     public boolean collidesWithBarrier(Barrier barrier) {
         Rectangle ballBounds = getBounds();
@@ -162,96 +166,141 @@ public class Fireball {
         return ballBounds.intersects(barrierBounds);
     }
 
-    public void checkCollisionWithBarriers(ArrayList<Barrier> barriers) {
+    public void checkCollisionWithBarriers(ArrayList<Barrier> barriers, RunningModeModel model) {
         ArrayList<Barrier> barriersCopy = new ArrayList<>(barriers); // Create a copy of the list
-
+    
         for (Barrier barrier : barriersCopy) { // Iterate over the copy
             Rectangle ballBounds = getBounds();
             Rectangle barrierBounds = barrier.getBounds();
-        
+    
             Point topLeft = new Point(ballBounds.x, ballBounds.y);
-        Point topRight = new Point(ballBounds.x + ballBounds.width, ballBounds.y);
-        Point bottomLeft = new Point(ballBounds.x, ballBounds.y + ballBounds.height);
-        Point bottomRight = new Point(ballBounds.x + ballBounds.width, ballBounds.y + ballBounds.height);
+            Point topRight = new Point(ballBounds.x + ballBounds.width, ballBounds.y);
+            Point bottomLeft = new Point(ballBounds.x, ballBounds.y + ballBounds.height);
+            Point bottomRight = new Point(ballBounds.x + ballBounds.width, ballBounds.y + ballBounds.height);
+    
             double px = 0;
             double py = 0;
-
-
-            
+    
             double middleTopX = ballBounds.getCenterX();
             double middleTopY = ballBounds.getMinY();
-            
+    
             double middleLeftX = ballBounds.getMinX();
             double middleLeftY = ballBounds.getCenterY();
-            
+    
             double middleRightX = ballBounds.getMaxX();
             double middleRightY = ballBounds.getCenterY();
-            
+    
             double middleBottomX = ballBounds.getCenterX();
             double middleBottomY = ballBounds.getMaxY();
-            
+    
             double offsetx = -2;
-            double offsety =  -2;
-boolean isMiddleTopInside = (middleTopX >= barrierBounds.getMinX() + offsetx && middleTopX <= barrierBounds.getMaxX() - offsetx)
-        && (middleTopY >= barrierBounds.getMinY() + offsety && middleTopY <= barrierBounds.getMaxY() - offsety);
-
-boolean isMiddleLeftInside = (middleLeftX >= barrierBounds.getMinX() + offsetx && middleLeftX <= barrierBounds.getMaxX() - offsetx)
-        && (middleLeftY >= barrierBounds.getMinY() + offsety && middleLeftY <= barrierBounds.getMaxY() - offsety);
-
-boolean isMiddleRightInside = (middleRightX >= barrierBounds.getMinX() + offsetx && middleRightX <= barrierBounds.getMaxX() - offsetx)
-        && (middleRightY >= barrierBounds.getMinY() + offsety && middleRightY <= barrierBounds.getMaxY() - offsety);
-
-boolean isMiddleBottomInside = (middleBottomX >= barrierBounds.getMinX() + offsetx && middleBottomX <= barrierBounds.getMaxX() - offsetx)
-        && (middleBottomY >= barrierBounds.getMinY() + offsety && middleBottomY <= barrierBounds.getMaxY() - offsety);
-
-
+            double offsety = -2;
+    
+            boolean isMiddleTopInside = (middleTopX >= barrierBounds.getMinX() + offsetx && middleTopX <= barrierBounds.getMaxX() - offsetx)
+                && (middleTopY >= barrierBounds.getMinY() + offsety && middleTopY <= barrierBounds.getMaxY() - offsety);
+    
+            boolean isMiddleLeftInside = (middleLeftX >= barrierBounds.getMinX() + offsetx && middleLeftX <= barrierBounds.getMaxX() - offsetx)
+                && (middleLeftY >= barrierBounds.getMinY() + offsety && middleLeftY <= barrierBounds.getMaxY() - offsety);
+    
+            boolean isMiddleRightInside = (middleRightX >= barrierBounds.getMinX() + offsetx && middleRightX <= barrierBounds.getMaxX() - offsetx)
+                && (middleRightY >= barrierBounds.getMinY() + offsety && middleRightY <= barrierBounds.getMaxY() - offsety);
+    
+            boolean isMiddleBottomInside = (middleBottomX >= barrierBounds.getMinX() + offsetx && middleBottomX <= barrierBounds.getMaxX() - offsetx)
+                && (middleBottomY >= barrierBounds.getMinY() + offsety && middleBottomY <= barrierBounds.getMaxY() - offsety);
+    
             boolean isTopLeftInside = (topLeft.getX() >= barrierBounds.getMinX() && topLeft.getX() <= barrierBounds.getMaxX())
-        && (topLeft.getY() >= barrierBounds.getMinY() && topLeft.getY() <= barrierBounds.getMaxY());
-
-boolean isTopRightInside = (topRight.getX() >= barrierBounds.getMinX() && topRight.getX() <= barrierBounds.getMaxX())
-        && (topRight.getY() >= barrierBounds.getMinY() && topRight.getY() <= barrierBounds.getMaxY());
-
-boolean isBottomLeftInside = (bottomLeft.getX() >= barrierBounds.getMinX() && bottomLeft.getX() <= barrierBounds.getMaxX())
-        && (bottomLeft.getY() >= barrierBounds.getMinY() && bottomLeft.getY() <= barrierBounds.getMaxY());
-
-boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && bottomRight.getX() <= barrierBounds.getMaxX())
-        && (bottomRight.getY() >= barrierBounds.getMinY() && bottomRight.getY() <= barrierBounds.getMaxY());
-
-        if(isMiddleBottomInside||isMiddleTopInside){
-            reflectHorizontal();
-            if (barrier.onHit()) { // If the barrier should be destroyed
-                barriers.remove(barrier); // Safely remove it from the list
-            }break;
-        }
-        else if(isMiddleLeftInside||isMiddleRightInside){
-            if (barrier.onHit()) { // If the barrier should be destroyed
-                barriers.remove(barrier); // Safely remove it from the list
+                && (topLeft.getY() >= barrierBounds.getMinY() && topLeft.getY() <= barrierBounds.getMaxY());
+    
+            boolean isTopRightInside = (topRight.getX() >= barrierBounds.getMinX() && topRight.getX() <= barrierBounds.getMaxX())
+                && (topRight.getY() >= barrierBounds.getMinY() && topRight.getY() <= barrierBounds.getMaxY());
+    
+            boolean isBottomLeftInside = (bottomLeft.getX() >= barrierBounds.getMinX() && bottomLeft.getX() <= barrierBounds.getMaxX())
+                && (bottomLeft.getY() >= barrierBounds.getMinY() && bottomLeft.getY() <= barrierBounds.getMaxY());
+    
+            boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && bottomRight.getX() <= barrierBounds.getMaxX())
+                && (bottomRight.getY() >= barrierBounds.getMinY() && bottomRight.getY() <= barrierBounds.getMaxY());
+    
+            if (isMiddleBottomInside || isMiddleTopInside) {
+                reflectHorizontal();
+                if (barrier.onHit()) {
+                    barriers.remove(barrier);
+                    if (model != null) {
+                        System.out.println("Barrier hit. Updating score.");
+                        model.updateScore(System.currentTimeMillis()); // Use the correct time for score update
+                    }
+                }
+                break;
+            } else if (isMiddleLeftInside || isMiddleRightInside) {
+                if (barrier.onHit()) {
+                    barriers.remove(barrier);
+                    if (model != null) {
+                        System.out.println("Barrier hit. Updating score.");
+                        model.updateScore(System.currentTimeMillis()); // Use the correct time for score update
+                    }
+                }
+                reflectVertical();
+                break;
+            } else if (isTopLeftInside || isTopRightInside) {
+                if (ballBounds.getMaxY() < barrierBounds.getMaxY() + ballBounds.getHeight() - py) {
+                    reflectVertical();
+                    if (barrier.onHit()) {
+                        barriers.remove(barrier);
+                        if (model != null) {
+                            System.out.println("Barrier hit. Updating score.");
+                            model.updateScore(System.currentTimeMillis()); // Use the correct time for score update
+                        }
+                    }
+                    break;
+                } else if ((ballBounds.getMaxX() < barrierBounds.getMaxX() + ballBounds.getWidth() - px)
+                        || ballBounds.getX() > barrierBounds.getX() - ballBounds.getWidth() + px) {
+                    reflectHorizontal();
+                    if (barrier.onHit()) {
+                        barriers.remove(barrier);
+                        if (model != null) {
+                            System.out.println("Barrier hit. Updating score.");
+                            model.updateScore(System.currentTimeMillis()); // Use the correct time for score update
+                        }
+                    }
+                    break;
+                }
+            } else if (isBottomLeftInside || isBottomRightInside) {
+                if (ballBounds.getY() > barrierBounds.getY() - ballBounds.getHeight() + py) {
+                    reflectVertical();
+                    if (barrier.onHit()) {
+                        barriers.remove(barrier);
+                        if (model != null) {
+                            System.out.println("Barrier hit. Updating score.");
+                            model.updateScore(System.currentTimeMillis()); // Use the correct time for score update
+                        }
+                    }
+                    break;
+                } else if ((ballBounds.getMaxX() < barrierBounds.getMaxX() + ballBounds.getWidth() - px)
+                        || ballBounds.getX() > barrierBounds.getX() - ballBounds.getWidth() + px) {
+                    reflectHorizontal();
+                    if (barrier.onHit()) {
+                        barriers.remove(barrier);
+                        if (model != null) {
+                            System.out.println("Barrier hit. Updating score.");
+                            model.updateScore(System.currentTimeMillis()); // Use the correct time for score update
+                        }
+                    }
+                    break;
+                }
             }
-            reflectVertical();            
-            break;
         }
-        else if (isTopLeftInside || isTopRightInside){
-            if(ballBounds.getMaxY()<barrierBounds.getMaxY()+ballBounds.getHeight()-py){
-                reflectVertical();if (barrier.onHit()) { // If the barrier should be destroyed
-                    barriers.remove(barrier); // Safely remove it from the list
-                }break;
-            }else if((ballBounds.getMaxX()<barrierBounds.getMaxX()+ballBounds.getWidth()-px)||ballBounds.getX()>barrierBounds.getX()-ballBounds.getWidth()+px){
-                reflectHorizontal();if (barrier.onHit()) { // If the barrier should be destroyed
-                    barriers.remove(barrier); // Safely remove it from the list
-                }break;
+    }
+    private boolean isCollisionDetected(Rectangle ballBounds, Rectangle barrierBounds) {
+        // Logic to detect collision...
+        return ballBounds.intersects(barrierBounds);
+    }
+
+    private void handleBarrierCollision(Barrier barrier, RunningModeModel model) {
+        if (barrier.onHit()) {
+            barriers.remove(barrier);
+            if (model != null) {
+                System.out.println("Barrier hit. Updating score.");
+                model.updateScore(System.currentTimeMillis()); // Use the correct time for score update
             }
-            
-        }else if(isBottomLeftInside || isBottomRightInside){
-            if(ballBounds.getY()>barrierBounds.getY()-ballBounds.getHeight()+py){
-                reflectVertical();if (barrier.onHit()) { // If the barrier should be destroyed
-                    barriers.remove(barrier); // Safely remove it from the list
-                }break;
-            }else if((ballBounds.getMaxX()<barrierBounds.getMaxX()+ballBounds.getWidth()-px)||ballBounds.getX()>barrierBounds.getX()-ballBounds.getWidth()+px){
-                reflectHorizontal();if (barrier.onHit()) { // If the barrier should be destroyed
-                    barriers.remove(barrier); // Safely remove it from the list
-                }break;
-            }
-        }
         }
     }
 
