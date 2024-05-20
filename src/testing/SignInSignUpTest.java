@@ -10,11 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 
-
-import static org.junit.Assert.*;
 
 public class SignInSignUpTest {
 
@@ -25,7 +24,7 @@ public class SignInSignUpTest {
     private ResultSet mockResultSet;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         // Create a new instance of SignInView
         signInView = new SignInView();
         
@@ -39,7 +38,7 @@ public class SignInSignUpTest {
     }
 
     @Test
-    public void testSignInSuccessful() throws SQLException {
+    void testSignInSuccessful() throws SQLException {
         // Set up the mock objects
         signInView.setUsername("testUser");
         signInView.setPassword("testPass");
@@ -64,7 +63,7 @@ public class SignInSignUpTest {
     }
 
     @Test
-    public void testSignInInvalidCredentials() throws SQLException {
+   void testSignInInvalidCredentials() throws SQLException {
         // Set up the mock objects
         signInView.setUsername("testUser");
         signInView.setPassword("wrongPass");
@@ -86,7 +85,7 @@ public class SignInSignUpTest {
     }
 
     @Test
-    public void testSignInDatabaseError() throws SQLException {
+     void testSignInDatabaseError() throws SQLException {
         // Set up the mock objects to throw a SQLException
         signInView.setUsername("testUser");
         signInView.setPassword("testPass");
@@ -105,7 +104,7 @@ public class SignInSignUpTest {
     }
 
     @Test
-    public void testShowSignUpView() {
+    void testShowSignUpView() {
     	 // Call the signIn method
         JButton signUpButton = signInView.getSignUpButton();
         signUpButton.doClick();
@@ -177,3 +176,4 @@ class MockResultSet  {
 
     // Implement other required methods from ResultSet as needed
 }
+
