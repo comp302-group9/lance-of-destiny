@@ -2,10 +2,14 @@ package domain.controllers;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import database.DatabaseConnection;
 import domain.models.BuildingModeModel;
 import domain.models.RunningModeModel;
 import domain.models.User;
@@ -16,6 +20,7 @@ public class RunningModeController implements KeyListener, Runnable {
     private RunningModeModel model;
     private RunningModeView view;
     private User user;
+    private int gameId;
     private boolean[] keys;
     private boolean isPaused = false;
     private int[][] grid;
@@ -32,22 +37,82 @@ public class RunningModeController implements KeyListener, Runnable {
         model.initaliseBarrierLocations(grid);
         model.getFireball().setGrid(grid);;
         setupQuitButtonListener();
-//        setupSaveButtonListener();
+        setupSaveButtonListener();
     }
+    
+    
+    public RunningModeController(User user, RunningModeModel model, RunningModeView view, int[][] grid, int gameId) {
+    	this.grid = grid;
+    	this.gameId = gameId;
+        this.model = model;
+        this.user = user;
+        this.view = view;
+        view.addKeyListener(this);
+        view.setFocusable(true);
+        keys = new boolean[256];  // Array to keep track of key states
+        model.initaliseBarrierLocations(grid);
+        model.getFireball().setGrid(grid);;
+        setupQuitButtonListener();
+        setupSaveButtonListener();
+    }
+    
+    
+    
     
     private void setupQuitButtonListener() {
         view.addQuitButtonListener(e -> quitGame());
     }
     
     
-//    private void setupSaveButtonListener() {
-//    	view.addSaveButtonListener(e -> saveGame());
-//    }
+    private void setupSaveButtonListener() {
+    	view.addSaveButtonListener(e -> saveGame(grid, gameId));
+    }
     
     
 //    private void saveGame() {
 //        model.saveGame();
 //    }
+    
+    public void saveGame(int[][] matrix, int gameId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = DatabaseConnection.getConnection();
+            String sql = "UPDATE SavedGames SET grid = ? WHERE gameId = ?";
+            pstmt = conn.prepareStatement(sql);
+
+//            // Convert the 2D array into a single string
+//            StringBuilder gridBuilder = new StringBuilder();
+//            for (int i = 0; i < matrix.length; i++) {
+//                for (int j = 0; j < matrix[i].length; j++) {
+//                    gridBuilder.append(matrix[i][j]).append(" ");
+//                }
+//            }
+//            String gridString = gridBuilder.toString().trim(); // Remove trailing space
+            
+            String gridString = writeGrid(matrix);
+
+            pstmt.setString(1, gridString);
+            pstmt.setInt(2, gameId);
+
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Updating the grid failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    
+    
     
     private void quitGame() {
         running = false; // Stop the game loop
@@ -81,6 +146,7 @@ public class RunningModeController implements KeyListener, Runnable {
             if (!model.isPaused()) {
                 long currentTime = System.currentTimeMillis();
                 model.update(currentTime, keys);
+                //System.out.println(writeGrid(model.getGrid()));
                 view.repaint(); // Repaint the view
             }
         

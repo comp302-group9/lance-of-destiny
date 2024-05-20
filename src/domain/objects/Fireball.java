@@ -227,7 +227,7 @@ boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && 
             if (barrier.onHit()) { // If the barrier should be destroyed
             	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
             	grid[barrier.getGridY()][barrier.getGridX()] = 0;
-            	System.out.println(writeGrid(grid));
+            	//System.out.println(writeGrid(grid));
             	
             	
                 barriers.remove(barrier); // Safely remove it from the list
@@ -237,7 +237,7 @@ boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && 
             if (barrier.onHit()) { // If the barrier should be destroyed
             	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
             	grid[barrier.getGridY()][barrier.getGridX()] = 0;
-            	System.out.println(writeGrid(grid));
+            	//System.out.println(writeGrid(grid));
             	
                 barriers.remove(barrier); // Safely remove it from the list
             }
@@ -249,7 +249,7 @@ boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && 
                 reflectVertical();if (barrier.onHit()) { // If the barrier should be destroyed
                 	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                 	grid[barrier.getGridY()][barrier.getGridX()] = 0;
-                	System.out.println(writeGrid(grid));
+                	//System.out.println(writeGrid(grid));
                 	
                     barriers.remove(barrier); // Safely remove it from the list
                     
@@ -258,7 +258,7 @@ boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && 
                 reflectHorizontal();if (barrier.onHit()) { // If the barrier should be destroyed
                 	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                 	grid[barrier.getGridY()][barrier.getGridX()] = 0;
-                	System.out.println(writeGrid(grid));
+                	//System.out.println(writeGrid(grid));
                     barriers.remove(barrier); // Safely remove it from the list
                 }break;
             }
@@ -268,14 +268,14 @@ boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && 
                 reflectVertical();if (barrier.onHit()) { // If the barrier should be destroyed
                 	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                 	grid[barrier.getGridY()][barrier.getGridX()] = 0;
-                	System.out.println(writeGrid(grid));
+                	//System.out.println(writeGrid(grid));
                     barriers.remove(barrier); // Safely remove it from the list
                 }break;
             }else if((ballBounds.getMaxX()<barrierBounds.getMaxX()+ballBounds.getWidth()-px)||ballBounds.getX()>barrierBounds.getX()-ballBounds.getWidth()+px){
                 reflectHorizontal();if (barrier.onHit()) { // If the barrier should be destroyed
                 	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                 	grid[barrier.getGridY()][barrier.getGridX()] = 0;
-                	System.out.println(writeGrid(grid));
+                	//System.out.println(writeGrid(grid));
                     barriers.remove(barrier); // Safely remove it from the list
                 }break;
             }
@@ -293,6 +293,10 @@ boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && 
 	    String gridString = gridStringBuilder.toString().trim(); // Remove trailing space
 	    return gridString;
 	    
+	}
+
+	public int[][] getGrid() {
+		return grid;
 	}
 
 

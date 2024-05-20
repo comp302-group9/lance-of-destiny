@@ -31,7 +31,17 @@ public class RunningModeModel {
     private int[][] grid;
     
 
-    public RunningModeModel() {
+    public int[][] getGrid() {
+		return grid;
+	}
+
+
+	public void setGrid(int[][] grid) {
+		this.grid = grid;
+	}
+
+
+	public RunningModeModel() {
     	
     	//normalde sondaydı başa alınca sıkıntı çıkacak mı emin değilim
     	initializeGame();
@@ -212,6 +222,7 @@ public class RunningModeModel {
         if ((currentTime - lastCollisionTime2) >= cooldownbar) {
         	//fireball.setGrid(grid);
         	fireball.checkCollisionWithBarriers(barriers);
+        	grid = fireball.getGrid();
         	//System.out.println(grid);
         	lastCollisionTime2 = currentTime;
         }
