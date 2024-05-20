@@ -57,9 +57,7 @@ public class SignInSignUpTest {
         assertEquals("Sign in successful.", signInView.getSignInStatus());
         assertFalse(signInView.getFrame().isVisible());
 
-        // Verify the interactions and assertions
-        assertEquals("Sign in successful.", signInView.getSignInStatus());
-        assertFalse(signInView.getFrame().isVisible());
+        
     }
 
     @Test
