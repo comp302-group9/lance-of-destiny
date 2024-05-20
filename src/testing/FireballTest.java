@@ -18,7 +18,6 @@ public class FireballTest {
         paddle = new Paddle(0, 0, 0, 0);
     }
 
-// TEST CASE 1
     @Test
     public void testValidateSpeedPositiveDxPaddleLeft() {
         fireball.setVelocity(3, 3);
@@ -27,7 +26,7 @@ public class FireballTest {
         assertEquals(3, fireball.getVelocityX());
         assertEquals(3, fireball.getVelocityY());
     }
-// TEST CASE 2
+
     @Test
     public void testValidateSpeedNegativeDxPaddleRight() {
         fireball.setVelocity(-3, 3);
@@ -36,7 +35,7 @@ public class FireballTest {
         assertEquals(-3, fireball.getVelocityX());
         assertEquals(3, fireball.getVelocityY());
     }
-// TEST CASE 3
+
     @Test
     public void testValidateSpeedZeroVelocity() {
         fireball.setVelocity(0, 0);
@@ -46,7 +45,6 @@ public class FireballTest {
         assertEquals(0, fireball.getVelocityY());
     }
 
-// TEST CASE 4
     @Test
     public void testValidateSpeedZeroPaddleDirection() {
         fireball.setVelocity(3, 3);
@@ -55,7 +53,7 @@ public class FireballTest {
         assertEquals(3, fireball.getVelocityX());
         assertEquals(3, fireball.getVelocityY());
     }
-// TEST CASE 5
+
     @Test
     public void testValidateSpeedNullPaddle() {
         fireball.setVelocity(3, 3);
