@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "YmirApp",
+            "request": "launch",
+            "mainClass": "domain.objects.Ymir.YmirApp",
+            "projectName": "lance-of-destiny"
+        },
+        {
+            "type": "java",
             "name": "main",
             "request": "launch",
             "mainClass": "src.main",
