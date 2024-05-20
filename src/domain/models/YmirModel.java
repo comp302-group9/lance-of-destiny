@@ -1,4 +1,4 @@
-package domain.objects.Ymir;
+package domain.models;
 
 import java.util.Random;
 

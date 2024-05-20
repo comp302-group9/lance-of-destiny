@@ -1,6 +1,11 @@
-package domain.objects.Ymir;
+package domain.controllers;
 
 import javax.swing.*;
+
+import domain.models.YmirModel;
+import domain.objects.Ymir.YmirContext;
+import ui.screens.RModeUI.YmirView;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

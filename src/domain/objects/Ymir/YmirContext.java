@@ -1,5 +1,8 @@
 package domain.objects.Ymir;
 
+import domain.models.YmirModel;
+import ui.screens.RModeUI.YmirView;
+
 public class YmirContext {
     private YmirState currentState;
     private YmirModel model;
