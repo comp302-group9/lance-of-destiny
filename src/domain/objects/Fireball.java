@@ -79,6 +79,10 @@ public class Fireball {
         
     }
 
+    public double getVelocityY() {
+        return dy;
+    }
+
     //updates the fireball location
     public void move() {
         x += dx;

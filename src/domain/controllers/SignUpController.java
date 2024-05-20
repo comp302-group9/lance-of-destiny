@@ -59,7 +59,7 @@ public class SignUpController {
     }
     
     
-    private boolean usernameExists(String username, Connection conn) throws SQLException {
+    public boolean usernameExists(String username, Connection conn) throws SQLException {
         String sql = "SELECT id FROM Users WHERE username = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
