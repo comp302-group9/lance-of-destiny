@@ -241,5 +241,13 @@ public class SignInView extends JPanel {
     public JButton getSignUpButton() {
         return signUpButton;
     }
-
+    public JLabel getStatusLabel() {
+    	return this.statusLabel;
+    }
+    public JTextField getUsernameField() {
+    	return this.usernameField;
+    }
+    public JTextField getPasswordField() {
+    	return this.usernameField;
+    }
 }

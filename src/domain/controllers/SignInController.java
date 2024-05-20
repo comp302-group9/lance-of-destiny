@@ -48,7 +48,21 @@ public class SignInController {
                 
                 signInView.closeFrame();
     }*/
-
+    /** private void signIn() {
+    // method implementation
+      }
+ *REQUIRES: A valid SignInView instance and DatabaseConnection should be properly set up.
+ * MODIFIES: The status label in SignInView, initiates the BuildingModeView on successful sign-in.
+ * EFFECTS: 
+ *  - Retrieves the username and password from SignInView.
+ *  - Attempts to validate the credentials against the database.
+ *  - If the credentials are valid, updates the status label to "Sign in successful", closes the sign-in view,
+ *    and opens the BuildingModeView.//FOR GLASS BOX TESTING test validateCredentials()
+ *  - If the credentials are invalid, updates the status label to "Invalid credentials".
+ *  - In case of a database error, updates the status label to "Database error: " followed by the error message.
+ ** 
+ */
+ 
     private void signIn() {
         String username = signInView.getUsername();
         String password = signInView.getPassword();
@@ -79,7 +93,17 @@ public class SignInController {
             signInView.setSignInStatus("Database error: " + e.getMessage());
         }
     }
-    
+    /*private boolean validateCredentials(String username, String password, Connection conn) throws SQLException {
+    // method implementation
+}
+ **Requires: A non-null, non-empty username and password, a valid SQL Connection.
+ * Modifies: None.
+ * Effects: 
+ *  - Prepares an SQL statement to fetch the password for the given username.
+ *  - Executes the statement and retrieves the password from the result set.
+ *  - Returns true if the provided password matches the stored password; false otherwise.
+ *  - Throws SQLException if there is a database access error.
+ */
     private boolean validateCredentials(String username, String password, Connection conn) throws SQLException {
         String sql = "SELECT password FROM Users WHERE username = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
