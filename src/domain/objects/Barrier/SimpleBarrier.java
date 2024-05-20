@@ -1,6 +1,5 @@
 package domain.objects.Barrier;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,8 +13,8 @@ public class SimpleBarrier extends Barrier {
 		
 	}
 
-	public SimpleBarrier(int x, int y){
-		super(x, y);
+	public SimpleBarrier(int x, int y, int gridX, int gridY){
+		super(x, y, gridX, gridY);
 		updateMovementState(RunningModeModel.barriers); // Initialize movement state
 		
 	}

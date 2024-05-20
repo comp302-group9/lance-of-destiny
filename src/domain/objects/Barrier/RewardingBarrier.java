@@ -1,6 +1,7 @@
 package domain.objects.Barrier;
 
 import java.util.Random;
+
 import domain.models.RunningModeModel;
 import domain.objects.Box;
 
@@ -14,8 +15,8 @@ public class RewardingBarrier extends Barrier {
 		this.message="*At least 10*";
 	}
 
-	public RewardingBarrier(int x, int y) {
-		super(x,y);
+	public RewardingBarrier(int x, int y, int gridX, int gridY) {
+		super(x,y,gridX,gridY);
 		this.containedSpell=spells[new Random().nextInt(spells.length)];
 	}
 

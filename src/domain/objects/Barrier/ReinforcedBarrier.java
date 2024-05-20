@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -22,8 +21,8 @@ public class ReinforcedBarrier extends Barrier {
 		
 	}
 
-	public ReinforcedBarrier(int x,int y) {
-		super(x,y);
+	public ReinforcedBarrier(int x,int y, int gridX, int gridY) {
+		super(x,y,gridX,gridY);
 		//this.hitCount=new Random().nextInt(3)+2;
 		updateMovementState(RunningModeModel.barriers); // Update whether it should move
 		

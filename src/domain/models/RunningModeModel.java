@@ -28,8 +28,16 @@ public class RunningModeModel {
     public static ArrayList<Box> boxes= new ArrayList<Box>();
     private boolean gameOver = false; // State to track if the game is over
     private String gameOverMessage = "Game Over!"; // Game over message
+    private int[][] grid;
+    
 
     public RunningModeModel() {
+    	
+    	//normalde sondaydı başa alınca sıkıntı çıkacak mı emin değilim
+    	initializeGame();
+    	
+    	
+    	
         // Initialize the paddle
         paddle = new Paddle(WIDTH / 2, HEIGHT - 50, WIDTH/10, 20); // Adjust parameters as needed
 
@@ -38,12 +46,17 @@ public class RunningModeModel {
 
         lastUpdateTime = System.currentTimeMillis();
         
-        initializeGame();
+        //initaliseBarrierLocations(this.grid);
         
     }
     
     
-    private void initializeGame() {
+    public void setFireball(Fireball fireball) {
+		this.fireball = fireball;
+	}
+
+
+	private void initializeGame() {
         // Clear existing barriers before setting up a new game
         barriers.clear();
         
@@ -123,6 +136,26 @@ public class RunningModeModel {
             }
         }
         
+//        synchronized(barriers) {
+//            for (int i = 0; i < barriers.size(); i++) {
+//                Barrier barrier = barriers.get(i);
+//                if (barrier.isMoving) {
+//                    barrier.move(barriers, deltaTime);
+//                }
+//            }
+//        }
+//
+//        synchronized(boxes) {
+//            for (int i = 0; i < boxes.size(); i++) {
+//                Box box = boxes.get(i);
+//                box.move();
+//                if (box.getY() > HEIGHT) {
+//                    boxes.remove(i);
+//                    i--; // Decrement index to continue correctly after removal
+//                }
+//            }
+//        }
+        
         if (!fireball.isLaunched()) {
             // Align fireball's x-coordinate to the paddle's center
             int fireballX = paddle.getX() + (paddle.getWidth() - fireball.getWidth()) / 2;
@@ -177,7 +210,9 @@ public class RunningModeModel {
         // Check collision of fireball with walls
         fireball.checkCollisionWithWalls(WIDTH, HEIGHT);
         if ((currentTime - lastCollisionTime2) >= cooldownbar) {
+        	//fireball.setGrid(grid);
         	fireball.checkCollisionWithBarriers(barriers);
+        	//System.out.println(grid);
         	lastCollisionTime2 = currentTime;
         }
         
@@ -191,6 +226,8 @@ public class RunningModeModel {
         if (keys[KeyEvent.VK_SPACE] && !fireball.isLaunched()) {
             fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
         }
+        
+        
     }
 
     public void initaliseBarrierLocations(int[][] grid){
@@ -206,19 +243,19 @@ public class RunningModeModel {
 					case 0:
                         break;
                     case 1:
-                        Barrier simple = new SimpleBarrier(x,y);
+                        Barrier simple = new SimpleBarrier(x,y,col, row);
                         barriers.add(simple);
                         break;
                     case 2:
-                        Barrier reinforced = new ReinforcedBarrier(x,y);
+                        Barrier reinforced = new ReinforcedBarrier(x,y,col, row);
                         barriers.add(reinforced);
                         break;
                     case 3:
-                        Barrier explosive = new ExplosiveBarrier(x,y);
+                        Barrier explosive = new ExplosiveBarrier(x,y,col, row);
                         barriers.add(explosive);
                         break;
                     case 4:
-                        Barrier rewarding = new RewardingBarrier(x,y);
+                        Barrier rewarding = new RewardingBarrier(x,y,col, row);
                         barriers.add(rewarding);
                         break;
                 }

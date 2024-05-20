@@ -1,16 +1,15 @@
 package domain.objects;
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.Area;
-
-import javax.swing.*;
-
-import domain.objects.Paddle;
-
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.ArrayList;
-import domain.objects.Barrier.*;
+
+import javax.imageio.ImageIO;
+
+import domain.objects.Barrier.Barrier;
 
 public class Fireball {
 
@@ -19,6 +18,7 @@ public class Fireball {
     private double dx, dy;
     private int width, height;
     private boolean isLaunched = false; // Track if the fireball is launched
+    private int[][] grid;
 
     public Fireball(int x, int y, int width, int height) {
         this.x = x;
@@ -34,6 +34,10 @@ public class Fireball {
             e.printStackTrace();
         }
         setDefaultVelocity();
+    }
+    
+    public void setGrid(int[][] grid) {
+        this.grid = grid;
     }
     
 
@@ -171,9 +175,9 @@ public class Fireball {
             Rectangle barrierBounds = barrier.getBounds();
         
             Point topLeft = new Point(ballBounds.x, ballBounds.y);
-        Point topRight = new Point(ballBounds.x + ballBounds.width, ballBounds.y);
-        Point bottomLeft = new Point(ballBounds.x, ballBounds.y + ballBounds.height);
-        Point bottomRight = new Point(ballBounds.x + ballBounds.width, ballBounds.y + ballBounds.height);
+            Point topRight = new Point(ballBounds.x + ballBounds.width, ballBounds.y);
+            Point bottomLeft = new Point(ballBounds.x, ballBounds.y + ballBounds.height);
+            Point bottomRight = new Point(ballBounds.x + ballBounds.width, ballBounds.y + ballBounds.height);
             double px = 0;
             double py = 0;
 
@@ -221,11 +225,20 @@ boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && 
         if(isMiddleBottomInside||isMiddleTopInside){
             reflectHorizontal();
             if (barrier.onHit()) { // If the barrier should be destroyed
+            	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
+            	grid[barrier.getGridY()][barrier.getGridX()] = 0;
+            	System.out.println(writeGrid(grid));
+            	
+            	
                 barriers.remove(barrier); // Safely remove it from the list
             }break;
         }
         else if(isMiddleLeftInside||isMiddleRightInside){
             if (barrier.onHit()) { // If the barrier should be destroyed
+            	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
+            	grid[barrier.getGridY()][barrier.getGridX()] = 0;
+            	System.out.println(writeGrid(grid));
+            	
                 barriers.remove(barrier); // Safely remove it from the list
             }
             reflectVertical();            
@@ -234,10 +247,18 @@ boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && 
         else if (isTopLeftInside || isTopRightInside){
             if(ballBounds.getMaxY()<barrierBounds.getMaxY()+ballBounds.getHeight()-py){
                 reflectVertical();if (barrier.onHit()) { // If the barrier should be destroyed
+                	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
+                	grid[barrier.getGridY()][barrier.getGridX()] = 0;
+                	System.out.println(writeGrid(grid));
+                	
                     barriers.remove(barrier); // Safely remove it from the list
+                    
                 }break;
             }else if((ballBounds.getMaxX()<barrierBounds.getMaxX()+ballBounds.getWidth()-px)||ballBounds.getX()>barrierBounds.getX()-ballBounds.getWidth()+px){
                 reflectHorizontal();if (barrier.onHit()) { // If the barrier should be destroyed
+                	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
+                	grid[barrier.getGridY()][barrier.getGridX()] = 0;
+                	System.out.println(writeGrid(grid));
                     barriers.remove(barrier); // Safely remove it from the list
                 }break;
             }
@@ -245,16 +266,34 @@ boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && 
         }else if(isBottomLeftInside || isBottomRightInside){
             if(ballBounds.getY()>barrierBounds.getY()-ballBounds.getHeight()+py){
                 reflectVertical();if (barrier.onHit()) { // If the barrier should be destroyed
+                	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
+                	grid[barrier.getGridY()][barrier.getGridX()] = 0;
+                	System.out.println(writeGrid(grid));
                     barriers.remove(barrier); // Safely remove it from the list
                 }break;
             }else if((ballBounds.getMaxX()<barrierBounds.getMaxX()+ballBounds.getWidth()-px)||ballBounds.getX()>barrierBounds.getX()-ballBounds.getWidth()+px){
                 reflectHorizontal();if (barrier.onHit()) { // If the barrier should be destroyed
+                	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
+                	grid[barrier.getGridY()][barrier.getGridX()] = 0;
+                	System.out.println(writeGrid(grid));
                     barriers.remove(barrier); // Safely remove it from the list
                 }break;
             }
         }
         }
     }
+    
+    public String writeGrid(int[][] matrix) {
+	    StringBuilder gridStringBuilder = new StringBuilder();
+	    for (int i = 0; i < matrix.length; i++) {
+	        for (int j = 0; j < matrix[i].length; j++) {
+	            gridStringBuilder.append(matrix[i][j]).append(" ");
+	        }
+	    }
+	    String gridString = gridStringBuilder.toString().trim(); // Remove trailing space
+	    return gridString;
+	    
+	}
 
 
 

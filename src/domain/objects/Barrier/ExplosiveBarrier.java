@@ -1,7 +1,5 @@
 package domain.objects.Barrier;
 
-import java.awt.Graphics;
-
 public class ExplosiveBarrier extends Barrier {
 
 	private int explosionRadius;
@@ -12,8 +10,8 @@ public class ExplosiveBarrier extends Barrier {
 		this.message="*At least 5*";
 	}
 
-	public ExplosiveBarrier(int x, int y) {
-		super(x,y);
+	public ExplosiveBarrier(int x, int y, int gridX, int gridY) {
+		super(x,y, gridX, gridY);
 	}
 
 	@Override

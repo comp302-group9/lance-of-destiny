@@ -18,9 +18,11 @@ public class RunningModeController implements KeyListener, Runnable {
     private User user;
     private boolean[] keys;
     private boolean isPaused = false;
+    private int[][] grid;
     private boolean running = true;  // Flag to control the running of the game loop
 
     public RunningModeController(User user, RunningModeModel model, RunningModeView view, int[][] grid) {
+    	this.grid = grid;
         this.model = model;
         this.user = user;
         this.view = view;
@@ -28,12 +30,24 @@ public class RunningModeController implements KeyListener, Runnable {
         view.setFocusable(true);
         keys = new boolean[256];  // Array to keep track of key states
         model.initaliseBarrierLocations(grid);
+        model.getFireball().setGrid(grid);;
         setupQuitButtonListener();
+//        setupSaveButtonListener();
     }
     
     private void setupQuitButtonListener() {
         view.addQuitButtonListener(e -> quitGame());
     }
+    
+    
+//    private void setupSaveButtonListener() {
+//    	view.addSaveButtonListener(e -> saveGame());
+//    }
+    
+    
+//    private void saveGame() {
+//        model.saveGame();
+//    }
     
     private void quitGame() {
         running = false; // Stop the game loop
@@ -58,6 +72,8 @@ public class RunningModeController implements KeyListener, Runnable {
         }
         
     }
+    
+    
     
     @Override
     public void run() {
@@ -100,4 +116,17 @@ public class RunningModeController implements KeyListener, Runnable {
     public void stopGame() {
         running = false;  // Method to stop the game loop
     }
+    
+    
+    public String writeGrid(int[][] matrix) {
+	    StringBuilder gridStringBuilder = new StringBuilder();
+	    for (int i = 0; i < matrix.length; i++) {
+	        for (int j = 0; j < matrix[i].length; j++) {
+	            gridStringBuilder.append(matrix[i][j]).append(" ");
+	        }
+	    }
+	    String gridString = gridStringBuilder.toString().trim(); // Remove trailing space
+	    return gridString;
+	    
+	}
 }

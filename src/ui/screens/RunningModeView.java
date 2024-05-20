@@ -35,6 +35,7 @@ public class RunningModeView extends JPanel {
     private JPanel pausePanel;  // Panel for pause screen
     private JLabel pauseLabel;
     private JButton quitButton;
+    private JButton saveButton;
 
     public RunningModeView(RunningModeModel model) {
         this.model = model;
@@ -51,6 +52,10 @@ public class RunningModeView extends JPanel {
     
     public void addQuitButtonListener(ActionListener listener) {
         quitButton.addActionListener(listener);
+    }
+    
+    public void addSaveButtonListener(ActionListener listener) {
+        saveButton.addActionListener(listener);
     }
 
     private void setupUIComponents() {
@@ -76,6 +81,11 @@ public class RunningModeView extends JPanel {
         quitButton.setFont(new Font("Arial", Font.BOLD, 18));
         quitButton.setForeground(Color.BLACK);
         topLeftPanel.add(quitButton);
+        
+        saveButton = new JButton("Save");
+        saveButton.setFont(new Font("Arial", Font.BOLD, 18));
+        saveButton.setForeground(Color.BLACK);
+        topLeftPanel.add(saveButton);
         
         add(topLeftPanel, BorderLayout.NORTH);
         

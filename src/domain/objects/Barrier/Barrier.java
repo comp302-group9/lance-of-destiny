@@ -22,8 +22,25 @@ public abstract class Barrier {
 	protected BufferedImage image;
 	protected String message;
 	public boolean isMoving = false;
+	protected int gridX, gridY;
     protected int direction; // 0 for left, 1 for right (for horizontal movement)
 
+
+	public int getGridX() {
+		return gridX;
+	}
+
+	public void setGridX(int gridX) {
+		this.gridX = gridX;
+	}
+
+	public int getGridY() {
+		return gridY;
+	}
+
+	public void setGridY(int gridY) {
+		this.gridY = gridY;
+	}
 
 	// Constructor
 	public Barrier() {
@@ -33,10 +50,12 @@ public abstract class Barrier {
             e.printStackTrace();
         }
 	}
-
-	public Barrier(int x, int y) {
+	
+	public Barrier(int x, int y, int gridX, int gridY) {
 		this.x=x;
 		this.y=y;
+		this.gridX = gridX;
+		this.gridY = gridY;
 		this.width= RunningModeModel.barrierWidth;
 		this.height =  RunningModeModel.barrierHeight;
 		this.isMoving = checkIfMoving();
