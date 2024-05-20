@@ -139,6 +139,23 @@ public class Fireball {
             dx*=-1;
         }
     }
+    
+    
+    /**OVERVIEW
+     * Validates and potentially increases the speed of the fireball based on the paddle's direction.
+     *
+     * REQUIRES:
+     * - The paddle's direction must be a valid integer.
+     * - The fireball's dx and dy must be valid doubles.
+     *
+     * MODIFIES:
+     * - This.dx and this.dy
+     *
+     * EFFECTS:
+     * - If the paddle is moving in the same direction as the fireball, the speed of the fireball is increased by a small increment.
+     * - The new speed maintains the same direction.
+     *
+     */
 
     public void validateSpeed(Paddle paddle){
         float increase = 5/64;
