@@ -29,7 +29,6 @@ public class BuildingModeView extends JPanel {
     private JButton playButton;
     private JButton helpButton;
     public int[][] grid;
-    //int buttonWidth = 21 * WIDTH / 256;
     int buttonWidth = RunningModeModel.barrierWidth;
     int buttonHeight = RunningModeModel.barrierHeight;
     private JLabel simpleLabel;
@@ -60,7 +59,6 @@ public class BuildingModeView extends JPanel {
             e.printStackTrace();
         }
 
-        //grid = model.readTxt("/domain/txtData/Test.txt");
         grid = model.createEmptyGrid();
 
         addEmptyButtons();
@@ -74,7 +72,6 @@ public class BuildingModeView extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Draw the background image
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 
@@ -102,20 +99,15 @@ public class BuildingModeView extends JPanel {
                         buttons[BuildingModeModel.COLUMNS * i + j].setIcon(rewarding);
                         break;
                 }
-
             }
         }
     }
 
     private ImageIcon scaleImage(String imagePath) {
         try {
-            // Load the image
             BufferedImage image = ImageIO.read(getClass().getResource(imagePath));
-
-            // Scale the image to fit the button
             Image scaledImage = image.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
             return new ImageIcon(scaledImage);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -123,10 +115,7 @@ public class BuildingModeView extends JPanel {
     }
 
     public void showErrorDialog() {
-        // Show error dialog
         JOptionPane.showMessageDialog(this, "You gived wrong barrier numbers! Check for the barrier numbers! (Before try to play again, first place the barriers.)", "Barrier Number Validation Error", JOptionPane.ERROR_MESSAGE);
-
-        // Create a timer to close the dialog after 5 seconds
         Timer closeDialogTimer = new Timer(5000, e -> {
             Window win = SwingUtilities.getWindowAncestor(this);
             if (win instanceof JDialog) {
@@ -139,13 +128,11 @@ public class BuildingModeView extends JPanel {
     }
 
     private void switchToRunningMode() {
-        // Validate barriers before switching to the running mode
         if (!model.validateBarriers()) {
             showErrorDialog();
             return;
         }
 
-        // Create the running mode components and switch views
         RunningModeModel model = new RunningModeModel();
         RunningModeView view = new RunningModeView(model);
         RunningModeController controller = new RunningModeController(model, view, grid);
@@ -172,16 +159,12 @@ public class BuildingModeView extends JPanel {
                 button.setFocusable(false);
                 int x = xStart + col * (buttonWidth + xGap);
                 int y = yStart + row * (buttonHeight + yGap);
-                //if (row % 2 == 0) {x += WIDTH / 128;}
                 button.setBounds(x, y, buttonWidth, buttonHeight);
                 button.setContentAreaFilled(false);
                 button.setBorderPainted(false);
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        switchBarrier(button);
-                        updateCurrent();
-                    }
+                button.addActionListener(e -> {
+                    switchBarrier(button);
+                    updateCurrent();
                 });
                 button.addMouseListener(new MouseAdapter() {
                     @Override
@@ -276,72 +259,55 @@ public class BuildingModeView extends JPanel {
 
     public void addButton() {
         JButton switchPanelButton = new JButton("Play");
-        switchPanelButton.setBounds(600, 490, 120, 30); // Adjust the position and size as needed
-        switchPanelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                RunningModeModel model = new RunningModeModel();
-                RunningModeView view = new RunningModeView(model);
-                RunningModeController controller = new RunningModeController(model, view, grid);
+        switchPanelButton.setBounds(600, 490, 120, 30);
+        switchPanelButton.addActionListener(e -> {
+            RunningModeModel model = new RunningModeModel();
+            RunningModeView view = new RunningModeView(model);
+            RunningModeController controller = new RunningModeController(model, view, grid);
 
-                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(BuildingModeView.this);
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(BuildingModeView.this);
 
-                frame.getContentPane().removeAll();
-                frame.getContentPane().add(view);
-                frame.revalidate();
-                frame.repaint();
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(view);
+            frame.revalidate();
+            frame.repaint();
 
-                Thread gameThread = new Thread(controller);
-                gameThread.start();
-            }
+            Thread gameThread = new Thread(controller);
+            gameThread.start();
         });
         add(switchPanelButton);
 
-
         JButton placeButton = new JButton("Place");
         placeButton.setBounds(600, 525, 120, 30);
-        placeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                resetCurrent();
-                int[][] temp = model.createEmptyGrid();
+        placeButton.addActionListener(e -> {
+            resetCurrent();
+            int[][] temp = model.createEmptyGrid();
 
-                for (int i = 0; i < 4; i++) {
-                    if (isValidInteger(elements[i].getTextFieldText())) {
-                        int value = Integer.parseInt(elements[i].getTextFieldText());
-                        changeRandomValues(temp, value, i + 1);
-                    }
+            for (int i = 0; i < 4; i++) {
+                if (isValidInteger(elements[i].getTextFieldText())) {
+                    int value = Integer.parseInt(elements[i].getTextFieldText());
+                    changeRandomValues(temp, value, i + 1);
                 }
-
-                grid = temp;
-                readGrid(grid);
-                updateCurrent();
             }
+
+            grid = temp;
+            readGrid(grid);
+            updateCurrent();
         });
         add(placeButton);
 
         JButton saveButton = new JButton("Save");
         saveButton.setBounds(600, 560, 120, 30);
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                model.writeTxt("src\\domain\\txtData\\Test.txt", grid);
-            }
-        });
-
+        saveButton.addActionListener(e -> model.writeTxt("src\\domain\\txtData\\Test.txt", grid));
         add(saveButton);
 
         JButton loadButton = new JButton("Load");
         loadButton.setBounds(730, 560, 120, 30);
-        loadButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                resetCurrent();
-                grid = model.readTxt("src\\domain\\txtData\\Test.txt"); // src/domain/txtData/Test.txt
-                readGrid(grid);
-                updateCurrent();
-
-            }
+        loadButton.addActionListener(e -> {
+            resetCurrent();
+            grid = model.readTxt("src\\domain\\txtData\\Test.txt");
+            readGrid(grid);
+            updateCurrent();
         });
         add(loadButton);
     }
@@ -365,8 +331,8 @@ public class BuildingModeView extends JPanel {
         for (int i = 0; i < 4; i++) {
             BarrierElement barrierElement = new BarrierElement(bList.get(i));
 
-            int row = i / 2; // Assuming you want 2 panels per row
-            int col = i % 2; // Assuming you want 2 panels per row
+            int row = i / 2;
+            int col = i % 2;
 
             int x = xStart + col * (panelWidth + gap);
             int y = yStart + row * (panelHeight + gap);
@@ -397,40 +363,20 @@ public class BuildingModeView extends JPanel {
 
     private void initializeUI() {
         JButton switchPanelButton = new JButton("Play");
-        switchPanelButton.setBounds(600, 490, 120, 30); // Adjust the position and size as needed
+        switchPanelButton.setBounds(600, 490, 120, 30);
         switchPanelButton.addActionListener(e -> switchToRunningMode());
         add(switchPanelButton);
     }
 
     private void addHelpButton() {
-        helpButton = new JButton("? Help Menu ?");
-        helpButton.setBounds(WIDTH - 200, 5, 180, 30); // Adjust the position and size as needed
+        helpButton = new JButton("Help Menu");
+        helpButton.setBounds(WIDTH - 200, 5, 180, 30);
         helpButton.addActionListener(e -> showHelpMenu());
         add(helpButton);
     }
 
     private void showHelpMenu() {
-        HelpMenu helpMenu = new HelpMenu(this);
+        HelpMenu helpMenu = new HelpMenu();
         helpMenu.setVisible(true);
-    }
-
-    private ActionListener createPlayButtonListener() {
-        return e -> {
-            // Create the running mode model, view, and controller
-            RunningModeModel runningModel = new RunningModeModel();
-            RunningModeView runningView = new RunningModeView(runningModel);
-            RunningModeController runningController = new RunningModeController(runningModel, runningView, grid);
-
-            // Get the parent frame of this panel to switch content
-            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            frame.getContentPane().removeAll();
-            frame.getContentPane().add(runningView);
-            frame.revalidate();
-            frame.repaint();
-
-            // Start the game loop in a new thread
-            Thread gameThread = new Thread(runningController);
-            gameThread.start();
-        };
     }
 }
