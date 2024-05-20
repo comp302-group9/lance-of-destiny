@@ -151,45 +151,58 @@ public class RunningModeView extends JPanel {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+protected void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
 
-        if (model.isGameOver()) {
-            Font font = new Font("Arial", Font.BOLD, 36);
-            g.setFont(font);
-            g.setColor(Color.WHITE);
-            String gameOverMessage = model.gameOverMessage();
-            FontMetrics metrics = g.getFontMetrics(font);
-            int textWidth = metrics.stringWidth(gameOverMessage);
-            int textHeight = metrics.getAscent();
-            g.drawString(gameOverMessage, (WIDTH - textWidth) / 2, (HEIGHT - textHeight) / 2);
-        } else {
-            Paddle paddle = model.getPaddle();
-            paddle.draw(g);
+    if (model.isGameOver()) {
+        Font font = new Font("Arial", Font.BOLD, 36);
+        g.setFont(font);
+        g.setColor(Color.WHITE);
+        String gameOverMessage = model.gameOverMessage();
+        FontMetrics metrics = g.getFontMetrics(font);
+        int textWidth = metrics.stringWidth(gameOverMessage);
+        int textHeight = metrics.getAscent();
+        g.drawString(gameOverMessage, (WIDTH - textWidth) / 2, (HEIGHT - textHeight) / 2);
+    } else {
+        Paddle paddle = model.getPaddle();
+        paddle.draw(g);
 
-            Fireball fireball = model.getFireball();
-            fireball.draw(g);
+        Fireball fireball = model.getFireball();
+        fireball.draw(g);
 
-            for (domain.objects.Box i : RunningModeModel.boxes) {
-                if (i != null) {
-                    i.draw(g);
-                }
-            }
-
-            for (Barrier i : RunningModeModel.barriers) {
-                if (i != null) {
-                    i.draw(g);
-                }
-            }
-
-            int lives = model.getChances();
-            g.setFont(new Font("Arial", Font.BOLD, 18));
-            g.setColor(Color.WHITE);
-            g.drawString("Lives:", WIDTH - 150, 30);
-            for (int i = 0; i < lives; i++) {
-                g.drawImage(heartImage, WIDTH - 80 + i * 25, 10, 20, 20, this);
+        for (domain.objects.Box box : RunningModeModel.boxes) {
+            if (box != null) {
+                box.draw(g);
             }
         }
+
+        for (Barrier barrier : RunningModeModel.barriers) {
+            if (barrier != null) {
+                barrier.draw(g);
+            }
+        }
+
+        // Draw the lives and score
+        int lives = model.getChances();
+        g.setFont(new Font("Arial", Font.BOLD, 18));
+        g.setColor(Color.WHITE);
+        
+        // Position "Lives:" label
+        int livesLabelX = WIDTH - 150;
+        g.drawString("Lives:", livesLabelX, 20);
+
+        // Draw heart icons next to "Lives:" label
+        int nextX = livesLabelX + g.getFontMetrics().stringWidth("Lives:") + 10;
+        for (int i = 0; i < lives; i++) {
+            g.drawImage(heartImage, nextX, 10, 20, 20, this);
+            nextX += 25; // Move to the next position for the next heart icon
+        }
+
+        // Draw the score next to the last heart icon
+        nextX += 10; // Add some spacing after the last heart icon
+        g.drawString("Score: " + model.getScore(), nextX, 20);
     }
 }
+}
+

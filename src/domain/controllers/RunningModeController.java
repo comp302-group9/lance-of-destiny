@@ -55,7 +55,6 @@ public class RunningModeController implements KeyListener, Runnable {
                 long currentTime = System.currentTimeMillis();
                 model.update(currentTime, keys);
                 view.repaint();
-
             }
 
             try {
@@ -89,6 +88,4 @@ public class RunningModeController implements KeyListener, Runnable {
     public void stopGame() {
         running = false;
     }
-
-    
 }
