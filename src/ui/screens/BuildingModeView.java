@@ -169,6 +169,27 @@ public class BuildingModeView extends JPanel {
 		gameThread.start();
 	}	
 
+/**
+ * addEmptyButtons Method:
+ * 
+ * Initializes and adds empty barrier buttons to the view in a grid layout.
+ * 
+ * Requires:
+ * - BuildingModeModel.ROWS and BuildingModeModel.COLUMNS must be properly initialized.
+ * - buttonWidth and buttonHeight must be set to valid dimensions.
+ * - This instance of BuildingModeView must be properly initialized.
+ * 
+ * Modifies:
+ * - This instance of BuildingModeView by adding BarrierButton components.
+ * - The `buttons` array by storing references to the created BarrierButton instances.
+ * 
+ * Effects:
+ * - Adds a grid of BarrierButton instances to the panel based on the number of rows and columns.
+ * - Sets button properties: non-focusable, specific bounds, no content area filled, and no border painted.
+ * - Attaches an ActionListener to each button that calls switchBarrier(button) and updateCurrent() on action events.
+ * - Attaches a MyMouseListener to each button.
+ * - Updates the `buttons` array with the created buttons.
+ */
 	public void addEmptyButtons() {
 		int xStart = HEIGHT / 32;
 		int yStart = WIDTH / 32;

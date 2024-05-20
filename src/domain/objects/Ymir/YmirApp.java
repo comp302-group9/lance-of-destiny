@@ -10,7 +10,7 @@ public class YmirApp {
     public static void main(String[] args) {
         JFrame frame = new JFrame("Ymir UI");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600*16/9, 800);
+        frame.setSize(200, 200);
 
         YmirModel model = new YmirModel();
         YmirView view = new YmirView();
