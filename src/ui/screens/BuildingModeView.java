@@ -62,6 +62,46 @@ public class BuildingModeView extends JPanel {
 	private ImageIcon rewarding = scaleImage("/ui/images/rewardingBarrierIcon.png");
 	
 	
+	public ImageIcon getEmpty() {
+		return empty;
+	}
+
+	public void setEmpty(ImageIcon empty) {
+		this.empty = empty;
+	}
+
+	public ImageIcon getSimple() {
+		return simple;
+	}
+
+	public void setSimple(ImageIcon simple) {
+		this.simple = simple;
+	}
+
+	public ImageIcon getFirm() {
+		return firm;
+	}
+
+	public void setFirm(ImageIcon firm) {
+		this.firm = firm;
+	}
+
+	public ImageIcon getExplosive() {
+		return explosive;
+	}
+
+	public void setExplosive(ImageIcon explosive) {
+		this.explosive = explosive;
+	}
+
+	public ImageIcon getRewarding() {
+		return rewarding;
+	}
+
+	public void setRewarding(ImageIcon rewarding) {
+		this.rewarding = rewarding;
+	}
+
 	public BuildingModeView(BuildingModeModel model) {
 		this.model = model;
 		initializeUI();
@@ -94,7 +134,7 @@ public class BuildingModeView extends JPanel {
 		g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
 	}
 
-    protected void readGrid(int[][] grid){
+    public void readGrid(int[][] grid){
         for (int i=0; i<BuildingModeModel.ROWS ;i++){
             for (int j=0; j<BuildingModeModel.COLUMNS ;j++){
                 switch (grid[i][j]) {
@@ -121,6 +161,11 @@ public class BuildingModeView extends JPanel {
                 
             }
         }
+    }
+    
+ // Method to get the icon of a button for testing
+    public ImageIcon getIconOfButtonAt(int row, int col) {
+        return (ImageIcon) buttons[BuildingModeModel.COLUMNS * row + col].getIcon();
     }
 
 	private ImageIcon scaleImage(String imagePath) {

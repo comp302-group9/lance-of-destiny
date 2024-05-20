@@ -53,10 +53,24 @@ public class BuildingModeModel {
 	}
 
 	public boolean validateBarriers() {
-		// Validate the counts against required minimums
+		//Requires: Implicit dependency on internal state variables 
+		//(number_simple, number_reinforced, number_explosive, number_rewarding) 
+		//that store current counts of each barrier type.
+
+		//Modifies: No external or internal state modifications.
+
+		//Effects: Checks if barrier counts are within set limits, returning true if 
+		//valid (each type meets minimum requirements and total count doesn’t exceed 219), 
+		//or false otherwise.
+
+
 		if (number_simple < 75 || number_reinforced < 10 || number_explosive < 5 || number_rewarding < 10) {
 			return false;
 		}
+		else if (number_simple + number_reinforced + number_explosive + number_rewarding > 219) {
+			return false;
+		}
+			
 		return true;
 	}
 
@@ -116,6 +130,16 @@ public class BuildingModeModel {
 	}
 	
 	public void saveGridToDatabase(int[][] matrix) {
+		
+		//Requires: A non-null 2D integer array matrix representing the game grid.
+
+		//Modifies: Updates the SavedGames table in the database by inserting a new row with 
+		//the current game state.
+
+		//Effects: Converts the game grid into a single string format, inserts it into the database 
+		//with static game details, and handles SQL exceptions by printing error messages. 
+		//This method ensures game progress persistence.
+		
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(
                  "INSERT INTO SavedGames (gameId, username, life, score, grid) VALUES (?, ?, ?, ?, ?)")) {
