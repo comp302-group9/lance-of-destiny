@@ -11,7 +11,7 @@ public class CastState implements YmirState {
 
     @Override
     public int getDelay() {
-        return 2000; // 2 seconds
+        return 2300; // 2 seconds
     }
 }
 

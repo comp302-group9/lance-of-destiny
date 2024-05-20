@@ -9,8 +9,8 @@ public class YmirContext {
     public YmirContext(YmirModel model, YmirView view) {
         this.model = model;
         this.view = view;
-        states = new YmirState[]{new WaitState(), new WandState(), new CastState()};
-        currentState = states[0]; // Initial state
+        states = new YmirState[]{new WaitState(), new WandState(), new CastState(), new EmptyState()};
+        currentState = states[3]; // Initial state
     }
 
     public void setCurrentState(YmirState state) {

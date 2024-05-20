@@ -10,6 +10,6 @@ public class WandState implements YmirState {
 
     @Override
     public int getDelay() {
-        return 3000; // 3 seconds
+        return 2400; // 3 seconds
     }
 }
