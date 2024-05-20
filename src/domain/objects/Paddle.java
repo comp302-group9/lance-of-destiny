@@ -21,8 +21,8 @@ public class Paddle {
     private int width=DEFAULT.paddleWidth;
     private int height=DEFAULT.paddleHeight;
     private int paddleSpeed = 6;
-    private double rotationAngle = 0;
-    private double rotationSpeed = 20; // degrees per second
+    private static double rotationAngle = 0;
+    private static double rotationSpeed = 20; // degrees per second
     private int direction = 0;
 
     public Paddle(int x, int y, int width, int height) {
@@ -45,6 +45,26 @@ public class Paddle {
     public int getDirection() {return direction;}
     public void setDirection(int direction) {this.direction= direction;}
 
+
+    /**
+ * The Paddle class represents the paddle in the game, which can move horizontally
+ * and rotate within specified limits. It is responsible for rendering itself and
+ * providing its current state for collision detection.
+ * 
+ * Abstract Function:
+ * AF(c) = A paddle with top-left corner at (x, y), of size (width, height),
+ *         moving at speed paddleSpeed, and rotating at speed rotationSpeed.
+ * 
+ * Representation Invariant:
+ * RI(c) = true if and only if:
+ *  - x >= 0
+ *  - y >= 0
+ *  - width > 0
+ *  - height > 0
+ *  - paddleSpeed > 0
+ *  - rotationSpeed > 0
+ *  - -45 <= rotationAngle <= 45
+ */
     // Responsible for left-right movement
     public void setDeltaX(int xDirection, int gameWidth) {
         int dx = xDirection * paddleSpeed;
@@ -59,7 +79,7 @@ public class Paddle {
     }
 
     // Responsible for right rotation
-    public void rotateClockwise(double deltaTime) {
+    public static void rotateClockwise(double deltaTime) {
         rotationAngle += rotationSpeed * deltaTime;
         if (rotationAngle > 45) {
             rotationAngle = 45;
