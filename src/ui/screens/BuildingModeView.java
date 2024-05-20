@@ -395,19 +395,19 @@ public class BuildingModeView extends JPanel {
 		
 		add(saveButton);
 
-		JButton loadButton = new JButton("Load");
-		loadButton.setBounds(730, 560, 120, 30);
-		loadButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				resetCurrent();
-				grid = model.readTxt("src\\domain\\txtData\\Test.txt"); // src/domain/txtData/Test.txt
-				readGrid(grid);
-				updateCurrent();
-
-			}
-		});
-		add(loadButton);
+//		JButton loadButton = new JButton("Load");
+//		loadButton.setBounds(730, 560, 120, 30);
+//		loadButton.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				resetCurrent();
+//				grid = model.readTxt("src\\domain\\txtData\\Test.txt"); // src/domain/txtData/Test.txt
+//				readGrid(grid);
+//				updateCurrent();
+//
+//			}
+//		});
+//		add(loadButton);
 		
 		JButton myGamesButton = new JButton("My Games");
 		myGamesButton.setBounds(730, 525, 120, 30);

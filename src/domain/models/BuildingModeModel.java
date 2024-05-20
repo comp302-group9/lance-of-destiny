@@ -1,7 +1,5 @@
 package domain.models;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
@@ -84,24 +82,24 @@ public class BuildingModeModel {
         return grid;
     }
 
-    public int[][] readTxt(String fileName){
-        int[][] matrix = new int[ROWS][COLUMNS];
-        try (BufferedReader br = new BufferedReader(new FileReader("src\\domain\\txtData\\Test.txt"))) {
-            String line;
-            int row = 0;
-            
-            while ((line = br.readLine()) != null) {
-                String[] elements = line.split(" ");
-                for (int col = 0; col < elements.length; col++) {
-                    matrix[row][col] = Integer.parseInt(elements[col]);
-                }
-                row++;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return matrix;
-    }
+//    public int[][] readTxt(String fileName){
+//        int[][] matrix = new int[ROWS][COLUMNS];
+//        try (BufferedReader br = new BufferedReader(new FileReader("src\\domain\\txtData\\Test.txt"))) {
+//            String line;
+//            int row = 0;
+//            
+//            while ((line = br.readLine()) != null) {
+//                String[] elements = line.split(" ");
+//                for (int col = 0; col < elements.length; col++) {
+//                    matrix[row][col] = Integer.parseInt(elements[col]);
+//                }
+//                row++;
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return matrix;
+//    }
 
 	public void writeTxt(String fileName, int[][] matrix) {
 		try (FileWriter writer = new FileWriter(fileName)) {
