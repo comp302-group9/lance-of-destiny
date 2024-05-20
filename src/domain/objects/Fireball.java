@@ -79,7 +79,7 @@ public class Fireball {
         
     }
 
-    public double getVelocityY() {
+    public double getVelocityY(){
         return dy;
     }
 
@@ -143,6 +143,21 @@ public class Fireball {
             dx*=-1;
         }
     }
+
+    /**
+ * Modifies the speed of the fireball based on the direction of the paddle.
+ *
+ * Requires: 
+ * - `paddle` is not null.
+ * - `dx` and `dy` represent the current velocity components of the fireball.
+ * - `paddle.getDirection()` returns the direction of the paddle's movement.
+ *
+ * Modifies:
+ * - `dx` and `dy` to adjust the speed of the fireball.
+ *
+ * Effects:
+ * - Increases the speed of the fireball if it is moving in the same direction as the paddle.
+ */
 
     public void validateSpeed(Paddle paddle){
         float increase = 5/64;
