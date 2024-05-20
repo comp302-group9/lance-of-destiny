@@ -268,6 +268,7 @@ public class BuildingModeView extends JPanel {
 			button.setIcon(empty);
 			model.setNumber_rewarding(model.getNumber_rewarding() - 1);
 			grid[row][col] = 0;
+		
 		}
 	}
 
