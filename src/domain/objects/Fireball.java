@@ -11,14 +11,17 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.ArrayList;
 import domain.objects.Barrier.*;
+import domain.objects.Spells.Overwhelming;
 
 public class Fireball {
 
     private BufferedImage image;
     private int x, y;
-    private double dx, dy;
+    private double dx;
+	private double dy;
     private int width, height;
     private boolean isLaunched = false; // Track if the fireball is launched
+    private Overwhelming overwhelmingFireballSpell; // Reference to the spell
 
     public Fireball(int x, int y, int width, int height) {
         this.x = x;
@@ -36,6 +39,10 @@ public class Fireball {
         setDefaultVelocity();
     }
     
+    public void setOverwhelmingFireballSpell(Overwhelming spell) {
+        this.overwhelmingFireballSpell = spell;
+    }
+    
 
 	public int getHeight() {
 		return height;
@@ -51,6 +58,10 @@ public class Fireball {
 		return y;
 	}
 	
+	public int getX() {
+		return x;
+	}
+	
 	public void setPosition(int x, int y) {
         this.x = x;
         this.y = y;
@@ -64,6 +75,11 @@ public class Fireball {
 		dx = 3;
         dy = 3;
     }
+    
+    public void setVelocity(double dx, double dy) {
+        this.dx = dx;
+        this.dy = dy;
+    }
 
     //updates the fireball location
     public void move() {
@@ -71,6 +87,9 @@ public class Fireball {
         y += dy;
     }
 
+    
+    
+    
     public void reflectHorizontal() {dy = -dy;}
     public void reflectVertical() {dx = -dx;}
     
@@ -104,6 +123,9 @@ public class Fireball {
         return !ballArea.isEmpty();
     }
     
+    
+     
+    
     public void reflectFromPaddle(Paddle paddle) {
         // Calculate initial velocity magnitude of the ball
         double v_ball_initial = Math.sqrt(dx * dx + dy * dy); // initial velocity of the ball in m/s
@@ -114,20 +136,39 @@ public class Fireball {
         // Calculate initial velocity angle of the ball
         double theta_ball = Math.atan2(dy, dx); // angle of initial velocity of the ball
         
-        // Calculate angle between initial velocity of the ball and the wall
-        double alpha = theta_wall - theta_ball;
+        // Calculate reflection angle
+        double theta_reflection = 2 * theta_wall - theta_ball;
         
         // Calculate final velocity components of the ball after collision using reflection law
-        dx = v_ball_initial * Math.cos(theta_wall + alpha);
-        dy = v_ball_initial * Math.sin(theta_wall + alpha);
+        dx = v_ball_initial * Math.cos(theta_wall + theta_reflection);
+        dy = v_ball_initial * Math.sin(theta_wall + theta_reflection);
+        
+        
         
         if((dx<0&&paddle.getDirection()>0)||(dx>0&&paddle.getDirection()<0)){
             dx*=-1;
         }
     }
 
+   
+    /**OVERVIEW
+     * Validates and potentially increases the speed of the fireball based on the paddle's direction.
+     *
+     * REQUIRES:
+     * - The paddle's direction must be a valid integer.
+     * - The fireball's dx and dy must be valid doubles.
+     *
+     * MODIFIES:
+     * - This.dx and this.dy
+     *
+     * EFFECTS:
+     * - If the paddle is moving in the same direction as the fireball, the speed of the fireball is increased by a small increment.
+     * - The new speed maintains the same direction.
+     *
+     */
+    
     public void validateSpeed(Paddle paddle){
-        float increase = 5/64;
+        float increase = 5/64.0f;
         if((dx>0&&paddle.getDirection()>0)||(dx<0&&paddle.getDirection()<0)){
             double currentSpeed = Math.sqrt(dx * dx + dy * dy);
 
@@ -163,95 +204,105 @@ public class Fireball {
         return ballBounds.intersects(barrierBounds);
     }
 
+   
+    
+    
     public void checkCollisionWithBarriers(ArrayList<Barrier> barriers) {
-        ArrayList<Barrier> barriersCopy = new ArrayList<>(barriers); // Create a copy of the list
+        ArrayList<Barrier> barriersToRemove = new ArrayList<>(); // Track barriers to remove
 
-        for (Barrier barrier : barriersCopy) { // Iterate over the copy
+        for (Barrier barrier : barriers) { // Iterate over the barriers
             Rectangle ballBounds = getBounds();
             Rectangle barrierBounds = barrier.getBounds();
-        
-            Point topLeft = new Point(ballBounds.x, ballBounds.y);
-        Point topRight = new Point(ballBounds.x + ballBounds.width, ballBounds.y);
-        Point bottomLeft = new Point(ballBounds.x, ballBounds.y + ballBounds.height);
-        Point bottomRight = new Point(ballBounds.x + ballBounds.width, ballBounds.y + ballBounds.height);
-            double px = 0;
-            double py = 0;
 
-            double middleTopX = ballBounds.getCenterX();
-            double middleTopY = ballBounds.getMinY();
-            
-            double middleLeftX = ballBounds.getMinX();
-            double middleLeftY = ballBounds.getCenterY();
-            
-            double middleRightX = ballBounds.getMaxX();
-            double middleRightY = ballBounds.getCenterY();
-            
-            double middleBottomX = ballBounds.getCenterX();
-            double middleBottomY = ballBounds.getMaxY();
-            
-            double offsetx = -2;
-            double offsety =  -2;
+            if (ballBounds.intersects(barrierBounds)) {
+                if (overwhelmingFireballSpell != null && overwhelmingFireballSpell.getActive()) {
+                    // OverwhelmingFireball spell is active, destroy the barrier and continue
+                	if (!barrier.getFrozen() && barrier.onHit()) { // Ensure onHit is called
+                        barriersToRemove.add(barrier);
+                        
+                    }
+                	
+                	
+                    
+                } else {
+                    // Default collision behavior
+                    double middleTopX = ballBounds.getCenterX();
+                    double middleTopY = ballBounds.getMinY();
 
-            boolean isMiddleTopInside = (middleTopX >= barrierBounds.getMinX() + offsetx && middleTopX <= barrierBounds.getMaxX() - offsetx)
-        && (middleTopY >= barrierBounds.getMinY() + offsety && middleTopY <= barrierBounds.getMaxY() - offsety);
+                    double middleLeftX = ballBounds.getMinX();
+                    double middleLeftY = ballBounds.getCenterY();
 
-            boolean isMiddleLeftInside = (middleLeftX >= barrierBounds.getMinX() + offsetx && middleLeftX <= barrierBounds.getMaxX() - offsetx)
-        && (middleLeftY >= barrierBounds.getMinY() + offsety && middleLeftY <= barrierBounds.getMaxY() - offsety);
+                    double middleRightX = ballBounds.getMaxX();
+                    double middleRightY = ballBounds.getCenterY();
 
-            boolean isMiddleRightInside = (middleRightX >= barrierBounds.getMinX() + offsetx && middleRightX <= barrierBounds.getMaxX() - offsetx)
-        && (middleRightY >= barrierBounds.getMinY() + offsety && middleRightY <= barrierBounds.getMaxY() - offsety);
+                    double middleBottomX = ballBounds.getCenterX();
+                    double middleBottomY = ballBounds.getMaxY();
 
-            boolean isMiddleBottomInside = (middleBottomX >= barrierBounds.getMinX() + offsetx && middleBottomX <= barrierBounds.getMaxX() - offsetx)
-        && (middleBottomY >= barrierBounds.getMinY() + offsety && middleBottomY <= barrierBounds.getMaxY() - offsety);
+                    double offsetx = -2;
+                    double offsety = -2;
 
+                    boolean isMiddleTopInside = (middleTopX >= barrierBounds.getMinX() + offsetx && middleTopX <= barrierBounds.getMaxX() - offsetx)
+                            && (middleTopY >= barrierBounds.getMinY() + offsety && middleTopY <= barrierBounds.getMaxY() - offsety);
 
-            boolean isTopLeftInside = (topLeft.getX() >= barrierBounds.getMinX() && topLeft.getX() <= barrierBounds.getMaxX())
-        && (topLeft.getY() >= barrierBounds.getMinY() && topLeft.getY() <= barrierBounds.getMaxY());
+                    boolean isMiddleLeftInside = (middleLeftX >= barrierBounds.getMinX() + offsetx && middleLeftX <= barrierBounds.getMaxX() - offsetx)
+                            && (middleLeftY >= barrierBounds.getMinY() + offsety && middleLeftY <= barrierBounds.getMaxY() - offsety);
 
-            boolean isTopRightInside = (topRight.getX() >= barrierBounds.getMinX() && topRight.getX() <= barrierBounds.getMaxX())
-        && (topRight.getY() >= barrierBounds.getMinY() && topRight.getY() <= barrierBounds.getMaxY());
+                    boolean isMiddleRightInside = (middleRightX >= barrierBounds.getMinX() + offsetx && middleRightX <= barrierBounds.getMaxX() - offsetx)
+                            && (middleRightY >= barrierBounds.getMinY() + offsety && middleRightY <= barrierBounds.getMaxY() - offsety);
 
-            boolean isBottomLeftInside = (bottomLeft.getX() >= barrierBounds.getMinX() && bottomLeft.getX() <= barrierBounds.getMaxX())
-        && (bottomLeft.getY() >= barrierBounds.getMinY() && bottomLeft.getY() <= barrierBounds.getMaxY());
+                    boolean isMiddleBottomInside = (middleBottomX >= barrierBounds.getMinX() + offsetx && middleBottomX <= barrierBounds.getMaxX() - offsetx)
+                            && (middleBottomY >= barrierBounds.getMinY() + offsety && middleBottomY <= barrierBounds.getMaxY() - offsety);
 
-            boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && bottomRight.getX() <= barrierBounds.getMaxX())
-        && (bottomRight.getY() >= barrierBounds.getMinY() && bottomRight.getY() <= barrierBounds.getMaxY());
+                    boolean isTopLeftInside = (ballBounds.x >= barrierBounds.getMinX() && ballBounds.x <= barrierBounds.getMaxX())
+                            && (ballBounds.y >= barrierBounds.getMinY() && ballBounds.y <= barrierBounds.getMaxY());
 
-        if(isMiddleBottomInside||isMiddleTopInside){
-            reflectHorizontal();
-            if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
-                barriers.remove(barrier); // Safely remove it from the list
-            }break;
-        }
-        else if(isMiddleLeftInside||isMiddleRightInside){
-            if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
-                barriers.remove(barrier); // Safely remove it from the list
-            }
-            reflectVertical();            
-            break;
-        }
-        else if (isTopLeftInside || isTopRightInside){
-            if(ballBounds.getMaxY()<barrierBounds.getMaxY()+ballBounds.getHeight()-py){
-                reflectVertical();if (!barrier.getFrozen() &&barrier.onHit()) { // If the barrier should be destroyed
-                    barriers.remove(barrier); // Safely remove it from the list
-                }break;
-            }else if((ballBounds.getMaxX()<barrierBounds.getMaxX()+ballBounds.getWidth()-px)||ballBounds.getX()>barrierBounds.getX()-ballBounds.getWidth()+px){
-                reflectHorizontal();if (!barrier.getFrozen() &&barrier.onHit()) { // If the barrier should be destroyed
-                    barriers.remove(barrier); // Safely remove it from the list
-                }break;
-            }
-            
-        }else if(isBottomLeftInside || isBottomRightInside){
-            if(ballBounds.getY()>barrierBounds.getY()-ballBounds.getHeight()+py){
-                reflectVertical();if (!barrier.getFrozen() &&barrier.onHit()) { // If the barrier should be destroyed
-                    barriers.remove(barrier); // Safely remove it from the list
-                }break;
-            }else if((ballBounds.getMaxX()<barrierBounds.getMaxX()+ballBounds.getWidth()-px)||ballBounds.getX()>barrierBounds.getX()-ballBounds.getWidth()+px){
-                reflectHorizontal();if (!barrier.getFrozen() &&barrier.onHit()) { // If the barrier should be destroyed
-                    barriers.remove(barrier); // Safely remove it from the list
-                }break;
+                    boolean isTopRightInside = (ballBounds.x + ballBounds.width >= barrierBounds.getMinX() && ballBounds.x + ballBounds.width <= barrierBounds.getMaxX())
+                            && (ballBounds.y >= barrierBounds.getMinY() && ballBounds.y <= barrierBounds.getMaxY());
+
+                    boolean isBottomLeftInside = (ballBounds.x >= barrierBounds.getMinX() && ballBounds.x <= barrierBounds.getMaxX())
+                            && (ballBounds.y + ballBounds.height >= barrierBounds.getMinY() && ballBounds.y + ballBounds.height <= barrierBounds.getMaxY());
+
+                    boolean isBottomRightInside = (ballBounds.x + ballBounds.width >= barrierBounds.getMinX() && ballBounds.x + ballBounds.width <= barrierBounds.getMaxX())
+                            && (ballBounds.y + ballBounds.height >= barrierBounds.getMinY() && ballBounds.y + ballBounds.height <= barrierBounds.getMaxY());
+
+                    if (isMiddleBottomInside || isMiddleTopInside && overwhelmingFireballSpell == null) {
+                        reflectHorizontal();
+                        if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                            barriersToRemove.add(barrier); // Safely mark it for removal
+                        }
+                    } else if (isMiddleLeftInside || isMiddleRightInside && overwhelmingFireballSpell == null) {
+                        reflectVertical();
+                        if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                            barriersToRemove.add(barrier); // Safely mark it for removal
+                        }
+                    } else if (isTopLeftInside || isTopRightInside || isBottomLeftInside || isBottomRightInside && overwhelmingFireballSpell == null) {
+                        if (ballBounds.getMaxY() < barrierBounds.getMaxY() + ballBounds.height) {
+                            reflectVertical();
+                            if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                                barriersToRemove.add(barrier); // Safely mark it for removal
+                            }
+                        } else if (ballBounds.getMaxX() < barrierBounds.getMaxX() + ballBounds.width
+                                || ballBounds.x > barrierBounds.x - ballBounds.width && overwhelmingFireballSpell == null) {
+                            reflectHorizontal();
+                            if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                                barriersToRemove.add(barrier); // Safely mark it for removal
+                            }
+                        }
+                    }
+                }
             }
         }
-        }
+
+        // Remove barriers that have been destroyed
+        barriers.removeAll(barriersToRemove);
+    
+}
+ // Getter methods for dx and dy for testing
+    public double getDx() {
+        return dx;
+    }
+
+    public double getDy() {
+        return dy;
     }
 }

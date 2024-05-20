@@ -22,7 +22,7 @@ public class Paddle {
     private int height=DEFAULT.paddleHeight;
     private int paddleSpeed = 6;
     private double rotationAngle = 0;
-    private double rotationSpeed = 20; // degrees per second
+    public double rotationSpeed = 20; // degrees per second
     private int direction = 0;
 
     public Paddle(int x, int y, int width, int height) {
@@ -42,6 +42,7 @@ public class Paddle {
     public int getWidth() {return width;}
     public int getHeight() {return height;}
     public double getRotationAngle() {return rotationAngle;}
+    public double getRotationSpeed() {return rotationSpeed;}
     public int getDirection() {return direction;}
     public void setDirection(int direction) {this.direction= direction;}
 

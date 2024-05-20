@@ -16,6 +16,8 @@ import domain.objects.Barrier.RewardingBarrier;
 import domain.objects.Barrier.SimpleBarrier;
 import ui.screens.RModeUI.SpellIcon;
 import domain.objects.Spells.Expension;
+import domain.objects.Spells.Hex;
+import domain.objects.Spells.Overwhelming;
 
 public class RunningModeModel{
     public static int barrierWidth = 51;
@@ -35,9 +37,9 @@ public class RunningModeModel{
     private boolean gameStarted = false;
 
     public RunningModeModel() {
-        spells.add(new SpellIcon(new Expension()));
-        //spells.add(new SpellIcon("src\\ui\\images\\extend.png"));
-        //spells.add(new SpellIcon("src\\ui\\images\\fireballSpell.png"));
+    	spells.add(new SpellIcon(new Expension()));
+        spells.add(new SpellIcon(new Hex()));
+        spells.add(new SpellIcon(new Overwhelming(false)));
         //spells.add(new SpellIcon("src\\ui\\images\\Hex.png"));
         //spells.add(new SpellIcon("src\\ui\\images\\extend.png"));
 

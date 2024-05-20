@@ -10,7 +10,7 @@ public abstract class Spell {
     protected Boolean isStorable;
     private Timer timer;
     private int secondsElapsed;
-    private int duration = 30; // Duration of the spell in seconds
+    protected int duration = 30; // Duration of the spell in seconds
     protected Boolean active=false;
     private int num=2;
     

@@ -1,2 +1,13 @@
 /main$1.class
 /main.class
+/database/
+/domain/
+/ui/
+/BallTest$TestBarrier.class
+/BallTest$ConcreteBarrier.class
+/ConcreteBarrier.class
+/BallTest.class
+/PaddleTest.class
+/ReflectionTest.class
+/SpeedTest.class
+/ValidateSpeedTest.class
