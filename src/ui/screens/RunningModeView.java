@@ -2,6 +2,8 @@ package ui.screens;
 
 import javax.swing.*;
 
+import domain.controllers.BuildingModeController;
+import domain.models.BuildingModeModel;
 import domain.models.RunningModeModel;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
@@ -25,6 +27,7 @@ public class RunningModeView extends JPanel {
     private JButton saveButton;
     private JButton loadButton;
     private JButton quitButton;
+    private JButton backToBuildingModeButton;
 
     public RunningModeView(RunningModeModel model) {
         this.model = model;
@@ -94,6 +97,9 @@ public class RunningModeView extends JPanel {
             quitButton = new JButton("Quit");
             quitButton.addActionListener(e -> quitGame());
 
+            backToBuildingModeButton = new JButton("Turn Back To Building Mode");
+            backToBuildingModeButton.addActionListener(e -> switchToBuildingMode());
+
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridwidth = GridBagConstraints.REMAINDER;
             gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -103,9 +109,26 @@ public class RunningModeView extends JPanel {
             pausePanel.add(saveButton, gbc);
             pausePanel.add(loadButton, gbc);
             pausePanel.add(quitButton, gbc);
+            pausePanel.add(backToBuildingModeButton, gbc);
             add(pausePanel, BorderLayout.CENTER);
         }
     }
+
+    private void switchToBuildingMode() {
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        BuildingModeModel buildingModel = new BuildingModeModel();
+        BuildingModeView buildingView = new BuildingModeView(buildingModel);
+        BuildingModeController buildingController = new BuildingModeController(buildingModel, buildingView);
+
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(buildingView);
+        frame.revalidate();
+        frame.repaint();
+
+        Thread buildingModeThread = new Thread(buildingController);
+        buildingModeThread.start();
+    }
+
 
     private void removePauseScreen() {
         if (pausePanel != null) {

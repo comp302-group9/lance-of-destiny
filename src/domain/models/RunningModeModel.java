@@ -48,6 +48,8 @@ public class RunningModeModel {
         lastUpdateTime = System.currentTimeMillis();
     }
 
+    
+
     public void setGameOverCallback(Runnable gameOverCallback) {
         this.gameOverCallback = gameOverCallback;
     }

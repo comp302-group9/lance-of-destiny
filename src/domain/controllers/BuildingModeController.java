@@ -9,8 +9,9 @@ public class BuildingModeController implements Runnable {
 	private boolean[] keys;
 	private long lastUpdateTime; 
 
-	public BuildingModeController(BuildingModeModel model2, BuildingModeView view2) {
-		// TODO Auto-generated constructor stub
+	public BuildingModeController(BuildingModeModel model, BuildingModeView view) {
+		this.model = model;
+        this.view = view;
 	}
 
 	@Override
