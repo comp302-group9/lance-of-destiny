@@ -8,10 +8,7 @@ import domain.objects.Box;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
-import domain.objects.Barrier.ExplosiveBarrier;
-import domain.objects.Barrier.ReinforcedBarrier;
-import domain.objects.Barrier.RewardingBarrier;
-import domain.objects.Barrier.SimpleBarrier;
+import domain.objects.Barrier.BarrierFactory;
 import ui.screens.BuildingModeView;
 
 public class RunningModeModel {
@@ -214,25 +211,9 @@ public class RunningModeModel {
             for (int col = 0; col < COLUMNS; col++) {
                 int x = xStart + col * (barrierWidth + xGap);
                 int y = yStart + row * (barrierHeight + yGap);
-                switch (grid[row][col]) {
-                    case 0:
-                        break;
-                    case 1:
-                        Barrier simple = new SimpleBarrier(x, y);
-                        barriers.add(simple);
-                        break;
-                    case 2:
-                        Barrier reinforced = new ReinforcedBarrier(x, y);
-                        barriers.add(reinforced);
-                        break;
-                    case 3:
-                        Barrier explosive = new ExplosiveBarrier(x, y);
-                        barriers.add(explosive);
-                        break;
-                    case 4:
-                        Barrier rewarding = new RewardingBarrier(x, y);
-                        barriers.add(rewarding);
-                        break;
+                Barrier barrier = BarrierFactory.createBarrier(grid[row][col], x, y);
+                if (barrier != null) {
+                    barriers.add(barrier);
                 }
             }
         }
