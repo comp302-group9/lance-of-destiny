@@ -32,6 +32,9 @@ public class RunningModeModel {
     private String gameOverMessage = "Game Over!"; // Game over message
     private int[][] grid;
     
+    private int score = 0;
+    private long gameStartingTime;
+    
     private int chances = 3; // Add this line to keep track of player's chances
 
     private long lastCollisionTime = 0; // Initialize the last collision time
@@ -65,8 +68,18 @@ public class RunningModeModel {
 
         lastUpdateTime = System.currentTimeMillis();
         
+        this.gameStartingTime = System.currentTimeMillis();
+        
         //initaliseBarrierLocations(this.grid);
         
+    }
+	
+	public int getScore() {
+        return score;
+    }
+
+    public void increaseScore(long currentTime) {
+        score += 300 / ((currentTime - gameStartingTime) / 1000.0); // Convert to seconds
     }
 	
 	public void setGameOverCallback(Runnable gameOverCallback) {
@@ -257,7 +270,7 @@ public class RunningModeModel {
         fireball.checkCollisionWithWalls(WIDTH, HEIGHT);
         if ((currentTime - lastCollisionTime2) >= cooldownbar) {
         	//fireball.setGrid(grid);
-        	fireball.checkCollisionWithBarriers(barriers);
+        	fireball.checkCollisionWithBarriers(barriers, this);
         	grid = fireball.getGrid();
         	//System.out.println(grid);
         	lastCollisionTime2 = currentTime;

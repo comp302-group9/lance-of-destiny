@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import domain.models.RunningModeModel;
 import domain.objects.Barrier.Barrier;
 
 public class Fireball {
@@ -172,8 +173,10 @@ public class Fireball {
         return ballBounds.intersects(barrierBounds);
     }
 
-    public void checkCollisionWithBarriers(ArrayList<Barrier> barriers) {
+    public void checkCollisionWithBarriers(ArrayList<Barrier> barriers, RunningModeModel model) {
         ArrayList<Barrier> barriersCopy = new ArrayList<>(barriers); // Create a copy of the list
+        
+        long currentTime = System.currentTimeMillis(); // Get the current time
 
         for (Barrier barrier : barriersCopy) { // Iterate over the copy
             Rectangle ballBounds = getBounds();
@@ -229,6 +232,7 @@ boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && 
 
         if(isMiddleBottomInside||isMiddleTopInside){
             reflectHorizontal();
+            model.increaseScore(currentTime); 
             if (barrier.onHit()) { // If the barrier should be destroyed
             	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
             	grid[barrier.getGridY()][barrier.getGridX()] = 0;
@@ -246,12 +250,15 @@ boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && 
             	
                 barriers.remove(barrier); // Safely remove it from the list
             }
-            reflectVertical();            
+            reflectVertical();
+            model.increaseScore(currentTime);
             break;
         }
         else if (isTopLeftInside || isTopRightInside){
             if(ballBounds.getMaxY()<barrierBounds.getMaxY()+ballBounds.getHeight()-py){
-                reflectVertical();if (barrier.onHit()) { // If the barrier should be destroyed
+                reflectVertical();
+                model.increaseScore(currentTime);
+                if (barrier.onHit()) { // If the barrier should be destroyed
                 	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                 	grid[barrier.getGridY()][barrier.getGridX()] = 0;
                 	//System.out.println(writeGrid(grid));
@@ -260,7 +267,9 @@ boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && 
                     
                 }break;
             }else if((ballBounds.getMaxX()<barrierBounds.getMaxX()+ballBounds.getWidth()-px)||ballBounds.getX()>barrierBounds.getX()-ballBounds.getWidth()+px){
-                reflectHorizontal();if (barrier.onHit()) { // If the barrier should be destroyed
+                reflectHorizontal();
+                model.increaseScore(currentTime);
+                if (barrier.onHit()) { // If the barrier should be destroyed
                 	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                 	grid[barrier.getGridY()][barrier.getGridX()] = 0;
                 	//System.out.println(writeGrid(grid));
@@ -270,14 +279,18 @@ boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && 
             
         }else if(isBottomLeftInside || isBottomRightInside){
             if(ballBounds.getY()>barrierBounds.getY()-ballBounds.getHeight()+py){
-                reflectVertical();if (barrier.onHit()) { // If the barrier should be destroyed
+                reflectVertical();
+                model.increaseScore(currentTime);
+                if (barrier.onHit()) { // If the barrier should be destroyed
                 	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                 	grid[barrier.getGridY()][barrier.getGridX()] = 0;
                 	//System.out.println(writeGrid(grid));
                     barriers.remove(barrier); // Safely remove it from the list
                 }break;
             }else if((ballBounds.getMaxX()<barrierBounds.getMaxX()+ballBounds.getWidth()-px)||ballBounds.getX()>barrierBounds.getX()-ballBounds.getWidth()+px){
-                reflectHorizontal();if (barrier.onHit()) { // If the barrier should be destroyed
+                reflectHorizontal();
+                model.increaseScore(currentTime);
+                if (barrier.onHit()) { // If the barrier should be destroyed
                 	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                 	grid[barrier.getGridY()][barrier.getGridX()] = 0;
                 	//System.out.println(writeGrid(grid));

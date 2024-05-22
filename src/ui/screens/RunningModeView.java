@@ -2,16 +2,14 @@ package ui.screens;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -38,6 +36,11 @@ public class RunningModeView extends JPanel {
     private JButton saveButton;
     private BufferedImage heartImage;
     private JLabel chancesLabel;
+    
+    private JButton resumeButton;
+    //private JButton saveButton1;
+    //private JButton quitButton1;
+    
 
     public RunningModeView(RunningModeModel model) {
         this.model = model;
@@ -51,7 +54,6 @@ public class RunningModeView extends JPanel {
         setFocusable(true);  // Make the JPanel focusable
         requestFocusInWindow();
         setupUIComponents();
-        
      
     }
     
@@ -62,6 +64,12 @@ public class RunningModeView extends JPanel {
     public void addSaveButtonListener(ActionListener listener) {
         saveButton.addActionListener(listener);
     }
+    
+//    private void initButtons() {
+//        saveButton1 = new JButton("Save");
+//        quitButton1 = new JButton("Quit");
+//        // Optionally, add listeners here or ensure they're added only after this method
+//    }
 
     private void setupUIComponents() {
         setLayout(new BorderLayout());
@@ -74,18 +82,35 @@ public class RunningModeView extends JPanel {
         JPanel topLeftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topLeftPanel.setOpaque(false);
         
-        pauseLabel = new JLabel("Pause");
-        pauseLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        pauseLabel.setForeground(Color.WHITE);
-        pauseLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        pauseLabel.addMouseListener(new MouseAdapter() {
+//        pauseLabel = new JLabel("Pause");
+//        pauseLabel.setFont(new Font("Arial", Font.BOLD, 18));
+//        pauseLabel.setForeground(Color.WHITE);
+//        pauseLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+//        pauseLabel.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                setPaused(true);
+//                model.setPaused(true);
+//            }
+//        });
+//        topLeftPanel.add(pauseLabel);
+        
+        JButton pauseButton = new JButton("Pause");
+        pauseButton.setFont(new Font("Arial", Font.BOLD, 18));
+        pauseButton.setForeground(Color.BLACK); // You can set this to any color you prefer
+
+        // Add an ActionListener to handle button clicks
+        pauseButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 setPaused(true);
                 model.setPaused(true);
             }
+
         });
-        topLeftPanel.add(pauseLabel);
+
+        // Add the pause button to the topLeftPanel
+        topLeftPanel.add(pauseButton);
 
         quitButton = new JButton("Quit");
         quitButton.setFont(new Font("Arial", Font.BOLD, 18));
@@ -141,13 +166,24 @@ public class RunningModeView extends JPanel {
             pauseLabel.setFont(new Font("Arial", Font.BOLD, 22));
             pauseLabel.setForeground(Color.WHITE);
 
-            JButton resumeButton = new JButton("Resume");
+            resumeButton = new JButton("Resume");
             resumeButton.addActionListener(e -> setPaused(false));
+            
+//            saveButton1 = new JButton("Save");
+////            saveButton.addActionListener(e -> saveGame());
+//            
+//            quitButton1 = new JButton("Quit");
+//            quitButton.addActionListener(e -> quitGame());
+//            
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridwidth = GridBagConstraints.REMAINDER;
             gbc.fill = GridBagConstraints.HORIZONTAL;
             pausePanel.add(pauseLabel, gbc);
             pausePanel.add(resumeButton, gbc);
+//            pausePanel.add(saveButton1, gbc);
+//            pausePanel.add(quitButton1, gbc);
+//            
+            
             add(pausePanel, BorderLayout.CENTER);
         }
 
@@ -194,14 +230,25 @@ public class RunningModeView extends JPanel {
             }
             
             
-         // Draw the hearts for lives
+         // Draw the lives and score
             int lives = model.getChances();
             g.setFont(new Font("Arial", Font.BOLD, 18));
             g.setColor(Color.WHITE);
-            g.drawString("Lives:", WIDTH - 150, 30); // Adjust the position as needed
+
+            // Position "Lives:" label
+            int livesLabelX = WIDTH - 150;
+            g.drawString("Lives:", livesLabelX, 20);
+
+            // Draw heart icons next to "Lives:" label
+            int nextX = livesLabelX + g.getFontMetrics().stringWidth("Lives:") + 10;
             for (int i = 0; i < lives; i++) {
-                g.drawImage(heartImage, WIDTH - 80 + i * 25, 10, 20, 20, this);
+                g.drawImage(heartImage, nextX, 10, 20, 20, this);
+                nextX += 25; // Move to the next position for the next heart icon
             }
+            
+         // Draw the score next to the last heart icon
+            nextX += 10; // Add some spacing after the last heart icon
+            g.drawString("Score: " + model.getScore(), nextX, 20);
         }
 
         
