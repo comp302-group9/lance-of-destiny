@@ -36,6 +36,11 @@ public class Fireball {
         setDefaultVelocity();
     }
     
+    
+    public void setLaunched(boolean launched) {
+        isLaunched = launched;
+    }
+    
     public void setGrid(int[][] grid) {
         this.grid = grid;
     }

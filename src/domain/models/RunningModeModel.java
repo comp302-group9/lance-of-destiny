@@ -30,6 +30,13 @@ public class RunningModeModel {
     private String gameOverMessage = "Game Over!"; // Game over message
     private int[][] grid;
     
+    private int chances = 3; // Add this line to keep track of player's chances
+
+    private long lastCollisionTime = 0; // Initialize the last collision time
+    private long lastCollisionTime2 = 0;
+    private long cooldown = 1000; // Set the cooldown time in milliseconds (adjust as needed)
+    private long cooldownbar = 15;
+    
 
     public int[][] getGrid() {
 		return grid;
@@ -45,8 +52,6 @@ public class RunningModeModel {
     	
     	//normalde sondaydı başa alınca sıkıntı çıkacak mı emin değilim
     	initializeGame();
-    	
-    	
     	
         // Initialize the paddle
         paddle = new Paddle(WIDTH / 2, HEIGHT - 50, WIDTH/10, 20); // Adjust parameters as needed
@@ -77,6 +82,7 @@ public class RunningModeModel {
         fireball = new Fireball(WIDTH / 2, 7 * HEIGHT / 8, 16, 16);
 
         lastUpdateTime = System.currentTimeMillis();
+        
     }
 
     public void setPaused(boolean paused) {
@@ -103,6 +109,21 @@ public class RunningModeModel {
         // Logic to restart the game (reset positions, scores, etc.)
         setGameOver(false); // Reset game-over state
         fireball.setPosition(100, 100);
+        fireball.setPosition(paddle.getX() + paddle.getWidth() / 2 - fireball.getWidth() / 2, paddle.getY() - fireball.getHeight());
+        fireball.setLaunched(false);
+    }
+    
+    public int getChances() {
+        return chances;
+    }
+
+    public void decreaseChance() {
+        chances--;
+        if (chances <= 0) {
+            setGameOver(true);
+        } else {
+            restart(); // Restart the fireball position when a chance is lost
+        }
     }
 
     public Paddle getPaddle() {
@@ -112,10 +133,7 @@ public class RunningModeModel {
     public Fireball getFireball() {
         return fireball;
     }
-    long lastCollisionTime = 0; // Initialize the last collision time
-    long lastCollisionTime2 = 0;
-    long cooldown = 1000; // Set the cooldown time in milliseconds (adjust as needed)
-    long cooldownbar = 15;
+    
 
     //APPLICATION OF OBSERVER PATTERN 
     // When the RunningModeModel changes state, 
@@ -177,7 +195,8 @@ public class RunningModeModel {
         
      // Check if fireball has fallen below the game area
         if (fireball.getY() >= HEIGHT) { // If the fireball is below the bottom edge
-            setGameOver(true); // Set the game-over state
+            //setGameOver(true); // Set the game-over state
+        	decreaseChance(); // Decrease the player's chance
             return;
         }
        

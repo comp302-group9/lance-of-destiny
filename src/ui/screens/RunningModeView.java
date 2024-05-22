@@ -36,6 +36,7 @@ public class RunningModeView extends JPanel {
     private JLabel pauseLabel;
     private JButton quitButton;
     private JButton saveButton;
+    private JLabel chancesLabel;
 
     public RunningModeView(RunningModeModel model) {
         this.model = model;
@@ -48,6 +49,8 @@ public class RunningModeView extends JPanel {
         setFocusable(true);  // Make the JPanel focusable
         requestFocusInWindow();
         setupUIComponents();
+        
+     
     }
     
     public void addQuitButtonListener(ActionListener listener) {
@@ -60,7 +63,15 @@ public class RunningModeView extends JPanel {
 
     private void setupUIComponents() {
         setLayout(new BorderLayout());
+        
+        // Create a single panel for the top with a border layout
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setOpaque(false);
 
+        // Create a panel for the left buttons and label
+        JPanel topLeftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topLeftPanel.setOpaque(false);
+        
         pauseLabel = new JLabel("Pause");
         pauseLabel.setFont(new Font("Arial", Font.BOLD, 18));
         pauseLabel.setForeground(Color.WHITE);
@@ -72,11 +83,8 @@ public class RunningModeView extends JPanel {
                 model.setPaused(true);
             }
         });
-
-        JPanel topLeftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        topLeftPanel.setOpaque(false);
         topLeftPanel.add(pauseLabel);
-         
+
         quitButton = new JButton("Quit");
         quitButton.setFont(new Font("Arial", Font.BOLD, 18));
         quitButton.setForeground(Color.BLACK);
@@ -87,8 +95,25 @@ public class RunningModeView extends JPanel {
         saveButton.setForeground(Color.BLACK);
         topLeftPanel.add(saveButton);
         
-        add(topLeftPanel, BorderLayout.NORTH);
+        topPanel.add(topLeftPanel, BorderLayout.WEST);
         
+        // Add the chances label to the right
+        chancesLabel = new JLabel("Chances: " + model.getChances());
+        chancesLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        chancesLabel.setForeground(Color.WHITE);
+
+        JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        topRightPanel.setOpaque(false);
+        topRightPanel.add(chancesLabel);
+
+        topPanel.add(topRightPanel, BorderLayout.EAST);
+        
+        // Add the top panel to the frame
+        add(topPanel, BorderLayout.NORTH);
+    }
+    
+    public void updateChances() {
+        chancesLabel.setText("Chances: " + model.getChances());
     }
 
     // Method to toggle the pause screen
