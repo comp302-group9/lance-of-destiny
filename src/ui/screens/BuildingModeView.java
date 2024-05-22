@@ -43,6 +43,7 @@ public class BuildingModeView extends JPanel {
 	private BuildingModeModel model;
     private JButton playButton; 
 	public int[][] grid;
+	private JButton helpButton;
 	//int buttonWidth = 21 * WIDTH / 256;
 	int buttonWidth = RunningModeModel.barrierWidth;
 	int buttonHeight = RunningModeModel.barrierHeight;
@@ -124,6 +125,7 @@ public class BuildingModeView extends JPanel {
 		currentState();
 		addButton();
 		addInputFields();
+		addHelpButton();
 
 	}
 
@@ -503,6 +505,18 @@ public class BuildingModeView extends JPanel {
 		switchPanelButton.addActionListener(e -> switchToRunningMode());
 		add(switchPanelButton);
 	}
+	
+	private void addHelpButton() {
+        helpButton = new JButton("? Help Menu ?");
+        helpButton.setBounds(WIDTH - 200, 5, 180, 30); // Adjust the position and size as needed
+        helpButton.addActionListener(e -> showHelpMenu());
+        add(helpButton);
+    }
+
+    private void showHelpMenu() {
+        HelpMenu helpMenu = new HelpMenu(this);
+        helpMenu.setVisible(true);
+    }
 
     private ActionListener createPlayButtonListener() {
         return e -> {
