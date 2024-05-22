@@ -2,6 +2,7 @@ package domain.models;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Random;
 
 import domain.objects.Box;
 import domain.objects.Fireball;
@@ -26,6 +27,7 @@ public class RunningModeModel {
     private boolean paused = false; 
     public static ArrayList<Barrier> barriers = new ArrayList<Barrier>();
     public static ArrayList<Box> boxes= new ArrayList<Box>();
+    private Random random = new Random();
     private boolean gameOver = false; // State to track if the game is over
     private String gameOverMessage = "Game Over!"; // Game over message
     private int[][] grid;
@@ -36,6 +38,8 @@ public class RunningModeModel {
     private long lastCollisionTime2 = 0;
     private long cooldown = 1000; // Set the cooldown time in milliseconds (adjust as needed)
     private long cooldownbar = 15;
+    
+    private Runnable gameOverCallback; //BURAYI HIÇ BİLMİYORUM
     
 
     public int[][] getGrid() {
@@ -63,6 +67,10 @@ public class RunningModeModel {
         
         //initaliseBarrierLocations(this.grid);
         
+    }
+	
+	public void setGameOverCallback(Runnable gameOverCallback) {
+        this.gameOverCallback = gameOverCallback;
     }
     
     
@@ -118,9 +126,18 @@ public class RunningModeModel {
     }
 
     public void decreaseChance() {
-        chances--;
+//        chances--;
+//        if (chances <= 0) {
+//            setGameOver(true);
+//        } else {
+//            restart(); // Restart the fireball position when a chance is lost
+//        }
+    	chances--;
         if (chances <= 0) {
             setGameOver(true);
+            if (gameOverCallback != null) {
+                gameOverCallback.run();
+            }
         } else {
             restart(); // Restart the fireball position when a chance is lost
         }

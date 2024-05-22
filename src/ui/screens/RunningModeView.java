@@ -36,6 +36,7 @@ public class RunningModeView extends JPanel {
     private JLabel pauseLabel;
     private JButton quitButton;
     private JButton saveButton;
+    private BufferedImage heartImage;
     private JLabel chancesLabel;
 
     public RunningModeView(RunningModeModel model) {
@@ -43,6 +44,7 @@ public class RunningModeView extends JPanel {
         //setPreferredSize(new Dimension(WIDTH, HEIGHT));
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/ui/images/Background.png"));
+            heartImage = ImageIO.read(getClass().getResource("/ui/images/Heart.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -115,6 +117,7 @@ public class RunningModeView extends JPanel {
     public void updateChances() {
         chancesLabel.setText("Chances: " + model.getChances());
     }
+// Paint Component'da hallediliyor
 
     // Method to toggle the pause screen
     public void setPaused(boolean paused) {
@@ -188,6 +191,16 @@ public class RunningModeView extends JPanel {
                 if (i!=null){
                 i.draw(g);
                 }
+            }
+            
+            
+         // Draw the hearts for lives
+            int lives = model.getChances();
+            g.setFont(new Font("Arial", Font.BOLD, 18));
+            g.setColor(Color.WHITE);
+            g.drawString("Lives:", WIDTH - 150, 30); // Adjust the position as needed
+            for (int i = 0; i < lives; i++) {
+                g.drawImage(heartImage, WIDTH - 80 + i * 25, 10, 20, 20, this);
             }
         }
 

@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import database.DatabaseConnection;
 import domain.models.BuildingModeModel;
@@ -25,6 +26,7 @@ public class RunningModeController implements KeyListener, Runnable {
     private boolean isPaused = false;
     private int[][] grid;
     private boolean running = true;  // Flag to control the running of the game loop
+    
 
     public RunningModeController(User user, RunningModeModel model, RunningModeView view, int[][] grid) {
     	this.grid = grid;
@@ -38,6 +40,7 @@ public class RunningModeController implements KeyListener, Runnable {
         model.getFireball().setGrid(grid);;
         setupQuitButtonListener();
         setupSaveButtonListener();
+        model.setGameOverCallback(this::handleGameOver);
     }
     
     
@@ -54,7 +57,29 @@ public class RunningModeController implements KeyListener, Runnable {
         model.getFireball().setGrid(grid);;
         setupQuitButtonListener();
         setupSaveButtonListener();
+        model.setGameOverCallback(this::handleGameOver);
     }
+    
+    private void handleGameOver() {
+        // Display game over message for 5 seconds
+        Timer timer = new Timer(5000, e -> quitGame());
+        timer.setRepeats(false);
+        timer.start();
+    }
+    
+//    private void switchToBuildingMode() {
+//        SwingUtilities.invokeLater(() -> {
+//            BuildingModeModel buildingModel = new BuildingModeModel(user);
+//            BuildingModeView buildingView = new BuildingModeView(buildingModel);
+//            BuildingModeController buildingController = new BuildingModeController(buildingModel, buildingView);
+//
+//            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
+//            frame.getContentPane().removeAll();
+//            frame.getContentPane().add(buildingView);
+//            frame.revalidate();
+//            frame.repaint();
+//        });
+//    }
     
     
     
