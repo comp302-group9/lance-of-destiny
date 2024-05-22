@@ -319,6 +319,10 @@ public class RunningModeModel {
                         barriers.add(rewarding);
                         break;
                 }
+//				Barrier barrier = BarrierFactory.createBarrier(grid[row][col], x, y);
+//                if (barrier != null) {
+//                    barriers.add(barrier);
+//                }
 			}
 		}
     }
