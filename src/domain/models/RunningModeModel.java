@@ -45,6 +45,10 @@ public class RunningModeModel {
         this.gameStartingTime = System.currentTimeMillis();
     }
 
+    public boolean allBarriersCracked() {
+        return barriers.isEmpty();
+    }
+
     public int getScore() {
         return score;
     }
@@ -182,6 +186,24 @@ public class RunningModeModel {
         }
 
         fireball.checkCollisionWithBarriers(barriers, this);
+
+        if (allBarriersCracked()) {
+            setGameOver(true);
+            if (gameOverCallback != null) {
+                gameOverCallback.run();
+            }
+        }
+            
+    }
+
+    public void testFinalScoreScreen() {
+        barriers.clear();
+        if (allBarriersCracked()) {
+            setGameOver(true);
+            if (gameOverCallback != null) {
+                gameOverCallback.run();
+            }
+        }
     }
 
     public void initaliseBarrierLocations(int[][] grid) {

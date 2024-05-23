@@ -3,6 +3,7 @@ package domain.controllers;
 import domain.models.BuildingModeModel;
 import domain.models.RunningModeModel;
 import ui.screens.BuildingModeView;
+import ui.screens.FinalScoreView;
 import ui.screens.RunningModeView;
 
 import javax.swing.*;
@@ -25,13 +26,28 @@ public class RunningModeController implements KeyListener, Runnable {
         keys = new boolean[256];
         model.initaliseBarrierLocations(grid);
         model.setGameOverCallback(this::handleGameOver);
+        model.testFinalScoreScreen();
     }
 
     private void handleGameOver() {
-        // Display game over message for 5 seconds
-        Timer timer = new Timer(5000, e -> switchToBuildingMode());
-        timer.setRepeats(false);
-        timer.start();
+        if (model.allBarriersCracked()) {
+            SwingUtilities.invokeLater(() -> {
+                showFinalScoreScreen(model.getScore());
+            });
+        } else {
+            // Existing game over logic...
+            Timer timer = new Timer(5000, e -> switchToBuildingMode());
+            timer.setRepeats(false);
+            timer.start();
+        }
+    }
+
+    private void showFinalScoreScreen(int finalScore) {
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(new FinalScoreView(finalScore));
+        frame.revalidate();
+        frame.repaint();
     }
 
     private void switchToBuildingMode() {
