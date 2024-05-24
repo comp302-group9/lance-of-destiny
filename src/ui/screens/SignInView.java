@@ -163,7 +163,7 @@ public class SignInView extends JPanel {
         frame.setContentPane(this);
 
         // Set size and location before making the frame visible
-        frame.setSize(new Dimension(900, 600));
+        frame.setSize(new Dimension(600*16/9, 600));
         frame.setLocationRelativeTo(null);
 
         // Finally, make the frame visible after all properties are set
@@ -179,15 +179,6 @@ public class SignInView extends JPanel {
             frame.setVisible(false);
             frame.dispose();  // Close the frame when switching views
         }
-    }
-    
-    public void displayUsers(List<User> users) {
-        JTextArea userListTextArea = new JTextArea(10, 30); // Set the size according to your needs
-        for (User user : users) {
-            userListTextArea.append(user.getUsername() + " - " + user.getEmail() + "\n");
-        }
-        // Now display this text area in your UI, either in a dialog or directly in the main window
-        JOptionPane.showMessageDialog(null, userListTextArea, "User List", JOptionPane.INFORMATION_MESSAGE);
     }
     
     public JPanel getPanel() {

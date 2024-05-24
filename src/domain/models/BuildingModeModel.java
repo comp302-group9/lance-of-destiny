@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import database.DatabaseConnection;
 import java.util.ArrayList;
 
 import domain.DEFAULT;
@@ -22,6 +26,8 @@ public class BuildingModeModel{
     public int number_explosive = 0;
     public int number_rewarding = 0; 
 
+	private User user;
+
 	private ArrayList<Barrier> BarrierList = new ArrayList<Barrier>();
 
 	Barrier a = new SimpleBarrier();
@@ -29,11 +35,12 @@ public class BuildingModeModel{
 	Barrier c = new ExplosiveBarrier(4);
 	Barrier d = new RewardingBarrier();
 
-	public BuildingModeModel() {
+	public BuildingModeModel(User user) {
 		BarrierList.add(a);
 		BarrierList.add(b);
 		BarrierList.add(c);
 		BarrierList.add(d);
+		this.user = user;
 	}
 
 	public void update(long currentTime, boolean[] keys, int WIDTH, int HEIGHT) {
@@ -99,6 +106,43 @@ public class BuildingModeModel{
 		
 	}
 
+	public void writeGrid(int[][] matrix) {
+	    StringBuilder gridStringBuilder = new StringBuilder();
+	    for (int i = 0; i < matrix.length; i++) {
+	        for (int j = 0; j < matrix[i].length; j++) {
+	            gridStringBuilder.append(matrix[i][j]).append(" ");
+	        }
+	    }
+	    String gridString = gridStringBuilder.toString().trim(); // Remove trailing space
+	}
+
+	public void saveGridToDatabase(String fileName, int[][] matrix) {
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(
+                 "INSERT INTO SavedGames (gameId, username, life, score, grid) VALUES (?, ?, ?, ?, ?)")) {
+            // Convert the 2D array into a single string
+            StringBuilder gridBuilder = new StringBuilder();
+            StringBuilder gridStringBuilder = new StringBuilder();
+    	    for (int i = 0; i < matrix.length; i++) {
+    	        for (int j = 0; j < matrix[i].length; j++) {
+    	            gridStringBuilder.append(matrix[i][j]).append(" ");
+    	        }
+    	    }
+    	    String gridString = gridStringBuilder.toString().trim(); // Remove trailing space
+
+            // Assuming gameId is auto-incremented or otherwise generated
+            pstmt.setNull(1, java.sql.Types.INTEGER); // Use NULL or provide a value if not auto-increment
+            pstmt.setString(2, this.user.getUsername()); // Replace with your User class's method to get user ID
+            pstmt.setInt(3, 3); // Set life as 3
+            pstmt.setInt(4, 0); // Set score as 0
+            pstmt.setString(5, gridString); // Set grid as the constructed string
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 	public int getNumber_simple() {
 		return number_simple;
 	}
@@ -129,5 +173,13 @@ public class BuildingModeModel{
 
 	public void setNumber_rewarding(int number_rewarding) {
 		this.number_rewarding = number_rewarding;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

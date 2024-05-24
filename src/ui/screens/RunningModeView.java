@@ -5,9 +5,19 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.awt.event.ActionListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import domain.DEFAULT;
 import domain.controllers.YmirController;
@@ -28,6 +38,8 @@ public class RunningModeView extends JPanel {
     private ImageIcon gifIcon;
     private JPanel pausePanel;  // Panel for pause screen
     private JLabel pauseLabel;
+    private JButton quitButton;
+    private JButton saveButton;
     private boolean gameStarted = false;
     private JLabel gifLabel;
     
@@ -38,7 +50,7 @@ public class RunningModeView extends JPanel {
 
     public RunningModeView(RunningModeModel model) {
         this.model = model;
-        setPreferredSize(new Dimension(DEFAULT.screenWidth, DEFAULT.screenHeight));
+        //setPreferredSize(new Dimension(DEFAULT.screenWidth, DEFAULT.screenHeight));
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/ui/images/Background.png"));
             gifIcon = new ImageIcon(getClass().getResource("/ui/gifs/W.gif"));
@@ -49,6 +61,14 @@ public class RunningModeView extends JPanel {
         requestFocusInWindow();
         setupUIComponents();
         setupYmirComponents(); 
+    }
+
+    public void addQuitButtonListener(ActionListener listener) {
+        quitButton.addActionListener(listener);
+    }
+
+    public void addSaveButtonListener(ActionListener listener) {
+        saveButton.addActionListener(listener);
     }
 
     private void setupUIComponents() {
@@ -70,6 +90,16 @@ public class RunningModeView extends JPanel {
         topLeftPanel.setOpaque(false);
         topLeftPanel.add(pauseLabel);
         topLeftPanel.setBounds(0, 0, 100, 30); // Adjust the size and position
+        quitButton = new JButton("Quit");
+        quitButton.setFont(new Font("Arial", Font.BOLD, 18));
+        quitButton.setForeground(Color.BLACK);
+        topLeftPanel.add(quitButton);
+
+        saveButton = new JButton("Save");
+        saveButton.setFont(new Font("Arial", Font.BOLD, 18));
+        saveButton.setForeground(Color.BLACK);
+        topLeftPanel.add(saveButton);
+        
         add(topLeftPanel);
 
         gifLabel = new JLabel(gifIcon);

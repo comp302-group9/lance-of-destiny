@@ -3,6 +3,9 @@ import java.awt.*;
 import java.awt.geom.Area;
 
 import javax.swing.*;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 
 import domain.objects.Paddle;
 
@@ -20,6 +23,7 @@ public class Fireball {
     private int width, height;
     private boolean isLaunched = false; // Track if the fireball is launched
     private boolean overwhelmed = false; // Track if the fireball is overwhelmed
+    private int[][] grid;
 
     public Fireball(int x, int y, int width, int height) {
         this.x = x;
@@ -46,6 +50,11 @@ public class Fireball {
 	public int getWidth() {
 		return width;
 	}
+
+    public void setGrid(int[][] grid) {
+        this.grid = grid;
+    }
+
 	
 
 	public int getY() {
@@ -260,11 +269,17 @@ public class Fireball {
                     reflectHorizontal();
                 }
                 if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                    System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
+                    grid[barrier.getGridY()][barrier.getGridX()] = 0;
+                    System.out.println(writeGrid(grid));
                     barriers.remove(barrier); // Safely remove it from the list
                 }
                 break;
             } else if (isMiddleLeftInside || isMiddleRightInside) {
                 if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                    System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
+                    grid[barrier.getGridY()][barrier.getGridX()] = 0;
+                    System.out.println(writeGrid(grid));
                     barriers.remove(barrier); // Safely remove it from the list
                 }
                 if (!overwhelmed) {
@@ -277,6 +292,9 @@ public class Fireball {
                         reflectVertical();
                     }
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                        System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
+                        grid[barrier.getGridY()][barrier.getGridX()] = 0;
+                        System.out.println(writeGrid(grid));
                         barriers.remove(barrier); // Safely remove it from the list
                     }
                     break;
@@ -285,6 +303,9 @@ public class Fireball {
                         reflectHorizontal();
                     }
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                        System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
+                        grid[barrier.getGridY()][barrier.getGridX()] = 0;
+                        System.out.println(writeGrid(grid));
                         barriers.remove(barrier); // Safely remove it from the list
                     }
                     break;
@@ -295,6 +316,9 @@ public class Fireball {
                         reflectVertical();
                     }
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                        System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
+                        grid[barrier.getGridY()][barrier.getGridX()] = 0;
+                        System.out.println(writeGrid(grid));
                         barriers.remove(barrier); // Safely remove it from the list
                     }
                     break;
@@ -303,11 +327,29 @@ public class Fireball {
                         reflectHorizontal();
                     }
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                        System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
+                        grid[barrier.getGridY()][barrier.getGridX()] = 0;
+                        System.out.println(writeGrid(grid));
                         barriers.remove(barrier); // Safely remove it from the list
                     }
                     break;
                 }
             }
+
+            
         }
+
+        
+    public String writeGrid(int[][] matrix) {
+	    StringBuilder gridStringBuilder = new StringBuilder();
+	    for (int i = 0; i < matrix.length; i++) {
+	        for (int j = 0; j < matrix[i].length; j++) {
+	            gridStringBuilder.append(matrix[i][j]).append(" ");
+	        }
+	    }
+	    String gridString = gridStringBuilder.toString().trim(); // Remove trailing space
+	    return gridString;
+
+	}
     }
 }

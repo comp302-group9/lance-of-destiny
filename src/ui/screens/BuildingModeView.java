@@ -23,6 +23,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+
+import domain.controllers.MyGamesController;
+import domain.controllers.RunningModeController;
+import domain.models.RunningModeModel;
 import domain.models.BuildingModeModel;
 import domain.objects.Barrier.Barrier;
 import ui.screens.BModeUI.BarrierButton;
@@ -154,9 +167,9 @@ public class BuildingModeView extends JPanel {
 		}
 		
 		// Create the running mode components and switch views
-		RunningModeModel model = new RunningModeModel();
-		RunningModeView view = new RunningModeView(model);
-		RunningModeController controller = new RunningModeController(model, view, grid);
+		RunningModeModel rmodel = new RunningModeModel();
+		RunningModeView view = new RunningModeView(rmodel);
+		RunningModeController controller = new RunningModeController(model.getUser(), rmodel, view, grid);
 	
 		JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
 		frame.getContentPane().removeAll();
@@ -304,9 +317,9 @@ public class BuildingModeView extends JPanel {
 		switchPanelButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				RunningModeModel model = new RunningModeModel();
-				RunningModeView view = new RunningModeView(model);
-				RunningModeController controller = new RunningModeController(model, view, grid);
+				RunningModeModel rmodel = new RunningModeModel();
+				RunningModeView view = new RunningModeView(rmodel);
+				RunningModeController controller = new RunningModeController(model.getUser(), rmodel, view, grid);
 
 				JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(BuildingModeView.this);
 
@@ -349,25 +362,27 @@ public class BuildingModeView extends JPanel {
 		saveButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				model.writeTxt("src\\domain\\txtData\\Test.txt", grid);
-			}
+			model.saveGridToDatabase("src\\domain\\txtData\\Test.txt", grid); }
 		});
 		
 		add(saveButton);
 
-		JButton loadButton = new JButton("Load");
-		loadButton.setBounds(730, 560, 120, 30);
-		loadButton.addActionListener(new ActionListener() {
+		JButton myGamesButton = new JButton("My Games");
+		myGamesButton.setBounds(730, 525, 120, 30);
+		myGamesButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				resetCurrent();
-				grid = model.readTxt("src\\domain\\txtData\\Test.txt"); // src/domain/txtData/Test.txt
-				readGrid(grid);
-				updateCurrent();
-
-			}
-		});
-		add(loadButton);
+				MyGamesView myGamesView = new MyGamesView();
+		        MyGamesController controller = new MyGamesController(myGamesView, model.getUser());	        
+		        
+		        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(BuildingModeView.this);
+		        frame.getContentPane().removeAll();
+				frame.getContentPane().add(myGamesView);
+				frame.revalidate();
+				frame.repaint();
+			 }
+			});
+			add(myGamesButton);
 	} 
 
 	public static boolean isValidInteger(String input) {
@@ -432,7 +447,7 @@ public class BuildingModeView extends JPanel {
             // Create the running mode model, view, and controller
             RunningModeModel runningModel = new RunningModeModel();
             RunningModeView runningView = new RunningModeView(runningModel);
-            RunningModeController runningController = new RunningModeController(runningModel, runningView, grid);
+            RunningModeController runningController = new RunningModeController(model.getUser(), runningModel, runningView, grid);
 
             // Get the parent frame of this panel to switch content
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);

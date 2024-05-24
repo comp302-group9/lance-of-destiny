@@ -42,11 +42,15 @@ public class RunningModeModel{
     private long lastHexShotTime = 0;
     private final long hexCooldown = 300; // Cooldown time in milliseconds
 
+    private int[][] grid;
+
     public RunningModeModel() {
         
         
         //spells.add(new SpellIcon("src\\ui\\images\\Hex.png"));
         //spells.add(new SpellIcon("src\\ui\\images\\extend.png"));
+
+        initializeGame();
         
         boxes.add(new Box(WIDTH/2,300));
 
@@ -60,7 +64,26 @@ public class RunningModeModel{
         spells.add(new SpellIcon(new Overwhelm(fireball)));
 
         lastUpdateTime = System.currentTimeMillis();
+
+        
     }
+
+    private void initializeGame() {
+        // Clear existing barriers before setting up a new game
+        barriers.clear();
+
+        // Initialize the paddle
+        paddle = new Paddle(WIDTH / 2, HEIGHT - 50, WIDTH/10, 20);
+
+        // Initialize the fireball
+        fireball = new Fireball(WIDTH / 2, 7 * HEIGHT / 8, 16, 16);
+
+        lastUpdateTime = System.currentTimeMillis();
+    }
+
+    public void setFireball(Fireball fireball) {
+		this.fireball = fireball;
+	}
 
     public void setPaused(boolean paused) {
         this.paused = paused;

@@ -32,7 +32,8 @@ public abstract class Barrier {
     protected int direction;
 	protected boolean frozen;
 	protected Timer freezeTimer;
-	private int secondsElapsed;
+	protected int gridX, gridY;
+	private int secondsElapsed;	
 
 	// Constructor
 	public Barrier() {
@@ -150,6 +151,23 @@ public abstract class Barrier {
 	public void setY(int y) {
 		this.y = y;
 	}
+
+	public int getGridX() {
+		return gridX;
+	}
+
+	public void setGridX(int gridX) {
+		this.gridX = gridX;
+	}
+
+	public int getGridY() {
+		return gridY;
+	}
+
+	public void setGridY(int gridY) {
+		this.gridY = gridY;
+	}
+
 
 	public String getName() {
 		return name;
