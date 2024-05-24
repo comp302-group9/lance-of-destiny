@@ -53,7 +53,7 @@ public class MyGamesView extends JPanel {
         // Back button setup
         backButton = new JButton("back");
         backButton.setBounds(50, 100, 150, 30);
-        this.add(backButton); // Adding directly to this JPanel, not gamesPanel
+        gamesPanel.add(backButton); // Adding directly to this JPanel, not gamesPanel
 
         // Frame setup, if necessary here
         frame = new JFrame("My Games");

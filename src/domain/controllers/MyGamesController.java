@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import database.DatabaseConnection;
 import domain.models.BuildingModeModel;
@@ -67,19 +68,23 @@ public class MyGamesController {
 //        signInView.display();
 //        signUpView.closeFrame();
         
-        BuildingModeModel model2 = new BuildingModeModel(user);
+		BuildingModeModel model2 = new BuildingModeModel(user);
         BuildingModeView view2 = new BuildingModeView(model2);
         BuildingModeController controller2 = new BuildingModeController(model2, view2);
         
-        JFrame frame = new JFrame();
-        frame.add(view2);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+        JFrame newFrame = new JFrame();
+        newFrame.add(view2);
+        newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        newFrame.pack();
+        newFrame.setVisible(true);
         
         //frame.setSize(SignInPage.WIDTH, SignInPage.HEIGHT);
-        frame.setLocationRelativeTo(null);
+        newFrame.setLocationRelativeTo(null);
         
-        myGamesView.closeFrame();
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(myGamesView);
+        if (frame != null) {
+            frame.dispose(); // Close the current game window
+            // Optionally, switch back to another view like the main menu
+        }
     }
 }
