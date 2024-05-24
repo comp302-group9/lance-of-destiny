@@ -100,4 +100,5 @@ public class Paddle {
         Shape transformedRect = transform.createTransformedShape(paddleRectangle);// Apply transformation to new rectangle
         return transformedRect;
     }
+   
 }
