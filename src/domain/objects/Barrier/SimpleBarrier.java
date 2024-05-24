@@ -13,8 +13,8 @@ public class SimpleBarrier extends Barrier {
 		
 	}
 
-	public SimpleBarrier(int x, int y, int gridX, int gridY){
-		super(x, y, gridX, gridY);
+	public SimpleBarrier(int x, int y){
+		super(x, y);
 		updateMovementState(RunningModeModel.barriers); // Initialize movement state
 		
 	}

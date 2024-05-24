@@ -10,8 +10,8 @@ public class ExplosiveBarrier extends Barrier {
 		this.message="*At least 5*";
 	}
 
-	public ExplosiveBarrier(int x, int y, int gridX, int gridY) {
-		super(x,y, gridX, gridY);
+	public ExplosiveBarrier(int x, int y) {
+		super(x,y);
 	}
 
 	@Override

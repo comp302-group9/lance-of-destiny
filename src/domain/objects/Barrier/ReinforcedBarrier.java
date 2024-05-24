@@ -21,8 +21,8 @@ public class ReinforcedBarrier extends Barrier {
 		
 	}
 
-	public ReinforcedBarrier(int x,int y, int gridX, int gridY) {
-		super(x,y,gridX,gridY);
+	public ReinforcedBarrier(int x,int y) {
+		super(x,y);
 		//this.hitCount=new Random().nextInt(3)+2;
 		updateMovementState(RunningModeModel.barriers); // Update whether it should move
 		
