@@ -29,7 +29,7 @@ import ui.screens.BModeUI.BarrierButton;
 import ui.screens.BModeUI.BarrierElement;
 
 public class BuildingModeView extends JPanel {
-	private int WIDTH=DEFAULT.screenWidth;
+	public int WIDTH=DEFAULT.screenWidth;
 	private int HEIGHT=DEFAULT.screenHeight;
 	private BufferedImage backgroundImage;
 	private BuildingModeModel model;

@@ -78,7 +78,7 @@ public class BoxTest {
         }
         assertEquals(120, box.getY()); // Since boxSpeed is 2 and moved 10 times
         assertTrue(box.repOk());
-    }
+    } 
 
     // Test Box Goes Out of Bounds
     @Test

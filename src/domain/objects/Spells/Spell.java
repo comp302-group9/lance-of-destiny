@@ -8,7 +8,7 @@ public abstract class Spell {
     protected String name;
     protected BufferedImage Img;
     protected Boolean isStorable;
-    private Timer timer;
+    protected Timer timer;
     private int secondsElapsed;
     private int duration = 30; // Duration of the spell in seconds
     protected Boolean active=false;
@@ -86,5 +86,8 @@ public abstract class Spell {
     public void setActive(boolean b) {
         // TODO Auto-generated method stub
         this.active=b;
+    }
+    public void increase() {
+    	num++;
     }
 }

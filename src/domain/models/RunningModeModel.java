@@ -1,8 +1,9 @@
 package domain.models;
 
 import java.awt.event.KeyEvent;
+
 import java.util.ArrayList;
-import java.util.Observable;
+import java.util.Iterator;
 import java.util.Random;
 
 import domain.DEFAULT;
@@ -14,10 +15,11 @@ import domain.objects.Barrier.ExplosiveBarrier;
 import domain.objects.Barrier.ReinforcedBarrier;
 import domain.objects.Barrier.RewardingBarrier;
 import domain.objects.Barrier.SimpleBarrier;
-import ui.screens.RModeUI.SpellIcon;
+import domain.objects.Spells.Canons;
 import domain.objects.Spells.Expension;
 import domain.objects.Spells.Hex;
 import domain.objects.Spells.Overwhelm;
+import ui.screens.RModeUI.SpellIcon;
 
 public class RunningModeModel{
     public static int barrierWidth = 51;
@@ -35,21 +37,27 @@ public class RunningModeModel{
     private Random random=new Random();
     private boolean gameOver = false; // State to track if the game is over
     private String gameOverMessage = "Game Over!"; // Game over message
-    public static ArrayList<SpellIcon> spells= new ArrayList<SpellIcon>();
+    public static ArrayList<SpellIcon> spells= new ArrayList<SpellIcon>();//spells.get(random.nextInt(spells.length)).spell.increase
     private boolean gameStarted = false;
+    private long lastHexShotTime = 0;
+    private final long hexCooldown = 300; // Cooldown time in milliseconds
 
     public RunningModeModel() {
-        spells.add(new SpellIcon(new Expension()));
-        spells.add(new SpellIcon(new Hex()));
-        spells.add(new SpellIcon(new Overwhelm()));
+        
+        
         //spells.add(new SpellIcon("src\\ui\\images\\Hex.png"));
         //spells.add(new SpellIcon("src\\ui\\images\\extend.png"));
+        
+        boxes.add(new Box(WIDTH/2,300));
 
         // Initialize the paddle
         paddle = new Paddle(DEFAULT.screenWidth / 2, DEFAULT.screenHeight - 50, DEFAULT.paddleWidth, DEFAULT.paddleHeight); // Adjust parameters as needed
+        spells.add(new SpellIcon(new Hex(paddle)));
+        spells.add(new SpellIcon(new Expension(paddle)));
 
         // Initialize the fireball
         fireball = new Fireball( DEFAULT.screenWidth / 2, 7 * DEFAULT.screenHeight / 8, 16, 16); // Adjust parameters as needed
+        spells.add(new SpellIcon(new Overwhelm(fireball)));
 
         lastUpdateTime = System.currentTimeMillis();
     }
@@ -141,6 +149,14 @@ public class RunningModeModel{
         if (keys[KeyEvent.VK_SPACE] && !fireball.isLaunched()) {
             fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
         }
+        
+        if (keys[KeyEvent.VK_H] && paddle.isHexActive() && currentTime - lastHexShotTime >= hexCooldown) {
+            paddle.shootHex();
+            lastHexShotTime = currentTime;
+            System.out.println("Hex fired"); // Debug statement
+        }
+
+        paddle.updateProjectiles();
     }
 
     private void updateGameElements(double deltaTime) {
@@ -163,6 +179,11 @@ public class RunningModeModel{
             if (box.getY() > DEFAULT.screenHeight) {
                 boxes.remove(i);
                 i--;
+            } else if (box.collidesWithPaddle(paddle)) {
+            	box.openBox();
+            	boxes.remove(i);
+            	i--;
+            	spells.get(random.nextInt(spells.size())).spell.increase();
             }
         }
     }
@@ -181,6 +202,23 @@ public class RunningModeModel{
             fireball.validateSpeed(paddle);
             lastCollisionTime = currentTime; // Update the last collision time
         }
+        
+        // Check collision of hex projectiles with barriers
+        for (Canons projectile : new ArrayList<>(paddle.getHexProjectiles())) {
+            Iterator<Barrier> iterator = barriers.iterator();
+            while (iterator.hasNext()) {
+                Barrier barrier = iterator.next();
+                if (projectile.collidesWithBarrier(barrier)) {
+                    if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                        iterator.remove(); // Safely remove it from the list using the iterator
+                    }
+                    paddle.removeHexProjectile(projectile);
+                    System.out.println("Hex projectile collided with barrier"); // Debug statement
+                    break;
+                }
+            }
+        }
+        
     }
 
     public void initaliseBarrierLocations(int[][] grid){

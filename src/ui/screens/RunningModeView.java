@@ -48,7 +48,7 @@ public class RunningModeView extends JPanel {
         setFocusable(true);  // Make the JPanel focusable
         requestFocusInWindow();
         setupUIComponents();
-        setupYmirComponents();
+        setupYmirComponents(); 
     }
 
     private void setupUIComponents() {

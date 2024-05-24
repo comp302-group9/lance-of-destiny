@@ -5,10 +5,15 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import domain.DEFAULT;
+import domain.objects.Paddle;
 
 public class Expension extends Spell{
-    public Expension(){
+	
+	private Paddle paddle;
+	
+    public Expension(Paddle paddle){
         super();
+        this.paddle = paddle;
         this.name="expension";
         this.isStorable=true;
         try {
@@ -20,13 +25,14 @@ public class Expension extends Spell{
     }
  
     public void Activate(){
-        DEFAULT.paddleWidth=DEFAULT.screenWidth/5;
+    	paddle.setWidth(DEFAULT.screenWidth / 5);
         setActive(true);
     }
 
     @Override
     public void deActivate() {
-        DEFAULT.paddleWidth=DEFAULT.screenWidth/10;
-        setActive(false);
+    	 paddle.setWidth(DEFAULT.screenWidth / 10);
+         setActive(false);
     }
 }
+

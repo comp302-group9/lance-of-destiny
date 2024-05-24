@@ -12,7 +12,7 @@ import domain.objects.Spells.Spell;
 public class SpellIcon extends JPanel implements MouseListener {
     private BufferedImage image;
     private boolean Onit = false;
-    private Spell spell;
+    public Spell spell;
 
     public SpellIcon(Spell spell) {
         this.spell = spell;

@@ -5,10 +5,14 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import domain.DEFAULT;
+import domain.objects.Paddle;
 
 public class Hex extends Spell{
-    public Hex(){
+	private Paddle paddle;
+	
+    public Hex(Paddle paddle){
         super();
+        this.paddle = paddle;
         this.name="expension";
         this.isStorable=true;
         try {
@@ -20,9 +24,20 @@ public class Hex extends Spell{
     }
  
     public void Activate(){
+    	if (paddle != null) {
+            paddle.setHexActive(true);
+            System.out.println("Hex spell activated"); // Debug statement
+            setActive(true);
+            startTimer();
+        }
     }
 
     @Override
     public void deActivate() {
+    	if (paddle != null) {
+            paddle.setHexActive(false);
+            System.out.println("Hex spell deactivated"); // Debug statement
+            setActive(false);
+        }
     }
 }

@@ -1,12 +1,16 @@
 package domain.objects;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
 import domain.models.RunningModeModel;
+import domain.objects.Spells.Spell;
 
 public class Box {
     private int x;
@@ -17,6 +21,7 @@ public class Box {
     //private int height=72;
     private int boxSpeed=2;
     private BufferedImage image;
+    private Spell spell;
     public Box(int x,int y){
         this.x=x;
         this.y=y;
@@ -25,7 +30,7 @@ public class Box {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    } 
 
     public void move(){
         y+=boxSpeed;
@@ -65,4 +70,26 @@ public class Box {
         }
         return true;
     }
+    
+    public boolean hasSpell() {
+        return spell != null;
+    }
+
+    public void openBox() {
+        if (spell != null) {
+            System.out.println("Box opened and spell retrieved: ");
+            spell.Activate();
+        }
+    }
+    public boolean collidesWithPaddle(Paddle paddle) {
+        Area boxArea = new Area(getBounds());
+        Area paddleArea = new Area(paddle.getBounds());
+        boxArea.intersect(paddleArea);
+        return !boxArea.isEmpty();
+    }
+
+	private Rectangle getBounds() {
+		
+	   return new Rectangle(x - (width / 2), y - (height / 2), width, height);
+	}
 }
