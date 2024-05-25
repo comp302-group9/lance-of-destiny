@@ -39,8 +39,8 @@ public class RunningModeController implements KeyListener, Runnable {
         keys = new boolean[256];  // Array to keep track of key states
         model.initaliseBarrierLocations(grid);
         model.getFireball().setGrid(grid);;
-        setupQuitButtonListener();
-        setupSaveButtonListener();
+        //setupQuitButtonListener();
+        //setupSaveButtonListener();
         model.setGameOverCallback(this::handleGameOver);
        
     }
@@ -57,8 +57,8 @@ public class RunningModeController implements KeyListener, Runnable {
         keys = new boolean[256];  // Array to keep track of key states
         model.initaliseBarrierLocations(grid);
         model.getFireball().setGrid(grid);;
-        setupQuitButtonListener();
-        setupSaveButtonListener();
+        //setupQuitButtonListener();
+        //setupSaveButtonListener();
         model.setGameOverCallback(this::handleGameOver);
     }
 
@@ -69,14 +69,14 @@ public class RunningModeController implements KeyListener, Runnable {
         timer.start();
     }
 
-
+/* 
     private void setupQuitButtonListener() {
         view.addQuitButtonListener(e -> quitGame());
     }
 
     private void setupSaveButtonListener() {
     	view.addSaveButtonListener(e -> saveGame(grid, gameId));
-    }
+    }*/
 
     public void saveGame(int[][] matrix, int gameId) {
         Connection conn = null;
