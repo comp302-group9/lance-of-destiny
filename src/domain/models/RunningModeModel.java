@@ -59,14 +59,20 @@ public class RunningModeModel {
 
     public RunningModeModel() {
         initializeGame();
-        boxes.add(new Box(WIDTH / 2, 300));
+        
+        boxes.add(new Box(WIDTH/2,300));
 
-        paddle = new Paddle(DEFAULT.screenWidth / 2, DEFAULT.screenHeight - 50, DEFAULT.paddleWidth, DEFAULT.paddleHeight);
+        // Initialize the paddle
+        paddle = new Paddle(DEFAULT.screenWidth / 2, DEFAULT.screenHeight - 50, DEFAULT.paddleWidth, DEFAULT.paddleHeight); // Adjust parameters as needed
+        
+        // Initialize the fireball
+        fireball = new Fireball( DEFAULT.screenWidth / 2, 7 * DEFAULT.screenHeight / 8, 16, 16); // Adjust parameters as needed
+        if(spells.isEmpty()){
+            spells.add(new SpellIcon(new Overwhelm(fireball)));
         spells.add(new SpellIcon(new Hex(paddle)));
         spells.add(new SpellIcon(new Expension(paddle)));
-
-        fireball = new Fireball(DEFAULT.screenWidth / 2, 7 * DEFAULT.screenHeight / 8, 16, 16);
-        spells.add(new SpellIcon(new Overwhelm(fireball)));
+        }
+        
 
         lastUpdateTime = System.currentTimeMillis();
         this.gameStartingTime = System.currentTimeMillis();

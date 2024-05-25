@@ -180,7 +180,7 @@ public class Paddle {
         g2d.rotate(Math.toRadians(rotationAngle), x + width / 2, y + height / 2);
         g2d.drawImage(image, x, y, width, height, null);
 
-        if (hexActive) {
+        if (!hexActive) {
             int cannonWidth = 10;
             int cannonHeight = 30;
 
