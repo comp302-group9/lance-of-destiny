@@ -140,6 +140,9 @@ public abstract class Barrier {
 	public int getY() {
 		return y;
 	}
+	public int getWidth() {
+		return width;
+	}
 
 	public void setX(int x) {
 		this.x = x;
