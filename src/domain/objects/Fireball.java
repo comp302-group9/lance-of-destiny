@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.ArrayList;
 import domain.objects.Barrier.*;
+import domain.models.RunningModeModel;
 
 public class Fireball {
 
@@ -116,6 +117,10 @@ public class Fireball {
         }
     }
 
+    public void setLaunched(boolean launched) {
+        isLaunched = launched;
+    }
+
     public boolean isLaunched() {
         return isLaunched; // Check if the fireball is launched
     }
@@ -211,8 +216,10 @@ public class Fireball {
         return ballBounds.intersects(barrierBounds);
     }
 
-    public void checkCollisionWithBarriers(ArrayList<Barrier> barriers) {
+    public void checkCollisionWithBarriers(ArrayList<Barrier> barriers, RunningModeModel model) {
         ArrayList<Barrier> barriersCopy = new ArrayList<>(barriers); // Create a copy of the list
+
+        long currentTime = System.currentTimeMillis(); // Get the current time
 
         for (Barrier barrier : barriersCopy) { // Iterate over the copy
             Rectangle ballBounds = getBounds();
@@ -267,11 +274,12 @@ public class Fireball {
             if (isMiddleBottomInside || isMiddleTopInside) {
                 if (!overwhelmed) {
                     reflectHorizontal();
+                    model.increaseScore(currentTime); 
                 }
                 if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                     System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                     grid[barrier.getGridY()][barrier.getGridX()] = 0;
-                    System.out.println(writeGrid(grid));
+                    //System.out.println(writeGrid(grid));
                     barriers.remove(barrier); // Safely remove it from the list
                 }
                 break;
@@ -279,33 +287,36 @@ public class Fireball {
                 if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                     System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                     grid[barrier.getGridY()][barrier.getGridX()] = 0;
-                    System.out.println(writeGrid(grid));
+                    //System.out.println(writeGrid(grid));
                     barriers.remove(barrier); // Safely remove it from the list
                 }
                 if (!overwhelmed) {
                     reflectVertical();
+                    model.increaseScore(currentTime); 
                 }
                 break;
             } else if (isTopLeftInside || isTopRightInside) {
                 if (ballBounds.getMaxY() < barrierBounds.getMaxY() + ballBounds.getHeight() - py) {
                     if (!overwhelmed) {
                         reflectVertical();
+                        model.increaseScore(currentTime); 
                     }
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                         System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                         grid[barrier.getGridY()][barrier.getGridX()] = 0;
-                        System.out.println(writeGrid(grid));
+                        //System.out.println(writeGrid(grid));
                         barriers.remove(barrier); // Safely remove it from the list
                     }
                     break;
                 } else if ((ballBounds.getMaxX() < barrierBounds.getMaxX() + ballBounds.getWidth() - px) || ballBounds.getX() > barrierBounds.getX() - ballBounds.getWidth() + px) {
                     if (!overwhelmed) {
                         reflectHorizontal();
+                        model.increaseScore(currentTime); 
                     }
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                         System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                         grid[barrier.getGridY()][barrier.getGridX()] = 0;
-                        System.out.println(writeGrid(grid));
+                        //System.out.println(writeGrid(grid));
                         barriers.remove(barrier); // Safely remove it from the list
                     }
                     break;
@@ -314,22 +325,24 @@ public class Fireball {
                 if (ballBounds.getY() > barrierBounds.getY() - ballBounds.getHeight() + py) {
                     if (!overwhelmed) {
                         reflectVertical();
+                        model.increaseScore(currentTime); 
                     }
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                         System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                         grid[barrier.getGridY()][barrier.getGridX()] = 0;
-                        System.out.println(writeGrid(grid));
+                       // System.out.println(writeGrid(grid));
                         barriers.remove(barrier); // Safely remove it from the list
                     }
                     break;
                 } else if ((ballBounds.getMaxX() < barrierBounds.getMaxX() + ballBounds.getWidth() - px) || ballBounds.getX() > barrierBounds.getX() - ballBounds.getWidth() + px) {
                     if (!overwhelmed) {
                         reflectHorizontal();
+                        model.increaseScore(currentTime); 
                     }
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                         System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                         grid[barrier.getGridY()][barrier.getGridX()] = 0;
-                        System.out.println(writeGrid(grid));
+                        //System.out.println(writeGrid(grid));
                         barriers.remove(barrier); // Safely remove it from the list
                     }
                     break;
@@ -338,7 +351,7 @@ public class Fireball {
 
             
         }
-
+    }
         
     public String writeGrid(int[][] matrix) {
 	    StringBuilder gridStringBuilder = new StringBuilder();
@@ -350,6 +363,9 @@ public class Fireball {
 	    String gridString = gridStringBuilder.toString().trim(); // Remove trailing space
 	    return gridString;
 
-	}
     }
+
+    public int[][] getGrid() {
+		return grid;
+	}
 }

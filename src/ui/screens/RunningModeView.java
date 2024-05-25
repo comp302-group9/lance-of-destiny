@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -41,7 +42,10 @@ public class RunningModeView extends JPanel {
     private JButton quitButton;
     private JButton saveButton;
     private boolean gameStarted = false;
+    private JLabel chancesLabel;
     private JLabel gifLabel;
+    private BufferedImage heartImage;
+    private JButton resumeButton;
     
     // Ymir components
     private YmirModel ymirModel;
@@ -53,6 +57,7 @@ public class RunningModeView extends JPanel {
         //setPreferredSize(new Dimension(DEFAULT.screenWidth, DEFAULT.screenHeight));
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/ui/images/Background.png"));
+            heartImage = ImageIO.read(getClass().getResource("/ui/images/Heart.png"));
             gifIcon = new ImageIcon(getClass().getResource("/ui/gifs/W.gif"));
         } catch (IOException e) {
             e.printStackTrace();
@@ -72,23 +77,30 @@ public class RunningModeView extends JPanel {
     }
 
     private void setupUIComponents() {
-        setLayout(null);
+        setLayout(new BorderLayout());  // buralarda iki branch arası farklılıklar var sıkıntı çıkabilir
 
-        pauseLabel = new JLabel("Pause");
-        pauseLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        pauseLabel.setForeground(Color.WHITE);
-        pauseLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        pauseLabel.addMouseListener(new MouseAdapter() {
+        // Create a single panel for the top with a border layout
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setOpaque(false);
+
+        // Create a panel for the left buttons and label
+        JPanel topLeftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        topLeftPanel.setOpaque(false);
+
+        JButton pauseButton = new JButton("Pause");
+        pauseButton.setFont(new Font("Arial", Font.BOLD, 18));
+        pauseButton.setForeground(Color.BLACK); // You can set this to any color you prefer
+
+        pauseButton.addActionListener(new ActionListener() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 setPaused(true);
                 model.setPaused(true);
             }
         });
 
-        JPanel topLeftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        topLeftPanel.setOpaque(false);
-        topLeftPanel.add(pauseLabel);
+        topLeftPanel.add(pauseButton);
+
         topLeftPanel.setBounds(0, 0, 100, 30); // Adjust the size and position
         quitButton = new JButton("Quit");
         quitButton.setFont(new Font("Arial", Font.BOLD, 18));
@@ -100,11 +112,30 @@ public class RunningModeView extends JPanel {
         saveButton.setForeground(Color.BLACK);
         topLeftPanel.add(saveButton);
         
-        add(topLeftPanel);
+        //add(topLeftPanel);
+        topPanel.add(topLeftPanel, BorderLayout.WEST);
+
+        // Add the chances label to the right
+        chancesLabel = new JLabel("Chances: " + model.getChances());
+        chancesLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        chancesLabel.setForeground(Color.WHITE);
+
+        JPanel topRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        topRightPanel.setOpaque(false);
+        topRightPanel.add(chancesLabel);
+
+        topPanel.add(topRightPanel, BorderLayout.EAST);
+
+        // Add the top panel to the frame
+        add(topPanel, BorderLayout.NORTH);
 
         gifLabel = new JLabel(gifIcon);
         gifLabel.setBounds(WIDTH / 2 - gifIcon.getIconWidth() / 2, HEIGHT / 2 - gifIcon.getIconHeight() / 2, gifIcon.getIconWidth(), gifIcon.getIconHeight());
         add(gifLabel);
+    }
+
+    public void updateChances() {
+        chancesLabel.setText("Chances: " + model.getChances());
     }
 
     private void setupYmirComponents() {
@@ -140,7 +171,7 @@ public class RunningModeView extends JPanel {
             pauseLabel.setFont(new Font("Arial", Font.BOLD, 22));
             pauseLabel.setForeground(Color.WHITE);
 
-            JButton resumeButton = new JButton("Resume");
+            resumeButton = new JButton("Resume");
             resumeButton.addActionListener(e -> setPaused(false));
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -198,11 +229,30 @@ public class RunningModeView extends JPanel {
                 }
             }
 
+            // Draw the hearts for lives
+            int lives = model.getChances();
+            g.setFont(new Font("Arial", Font.BOLD, 18));
+            g.setColor(Color.WHITE);
+            // Position "Lives:" label
+            int livesLabelX = WIDTH - 150;
+            g.drawString("Lives:", livesLabelX, 20);
+
+            // Draw heart icons next to "Lives:" label
+            int nextX = livesLabelX + g.getFontMetrics().stringWidth("Lives:") + 10;
+
+            for (int i = 0; i < lives; i++) {
+                g.drawImage(heartImage, nextX, 10, 20, 20, this);
+            }
+
             for (int i = 0; i < RunningModeModel.spells.size(); i++) {
                 SpellIcon SI = RunningModeModel.spells.get(i);
                 SI.setBounds(10, HEIGHT - 120 - i * 65, 50, 50);
                 add(SI);
             }
+
+            // Draw the score next to the last heart icon
+            nextX += 10; // Add some spacing after the last heart icon
+            g.drawString("Score: " + model.getScore(), nextX, 20);
         }
     }
 }
