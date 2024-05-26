@@ -1,30 +1,92 @@
 package domain.controllers;
 
-import domain.DEFAULT;
-import domain.models.BuildingModeModel;
 import ui.screens.BuildingModeView;
+import ui.screens.MyGamesView;
+import domain.models.BuildingModeModel;
+import domain.models.RunningModeModel;
+import ui.screens.RunningModeView;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class BuildingModeController implements Runnable {
-	private BuildingModeModel model;
-	private BuildingModeView view;
-	private boolean[] keys;
-	private long lastUpdateTime; 
+public class BuildingModeController {
+    private BuildingModeModel model;
+    private BuildingModeView view;
 
-	public BuildingModeController(BuildingModeModel model2, BuildingModeView view2) {
-		// TODO Auto-generated constructor stub
-	}
+    public BuildingModeController(BuildingModeModel model, BuildingModeView view) {
+        this.model = model;
+        this.view = view;
+        initController();
+    }
 
-	@Override
-	public void run() {
-		while (true) {
-			long currentTime = System.currentTimeMillis();
-			model.update(currentTime, keys, DEFAULT.screenWidth, DEFAULT.screenHeight);
-			// view.repaint(); // Repaint the view
-			try {
-				Thread.sleep(10); // Pause for a short duration
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+    private void initController() {
+        view.addPlayButtonListener(new PlayButtonListener());
+        view.addPlaceButtonListener(new PlaceButtonListener());
+        view.addSaveButtonListener(new SaveButtonListener());
+        view.addMyGamesButtonListener(new MyGamesButtonListener());
+    }
+
+    private class PlayButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (!model.validateBarriers()) {
+                view.showErrorDialog();
+                return;
+            }
+
+            RunningModeModel rmodel = new RunningModeModel();
+            RunningModeView rview = new RunningModeView(rmodel);
+            RunningModeController rcontroller = new RunningModeController(model.getUser(), rmodel, rview, view.getGrid());
+
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(rview);
+            frame.revalidate();
+            frame.repaint();
+
+            Thread gameThread = new Thread(rcontroller);
+            gameThread.start();
+        }
+    }
+
+    private class PlaceButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            view.resetCurrentState();
+            int[][] temp = model.createEmptyGrid();
+
+            for (int i = 0; i < 4; i++) {
+                String textFieldText = view.getBarrierElementText(i);
+                if (BuildingModeView.isValidInteger(textFieldText)) {
+                    int value = Integer.parseInt(textFieldText);
+                    view.changeRandomValues(temp, value, i + 1);
+                }
+            }
+
+            view.setGrid(temp);
+            view.readGrid(temp);
+            view.updateCurrentState();
+        }
+    }
+
+    private class SaveButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            model.saveGridToDatabase("src\\domain\\txtData\\Test.txt", view.getGrid());
+        }
+    }
+
+    private class MyGamesButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            MyGamesView myGamesView = new MyGamesView();
+            MyGamesController controller = new MyGamesController(myGamesView, model.getUser());
+
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
+            frame.getContentPane().removeAll();
+            frame.getContentPane().add(myGamesView);
+            frame.revalidate();
+            frame.repaint();
+        }
+    }
 }

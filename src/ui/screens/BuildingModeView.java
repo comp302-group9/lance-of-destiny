@@ -34,8 +34,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import domain.controllers.MyGamesController;
-import domain.controllers.RunningModeController;
-import domain.models.RunningModeModel;
 import domain.models.BuildingModeModel;
 import domain.objects.Barrier.Barrier;
 import ui.screens.BModeUI.BarrierButton;
@@ -46,61 +44,175 @@ public class BuildingModeView extends JPanel {
 	private int HEIGHT=DEFAULT.screenHeight;
 	private BufferedImage backgroundImage;
 	private BuildingModeModel model;
-    private JButton playButton;
+    private JButton playButton, placeButton, saveButton, myGamesButton, helpButton;
 	public int[][] grid;
-	//int buttonWidth = 21 * WIDTH / 256;
 	int buttonWidth = RunningModeModel.barrierWidth;
 	int buttonHeight = RunningModeModel.barrierHeight;
-	private JLabel simpleLabel;
-	private JLabel reinforcedLabel;
-	private JLabel explosiveLabel;
-	private JLabel rewardingLabel;
+    private JLabel simpleLabel, reinforcedLabel, explosiveLabel, rewardingLabel;
 	private BarrierElement[] elements = new BarrierElement[4];
-
-	private JButton helpButton;
 	public static BarrierButton[] buttons = new BarrierButton[DEFAULT.ROWS * DEFAULT.COLUMNS];
-	
-	private ImageIcon empty = scaleImage("/ui/images/Empty3.png");
-	private ImageIcon simple = scaleImage("/ui/images/simpleBarrierIcon.png");
-	private ImageIcon firm = scaleImage("/ui/images/reinforcedBarrierIcon.png");
-	private ImageIcon explosive = scaleImage("/ui/images/explosiveBarrierIcon.png");
-	private ImageIcon rewarding = scaleImage("/ui/images/rewardingBarrierIcon.png");
+    private ImageIcon empty, simple, firm, explosive, rewarding;
 	
 	
 	public BuildingModeView(BuildingModeModel model) {
-		this.model = model;
-		initializeUI();
-		setPreferredSize(new Dimension(WIDTH, HEIGHT));
-		setLayout(null);
-		setBackground(Color.BLACK);
+        this.model = model;
+        initializeComponents();
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        setLayout(null);
+        setBackground(Color.BLACK);
+        loadImage();
+        grid = model.createEmptyGrid();
+        addComponents();
+    }
 
-		try {
-			java.net.URL imageURL = getClass().getResource("/ui/images/Background.png");
-			backgroundImage = ImageIO.read(imageURL);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		//grid = model.readTxt("/domain/txtData/Test.txt");
-		grid = model.createEmptyGrid();
-
-		addEmptyButtons();
-		readGrid(grid);
-		currentState();
-		addButton();
-		addInputFields();
-		addHelpButton();
-
-	}
+    private void loadImage() {
+        try {
+            java.net.URL imageURL = getClass().getResource("/ui/images/Background.png");
+            backgroundImage = ImageIO.read(imageURL);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		// Draw the background image
 		g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
 	}
 
-    protected void readGrid(int[][] grid){
+	private void initializeComponents() {
+        initializeButtons();
+        initializeLabels();
+        initializeIcons();
+    }
+
+	private void initializeButtons() {
+        playButton = createButton("Play", 600, 490);
+        placeButton = createButton("Place", 600, 525);
+        saveButton = createButton("Save", 600, 560);
+        myGamesButton = createButton("My Games", 730, 525);
+        helpButton = createButton("? Help Menu ?", WIDTH - 200, 5);
+        helpButton.addActionListener(e -> showHelpMenu());
+    }
+
+    private JButton createButton(String text, int x, int y) {
+        JButton button = new JButton(text);
+        button.setBounds(x, y, 120, 30);
+        add(button);
+        return button;
+	}
+
+	private void initializeLabels() {
+        simpleLabel = createLabel("Simple: 0", 3 * WIDTH / 4, 12 * HEIGHT / 20);
+        reinforcedLabel = createLabel("Reinforced: 0", 3 * WIDTH / 4, 12 * HEIGHT / 20 + 30);
+        explosiveLabel = createLabel("Explosive: 0", 3 * WIDTH / 4, 12 * HEIGHT / 20 + 60);
+        rewardingLabel = createLabel("Rewarding: 0", 3 * WIDTH / 4, 12 * HEIGHT / 20 + 90);
+    }
+
+    private JLabel createLabel(String text, int x, int y) {
+        JLabel label = new JLabel(text);
+        label.setBounds(x, y, WIDTH / 5, HEIGHT / 20);
+        label.setFont(new Font("Old English Text MT", Font.ITALIC, WIDTH / 35));
+        label.setForeground(Color.WHITE);
+        add(label);
+        return label;
+    }
+
+	private void initializeIcons() {
+        empty = scaleImage("/ui/images/Empty3.png");
+        simple = scaleImage("/ui/images/simpleBarrierIcon.png");
+        firm = scaleImage("/ui/images/reinforcedBarrierIcon.png");
+        explosive = scaleImage("/ui/images/explosiveBarrierIcon.png");
+        rewarding = scaleImage("/ui/images/rewardingBarrierIcon.png");
+    }
+
+	private ImageIcon scaleImage(String imagePath) {
+		try {
+			// Load the image
+			BufferedImage image = ImageIO.read(getClass().getResource(imagePath));
+
+			// Scale the image to fit the button
+			Image scaledImage = image.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
+			return new ImageIcon(scaledImage);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+
+	private void addComponents() {
+        addEmptyButtons();
+        readGrid(grid);
+        updateCurrentState();
+        addInputFields();
+    }
+
+	/**
+	 * addEmptyButtons Method:
+	 * 
+	 * Initializes and adds empty barrier buttons to the view in a grid layout.
+	 * 
+	 * Requires:
+	 * - BuildingModeModel.ROWS and BuildingModeModel.COLUMNS must be properly initialized.
+	 * - buttonWidth and buttonHeight must be set to valid dimensions.
+	 * - This instance of BuildingModeView must be properly initialized.
+	 * 
+	 * Modifies:
+	 * - This instance of BuildingModeView by adding BarrierButton components.
+	 * - The buttons array by storing references to the created BarrierButton instances.
+	 * 
+	 * Effects:
+	 * - Adds a grid of BarrierButton instances to the panel based on the number of rows and columns.
+	 * - Sets button properties: non-focusable, specific bounds, no content area filled, and no border painted.
+	 * - Attaches an ActionListener to each button that calls switchBarrier(button) and updateCurrent() on action events.
+	 * - Attaches a MyMouseListener to each button.
+	 * - Updates the buttons array with the created buttons.
+	 */
+	private void addEmptyButtons() {
+        int xStart = HEIGHT / 32;
+        int yStart = WIDTH / 32;
+        int xGap = HEIGHT / 128;
+        int yGap = WIDTH / 96;
+        for (int row = 0; row < BuildingModeModel.ROWS; row++) {
+            for (int col = 0; col < BuildingModeModel.COLUMNS; col++) {
+                BarrierButton button = new BarrierButton(row, col);
+                button.setFocusable(false);
+                button.setBounds(xStart + col * (RunningModeModel.barrierWidth + xGap), yStart + row * (RunningModeModel.barrierHeight + yGap), RunningModeModel.barrierWidth, RunningModeModel.barrierHeight);
+                button.setContentAreaFilled(false);
+                button.setBorderPainted(false);
+                button.addActionListener(e -> {
+                    switchBarrier(button);
+                    updateCurrentState();
+                });
+                button.addMouseListener(new MyMouseListener());
+                add(button);
+                buttons[BuildingModeModel.COLUMNS * row + col] = button;
+            }
+        }
+    }
+
+	private void showHelpMenu() {
+        HelpMenu helpMenu = new HelpMenu(this);
+        helpMenu.setVisible(true);
+    }
+
+    public void showErrorDialog() {
+        JOptionPane.showMessageDialog(this, "You gave wrong barrier numbers! Check the barrier numbers! (Before trying to play again, first place the barriers.)", "Barrier Number Validation Error", JOptionPane.ERROR_MESSAGE);
+
+        Timer closeDialogTimer = new Timer(5000, e -> {
+            Window win = SwingUtilities.getWindowAncestor(this);
+            if (win instanceof JDialog) {
+                JDialog dialog = (JDialog) win;
+                dialog.dispose();
+            }
+        });
+        closeDialogTimer.setRepeats(false);
+        closeDialogTimer.start();
+    }
+	
+    public void readGrid(int[][] grid){
         for (int i=0; i<DEFAULT.ROWS ;i++){
             for (int j=0; j<DEFAULT.COLUMNS ;j++){
                 switch (grid[i][j]) {
@@ -129,262 +241,69 @@ public class BuildingModeView extends JPanel {
         }
     }
 
-	private ImageIcon scaleImage(String imagePath) {
-		try {
-			// Load the image
-			BufferedImage image = ImageIO.read(getClass().getResource(imagePath));
-
-			// Scale the image to fit the button
-			Image scaledImage = image.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
-			return new ImageIcon(scaledImage);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public void showErrorDialog() {
-    // Show error dialog
-    JOptionPane.showMessageDialog(this, "You gived wrong barrier numbers! Check for the barrier numbers! (Before try to play again, first place the barriers.)", "Barrier Number Validation Error", JOptionPane.ERROR_MESSAGE);
-    
-    // Create a timer to close the dialog after 5 seconds
-    Timer closeDialogTimer = new Timer(5000, e -> {
-        Window win = SwingUtilities.getWindowAncestor(this);
-        if (win instanceof JDialog) {
-            JDialog dialog = (JDialog) win;
-            dialog.dispose();
-        }
-    });
-    closeDialogTimer.setRepeats(false);
-    closeDialogTimer.start();
+	public void updateCurrentState() {
+        simpleLabel.setText("Simple: " + model.number_simple);
+        reinforcedLabel.setText("Reinforced: " + model.number_reinforced);
+        explosiveLabel.setText("Explosive: " + model.number_explosive);
+        rewardingLabel.setText("Rewarding: " + model.number_rewarding);
     }
 
-	private void switchToRunningMode() {
-		// Validate barriers before switching to the running mode
-		if (!model.validateBarriers()) {
-			showErrorDialog();
-			return;
-		}
-		
-		// Create the running mode components and switch views
-		RunningModeModel rmodel = new RunningModeModel();
-		RunningModeView view = new RunningModeView(rmodel);
-		RunningModeController controller = new RunningModeController(model.getUser(), rmodel, view, grid);
-	
-		JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-		frame.getContentPane().removeAll();
-		frame.getContentPane().add(view);
-		frame.revalidate();
-		frame.repaint();
-	
-		view.requestFocusInWindow();
-		Thread gameThread = new Thread(controller);
-		gameThread.start();
-	}	
-
-	
-	
-	
-	/**
-	 * addEmptyButtons Method:
-	 * 
-	 * Initializes and adds empty barrier buttons to the view in a grid layout.
-	 * 
-	 * Requires:
-	 * - BuildingModeModel.ROWS and BuildingModeModel.COLUMNS must be properly initialized.
-	 * - buttonWidth and buttonHeight must be set to valid dimensions.
-	 * - This instance of BuildingModeView must be properly initialized.
-	 * 
-	 * Modifies:
-	 * - This instance of BuildingModeView by adding BarrierButton components.
-	 * - The buttons array by storing references to the created BarrierButton instances.
-	 * 
-	 * Effects:
-	 * - Adds a grid of BarrierButton instances to the panel based on the number of rows and columns.
-	 * - Sets button properties: non-focusable, specific bounds, no content area filled, and no border painted.
-	 * - Attaches an ActionListener to each button that calls switchBarrier(button) and updateCurrent() on action events.
-	 * - Attaches a MyMouseListener to each button.
-	 * - Updates the buttons array with the created buttons.
-	 */
-	
-	
-	public void addEmptyButtons() {
-		int xStart = HEIGHT / 32;
-		int yStart = WIDTH / 32;
-		int xGap = HEIGHT / 128;
-		int yGap = WIDTH / 96;
-		for (int row = 0; row < BuildingModeModel.ROWS; row++) {
-			for (int col = 0; col < BuildingModeModel.COLUMNS; col++) {
-				BarrierButton button = new BarrierButton(row,col);
-				button.setFocusable(false);
-				int x = xStart + col * (buttonWidth + xGap);
-				int y = yStart + row * (buttonHeight + yGap);
-				//if (row % 2 == 0) {x += WIDTH / 128;}
-				button.setBounds(x, y, buttonWidth, buttonHeight);
-				button.setContentAreaFilled(false);
-				button.setBorderPainted(false);
-				button.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						switchBarrier(button);
-						updateCurrent();
-					}
-				});
-				button.addMouseListener(new MyMouseListener());
-				add(button);
-				buttons[BuildingModeModel.COLUMNS * row + col] = button;
-			}
-		}
-	}
-
-	protected void currentState() {
-		simpleLabel = new JLabel("Simple: " + model.number_simple);
-		reinforcedLabel = new JLabel("Reinforced: " + model.number_reinforced);
-		explosiveLabel = new JLabel("Explosive: " + model.number_explosive);
-		rewardingLabel = new JLabel("Rewarding: " + model.number_rewarding);
-
-        simpleLabel.setBounds(3*WIDTH/4, 12*HEIGHT/20, WIDTH/5, HEIGHT/20);
-        reinforcedLabel.setBounds(3*WIDTH/4, 12*HEIGHT/20+30, WIDTH/5, HEIGHT/20);
-        explosiveLabel.setBounds(3*WIDTH/4, 12*HEIGHT/20+60, WIDTH/5, HEIGHT/20);
-        rewardingLabel.setBounds(3*WIDTH/4, 12*HEIGHT/20+90, WIDTH/5, HEIGHT/20);
-
-        Font labelFont = new Font("Old English Text MT", Font.ITALIC, WIDTH/35);
-        Color labelColor = Color.WHITE;
-
-		simpleLabel.setFont(labelFont);
-		simpleLabel.setForeground(labelColor);
-		reinforcedLabel.setFont(labelFont);
-		reinforcedLabel.setForeground(labelColor);
-		explosiveLabel.setFont(labelFont);
-		explosiveLabel.setForeground(labelColor);
-		rewardingLabel.setFont(labelFont);
-		rewardingLabel.setForeground(labelColor);
-
-		this.add(simpleLabel);
-		this.add(reinforcedLabel);
-		this.add(explosiveLabel);
-		this.add(rewardingLabel);
-	}
-
-	public void updateCurrent() {
-		simpleLabel.setText("Simple: " + model.number_simple);
-		reinforcedLabel.setText("Reinforced: " + model.number_reinforced);
-		explosiveLabel.setText("Explosive: " + model.number_explosive);
-		rewardingLabel.setText("Rewarding: " + model.number_rewarding);
-	}
-
-	public void resetCurrent(){
-		model.setNumber_simple(0);
-		model.setNumber_reinforced(0);
-		model.setNumber_explosive(0);
-		model.setNumber_rewarding(0);
-	}
+	public void resetCurrentState() {
+        model.setNumber_simple(0);
+        model.setNumber_reinforced(0);
+        model.setNumber_explosive(0);
+        model.setNumber_rewarding(0);
+    }
 
 	public void switchBarrier(BarrierButton button) {
-		int row = button.getRow();
-		int col = button.getCol();
-	
-		if (button.getIcon() == empty) {
-			button.setIcon(simple);
-			model.setNumber_simple(model.getNumber_simple() + 1);
-			grid[row][col] = 1;
-		} else if (button.getIcon() == simple) {
-			button.setIcon(firm);
-			model.setNumber_simple(model.getNumber_simple() - 1);
-			model.setNumber_reinforced(model.getNumber_reinforced() + 1);
-			grid[row][col] = 2;
-		} else if (button.getIcon() == firm) {
-			button.setIcon(explosive);
-			model.setNumber_reinforced(model.getNumber_reinforced() - 1);
-			model.setNumber_explosive(model.getNumber_explosive() + 1);
-			grid[row][col] = 3;
-		} else if (button.getIcon() == explosive) {
-			button.setIcon(rewarding);
-			model.setNumber_explosive(model.getNumber_explosive() - 1);
-			model.setNumber_rewarding(model.getNumber_rewarding() + 1);
-			grid[row][col] = 4;
-		} else if (button.getIcon() == rewarding) {
-			button.setIcon(empty);
-			model.setNumber_rewarding(model.getNumber_rewarding() - 1);
-			grid[row][col] = 0;
-		
-		}
-	}
+        int row = button.getRow();
+        int col = button.getCol();
 
-	public void addButton() {
-		JButton switchPanelButton = new JButton("Play");
-		switchPanelButton.setBounds(600, 490, 120, 30); // Adjust the position and size as needed
-		switchPanelButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				RunningModeModel rmodel = new RunningModeModel();
-				RunningModeView view = new RunningModeView(rmodel);
-				RunningModeController controller = new RunningModeController(model.getUser(), rmodel, view, grid);
+        if (button.getIcon() == empty) {
+            button.setIcon(simple);
+            model.setNumber_simple(model.getNumber_simple() + 1);
+            grid[row][col] = 1;
+        } else if (button.getIcon() == simple) {
+            button.setIcon(firm);
+            model.setNumber_simple(model.getNumber_simple() - 1);
+            model.setNumber_reinforced(model.getNumber_reinforced() + 1);
+            grid[row][col] = 2;
+        } else if (button.getIcon() == firm) {
+            button.setIcon(explosive);
+            model.setNumber_reinforced(model.getNumber_reinforced() - 1);
+            model.setNumber_explosive(model.getNumber_explosive() + 1);
+            grid[row][col] = 3;
+        } else if (button.getIcon() == explosive) {
+            button.setIcon(rewarding);
+            model.setNumber_explosive(model.getNumber_explosive() - 1);
+            model.setNumber_rewarding(model.getNumber_rewarding() + 1);
+            grid[row][col] = 4;
+        } else if (button.getIcon() == rewarding) {
+            button.setIcon(empty);
+            model.setNumber_rewarding(model.getNumber_rewarding() - 1);
+            grid[row][col] = 0;
+        }
+    }
 
-				JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(BuildingModeView.this);
+	public void addInputFields() {
+        ArrayList<Barrier> barrierList = model.getBarrierList();
+        int yStart = 39 * HEIGHT / 64;
+        int xStart = WIDTH / 15;
+        int panelWidth = 200;
+        int panelHeight = 100;
+        int gap = HEIGHT / 30;
 
-				frame.getContentPane().removeAll();
-				frame.getContentPane().add(view);
-				frame.revalidate();
-				frame.repaint();
-
-				Thread gameThread = new Thread(controller);
-				gameThread.start();
-			}
-		});
-		add(switchPanelButton);
-		
-		
-		JButton placeButton = new JButton("Place");
-		placeButton.setBounds(600, 525, 120, 30);
-		placeButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				resetCurrent();
-				int[][] temp = model.createEmptyGrid();
-
-				for (int i=0;i<4;i++){
-					if(isValidInteger(elements[i].getTextFieldText())){
-						int value = Integer.parseInt(elements[i].getTextFieldText());
-						changeRandomValues(temp, value, i+1);
-					}
-				}
-
-				grid = temp;
-			    readGrid(grid);
-				updateCurrent();
-			}
-		});
-		add(placeButton);
-		
-		JButton saveButton = new JButton("Save");
-		saveButton.setBounds(600, 560, 120, 30);
-		saveButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-			model.saveGridToDatabase("src\\domain\\txtData\\Test.txt", grid); }
-		});
-		
-		add(saveButton);
-
-		JButton myGamesButton = new JButton("My Games");
-		myGamesButton.setBounds(730, 525, 120, 30);
-		myGamesButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				MyGamesView myGamesView = new MyGamesView();
-		        MyGamesController controller = new MyGamesController(myGamesView, model.getUser());	        
-		        
-		        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(BuildingModeView.this);
-		        frame.getContentPane().removeAll();
-				frame.getContentPane().add(myGamesView);
-				frame.revalidate();
-				frame.repaint();
-			 }
-			});
-			add(myGamesButton);
-	} 
+        for (int i = 0; i < 4; i++) {
+            BarrierElement barrierElement = new BarrierElement(barrierList.get(i));
+            int row = i / 2;
+            int col = i % 2;
+            int x = xStart + col * (panelWidth + gap);
+            int y = yStart + row * (panelHeight + gap);
+            barrierElement.setBounds(x, y, panelWidth, panelHeight);
+            add(barrierElement);
+            elements[i] = barrierElement;
+        }
+    }
 
 	public static boolean isValidInteger(String input) {
         String regex = "^[1-9]\\d*$";
@@ -393,86 +312,31 @@ public class BuildingModeView extends JPanel {
         return matcher.matches();
     }
 
-	private void addInputFields() {
-
-		ArrayList<Barrier> bList = model.getBarrierList();
-
-		int yStart = 39 * HEIGHT / 64;
-		int xStart = WIDTH / 15;
-		int panelWidth = 200;
-		int panelHeight = 100;
-		int gap = HEIGHT / 30;
-
-		for (int i = 0; i < 4; i++) {
-    		BarrierElement barrierElement = new BarrierElement(bList.get(i));
-
-    		int row = i / 2; // Assuming you want 2 panels per row
-    		int col = i % 2; // Assuming you want 2 panels per row
-
-    		int x = xStart + col * (panelWidth + gap);
-    		int y = yStart + row * (panelHeight + gap);
-			
-    		barrierElement.setBounds(x, y, panelWidth, panelHeight);
-
-    		add(barrierElement);
-			elements[i]=barrierElement;
-		}
-	}
-	
 	public void changeRandomValues(int[][] array, int numChanges, int replacementValue) {
         int rows = array.length;
         int cols = array[0].length;
-		int change_num = 0;
-
+        int changeNum = 0;
         Random random = new Random();
-        while (change_num < numChanges) {
+
+        while (changeNum < numChanges) {
             int row = random.nextInt(rows);
             int col = random.nextInt(cols);
-
             if (array[row][col] == 0) {
                 array[row][col] = replacementValue;
-				change_num++;
+                changeNum++;
             }
         }
     }
 
-	private void initializeUI() {
-		JButton switchPanelButton = new JButton("Play");
-		switchPanelButton.setBounds(600, 490, 120, 30); // Adjust the position and size as needed
-		switchPanelButton.addActionListener(e -> switchToRunningMode());
-		add(switchPanelButton);
-	}
+	public void addPlayButtonListener(ActionListener listener) {playButton.addActionListener(listener);}
+    public void addPlaceButtonListener(ActionListener listener) {placeButton.addActionListener(listener);}
+    public void addSaveButtonListener(ActionListener listener) {saveButton.addActionListener(listener);}
+    public void addMyGamesButtonListener(ActionListener listener) {myGamesButton.addActionListener(listener);}
 
-	private void addHelpButton() {
-        helpButton = new JButton("? Help Menu ?");
-        helpButton.setBounds(WIDTH - 200, 5, 180, 30); // Adjust the position and size as needed
-        helpButton.addActionListener(e -> showHelpMenu());
-        add(helpButton);
+    public String getBarrierElementText(int index) {
+        return elements[index].getTextFieldText();
     }
 
-    private void showHelpMenu() {
-        HelpMenu helpMenu = new HelpMenu(this);
-        helpMenu.setVisible(true);
-    }
-
-    private ActionListener createPlayButtonListener() {
-        return e -> {
-            // Create the running mode model, view, and controller
-            RunningModeModel runningModel = new RunningModeModel();
-            RunningModeView runningView = new RunningModeView(runningModel);
-            RunningModeController runningController = new RunningModeController(model.getUser(), runningModel, runningView, grid);
-
-            // Get the parent frame of this panel to switch content
-            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            frame.getContentPane().removeAll();
-            frame.getContentPane().add(runningView);
-            frame.revalidate();
-            frame.repaint();
-
-            // Start the game loop in a new thread
-            Thread gameThread = new Thread(runningController);
-            gameThread.start();
-        };
-    }
-	
+    public int[][] getGrid() {return grid;}
+    public void setGrid(int[][] grid) {this.grid = grid;}
 }

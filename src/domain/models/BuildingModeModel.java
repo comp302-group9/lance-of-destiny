@@ -41,24 +41,15 @@ public class BuildingModeModel{
 		this.user = user;
 	}
 
-	public void update(long currentTime, boolean[] keys, int WIDTH, int HEIGHT) {
-	}
+	public void update(long currentTime, boolean[] keys, int WIDTH, int HEIGHT) {}
 
 	public ArrayList<Barrier> getBarrierList() {
 		return BarrierList;
 	}
 
-	public void setBarrierList(ArrayList<Barrier> barrierList) {
-		BarrierList = barrierList;
-	}
-
 	public boolean validateBarriers() {
-		// Validate the counts against required minimums
-		if (number_simple < 75 || number_reinforced < 10 || number_explosive < 5 || number_rewarding < 10) {
-			return false;
-		}
-		return true;
-	}
+		return number_simple >= 75 && number_reinforced >= 10 && number_explosive >= 5 && number_rewarding >= 10;
+	}	
 
     public int[][] createEmptyGrid(){
         int[][] grid = new int[ROWS][COLUMNS];
@@ -69,22 +60,6 @@ public class BuildingModeModel{
         }
         return grid;
     }
-
-
-	public void writeTxt(String fileName, int[][] matrix) {
-		try (FileWriter writer = new FileWriter(fileName)) {
-			for (int i = 0; i < matrix.length; i++) {
-				for (int j = 0; j < matrix[i].length; j++) {
-					writer.write(matrix[i][j] + " ");
-				}
-				writer.write("\n");
-			}
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
 
 	public void writeGrid(int[][] matrix) {
 	    StringBuilder gridStringBuilder = new StringBuilder();
@@ -101,7 +76,6 @@ public class BuildingModeModel{
              PreparedStatement pstmt = conn.prepareStatement(
                  "INSERT INTO SavedGames (gameId, username, life, score, grid) VALUES (?, ?, ?, ?, ?)")) {
             // Convert the 2D array into a single string
-            StringBuilder gridBuilder = new StringBuilder();
             StringBuilder gridStringBuilder = new StringBuilder();
     	    for (int i = 0; i < matrix.length; i++) {
     	        for (int j = 0; j < matrix[i].length; j++) {
@@ -123,43 +97,16 @@ public class BuildingModeModel{
         }
     }
 
-	public int getNumber_simple() {
-		return number_simple;
-	}
+	public int getNumber_simple() {return number_simple;}
+	public int getNumber_reinforced() {return number_reinforced;}
+	public int getNumber_explosive() {return number_explosive;}
+	public int getNumber_rewarding() {return number_rewarding;}
 
-	public void setNumber_simple(int number_simple) {
-		this.number_simple = number_simple;
-	}
+	public void setNumber_simple(int number_simple) {this.number_simple = number_simple;}
+	public void setNumber_reinforced(int number_reinforced) {this.number_reinforced = number_reinforced;}
+	public void setNumber_explosive(int number_explosive) {this.number_explosive = number_explosive;}
+	public void setNumber_rewarding(int number_rewarding) {this.number_rewarding = number_rewarding;}
 
-	public int getNumber_reinforced() {
-		return number_reinforced;
-	}
-
-	public void setNumber_reinforced(int number_reinforced) {
-		this.number_reinforced = number_reinforced;
-	}
-
-	public int getNumber_explosive() {
-		return number_explosive;
-	}
-
-	public void setNumber_explosive(int number_explosive) {
-		this.number_explosive = number_explosive;
-	}
-
-	public int getNumber_rewarding() {
-		return number_rewarding;
-	}
-
-	public void setNumber_rewarding(int number_rewarding) {
-		this.number_rewarding = number_rewarding;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
+	public User getUser() {return user;}
+	public void setUser(User user) {this.user = user;}
 }
