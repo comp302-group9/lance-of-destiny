@@ -1,10 +1,14 @@
 package domain.models;
 
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+import database.DatabaseConnection;
 import domain.DEFAULT;
 import domain.objects.Box;
 import domain.objects.Fireball;
@@ -29,6 +33,7 @@ public class RunningModeModel {
     public static final int WIDTH = DEFAULT.screenWidth;
     private Paddle paddle;
     private Fireball fireball;
+    private User user;
     private long lastUpdateTime;
     private boolean paused = false;
     public static ArrayList<Barrier> barriers = new ArrayList<>();
@@ -42,6 +47,7 @@ public class RunningModeModel {
     private final long hexCooldown = 300;
 
     private int[][] grid;
+    private int gameId;
 
     private int chances = 3;
 
@@ -57,7 +63,13 @@ public class RunningModeModel {
 
     private Runnable scoreChangeCallback; // Add a callback for score change
 
-    public RunningModeModel() {
+    public RunningModeModel(User user, int[][] grid) {
+        this.user =user;
+        this.grid = grid;
+
+        //setupQuitButtonListener();
+        //setupSaveButtonListener();
+
         initializeGame();
         
         boxes.add(new Box(WIDTH/2,300));
@@ -71,6 +83,42 @@ public class RunningModeModel {
             spells.add(new SpellIcon(new Overwhelm(fireball)));
         spells.add(new SpellIcon(new Hex(paddle)));
         spells.add(new SpellIcon(new Expension(paddle)));
+
+        initaliseBarrierLocations(grid);
+        getFireball().setGrid(grid);;
+        }
+        
+
+        lastUpdateTime = System.currentTimeMillis();
+        this.gameStartingTime = System.currentTimeMillis();
+    }
+
+
+    public RunningModeModel(User user, int[][] grid, int gameId) {
+        
+        this.user =user;
+        this.grid = grid;
+        this.gameId = gameId;
+
+        //setupQuitButtonListener();
+        //setupSaveButtonListener();
+
+        initializeGame();
+        
+        boxes.add(new Box(WIDTH/2,300));
+
+        // Initialize the paddle
+        paddle = new Paddle(DEFAULT.screenWidth / 2, DEFAULT.screenHeight - 50, DEFAULT.paddleWidth, DEFAULT.paddleHeight); // Adjust parameters as needed
+        
+        // Initialize the fireball
+        fireball = new Fireball( DEFAULT.screenWidth / 2, 7 * DEFAULT.screenHeight / 8, 16, 16); // Adjust parameters as needed
+        if(spells.isEmpty()){
+            spells.add(new SpellIcon(new Overwhelm(fireball)));
+        spells.add(new SpellIcon(new Hex(paddle)));
+        spells.add(new SpellIcon(new Expension(paddle)));
+
+        initaliseBarrierLocations(grid);
+        getFireball().setGrid(grid);;
         }
         
 
@@ -103,6 +151,16 @@ public class RunningModeModel {
     public int[][] getGrid() {
         return grid;
     }
+
+    public User getUser() {
+        return user;
+    }
+
+    
+    public int getGameId() {
+        return gameId;
+    }
+
 
     public void setGameOverCallback(Runnable gameOverCallback) {
         this.gameOverCallback = gameOverCallback;
@@ -305,4 +363,53 @@ public class RunningModeModel {
             }
         }
     }
+
+        public void saveGame(int[][] matrix, int gameId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = DatabaseConnection.getConnection();
+            String sql = "UPDATE SavedGames SET grid = ? WHERE gameId = ?";
+            pstmt = conn.prepareStatement(sql);
+
+//            // Convert the 2D array into a single string
+//            StringBuilder gridBuilder = new StringBuilder();
+//            for (int i = 0; i < matrix.length; i++) {
+//                for (int j = 0; j < matrix[i].length; j++) {
+//                    gridBuilder.append(matrix[i][j]).append(" ");
+//                }
+//            }
+//            String gridString = gridBuilder.toString().trim(); // Remove trailing space
+
+            String gridString = writeGrid(matrix);
+
+            pstmt.setString(1, gridString);
+            pstmt.setInt(2, gameId);
+
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Updating the grid failed, no rows affected.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstmt != null) pstmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+        public String writeGrid(int[][] matrix) {
+            StringBuilder gridStringBuilder = new StringBuilder();
+            for (int i = 0; i < matrix.length; i++) {
+                for (int j = 0; j < matrix[i].length; j++) {
+                    gridStringBuilder.append(matrix[i][j]).append(" ");
+                }
+            }
+            String gridString = gridStringBuilder.toString().trim(); // Remove trailing space
+            return gridString;
+    
+        }
 }

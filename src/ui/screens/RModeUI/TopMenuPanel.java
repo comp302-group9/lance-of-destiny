@@ -36,7 +36,7 @@ public class TopMenuPanel extends JPanel {
         pauseButton.setFont(new Font("Arial", Font.BOLD, 18));
         pauseButton.setForeground(Color.BLACK);
         topLeftPanel.add(pauseButton);
-
+/*/
         quitButton = new JButton("Quit");
         quitButton.setFont(new Font("Arial", Font.BOLD, 18));
         quitButton.setForeground(Color.BLACK);
@@ -46,6 +46,7 @@ public class TopMenuPanel extends JPanel {
         saveButton.setFont(new Font("Arial", Font.BOLD, 18));
         saveButton.setForeground(Color.BLACK);
         topLeftPanel.add(saveButton);
+        */
 
         add(topLeftPanel, BorderLayout.WEST);
 

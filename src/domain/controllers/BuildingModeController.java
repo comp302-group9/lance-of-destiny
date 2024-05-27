@@ -34,9 +34,9 @@ public class BuildingModeController {
                 return;
             }
 
-            RunningModeModel rmodel = new RunningModeModel();
+            RunningModeModel rmodel = new RunningModeModel(model.getUser(), view.getGrid()); // the model in model.getUser is a BuildingModoModel
             RunningModeView rview = new RunningModeView(rmodel);
-            RunningModeController rcontroller = new RunningModeController(model.getUser(), rmodel, rview, view.getGrid());
+            RunningModeController rcontroller = new RunningModeController(rmodel, rview);
 
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
             frame.getContentPane().removeAll();

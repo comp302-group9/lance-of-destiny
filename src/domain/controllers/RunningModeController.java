@@ -2,43 +2,26 @@ package domain.controllers;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import database.DatabaseConnection;
 
 import javax.swing.Timer;
-
-import domain.models.BuildingModeModel;
 import domain.models.RunningModeModel;
 import ui.screens.RunningModeView;
 
-import domain.models.User;
-import ui.screens.BuildingModeView;
 
 public class RunningModeController implements KeyListener, Runnable {
     private RunningModeModel model;
     private RunningModeView view;
-    private User user;
-    private int gameId;
     private boolean[] keys;
     private int[][] grid;
     private boolean isPaused = false;
     private boolean running = true;  // Flag to control the running of the game loop
 
-    public RunningModeController(User user, RunningModeModel model, RunningModeView view, int[][] grid) {
+    public RunningModeController(RunningModeModel model, RunningModeView view) {
         this.model = model;
         this.view = view;
-        this.user = user;
-        this.grid = grid;
         view.addKeyListener(this);
         view.setFocusable(true);
         keys = new boolean[256];  // Array to keep track of key states
-        model.initaliseBarrierLocations(grid);
-        model.getFireball().setGrid(grid);;
         //setupQuitButtonListener();
         //setupSaveButtonListener();
         model.setGameOverCallback(this::handleGameOver);
@@ -46,25 +29,9 @@ public class RunningModeController implements KeyListener, Runnable {
     }
 
 
-    public RunningModeController(User user, RunningModeModel model, RunningModeView view, int[][] grid, int gameId) {
-    	this.grid = grid;
-    	this.gameId = gameId;
-        this.model = model;
-        this.user = user;
-        this.view = view;
-        view.addKeyListener(this);
-        view.setFocusable(true);
-        keys = new boolean[256];  // Array to keep track of key states
-        model.initaliseBarrierLocations(grid);
-        model.getFireball().setGrid(grid);;
-        //setupQuitButtonListener();
-        //setupSaveButtonListener();
-        model.setGameOverCallback(this::handleGameOver);
-    }
-
     private void handleGameOver() {
         // Display game over message for 5 seconds
-        Timer timer = new Timer(5000, e -> quitGame());
+        Timer timer = new Timer(5000, e -> view.quitGame());
         timer.setRepeats(false);
         timer.start();
     }
@@ -76,82 +43,8 @@ public class RunningModeController implements KeyListener, Runnable {
 
     private void setupSaveButtonListener() {
     	view.addSaveButtonListener(e -> saveGame(grid, gameId));
-    }*/
+    */
 
-    public void saveGame(int[][] matrix, int gameId) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        try {
-            conn = DatabaseConnection.getConnection();
-            String sql = "UPDATE SavedGames SET grid = ? WHERE gameId = ?";
-            pstmt = conn.prepareStatement(sql);
-
-//            // Convert the 2D array into a single string
-//            StringBuilder gridBuilder = new StringBuilder();
-//            for (int i = 0; i < matrix.length; i++) {
-//                for (int j = 0; j < matrix[i].length; j++) {
-//                    gridBuilder.append(matrix[i][j]).append(" ");
-//                }
-//            }
-//            String gridString = gridBuilder.toString().trim(); // Remove trailing space
-
-            String gridString = writeGrid(matrix);
-
-            pstmt.setString(1, gridString);
-            pstmt.setInt(2, gameId);
-
-            int affectedRows = pstmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Updating the grid failed, no rows affected.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
-
-    private void quitGame() {
-        running = false; // Stop the game loop
-
-        BuildingModeModel model2 = new BuildingModeModel(user);
-        BuildingModeView view2 = new BuildingModeView(model2);
-        BuildingModeController controller2 = new BuildingModeController(model2, view2);
-
-        JFrame newFrame = new JFrame();
-        newFrame.add(view2);
-        newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        newFrame.pack();
-        newFrame.setVisible(true);
-
-        //frame.setSize(SignInPage.WIDTH, SignInPage.HEIGHT);
-        newFrame.setLocationRelativeTo(null);
-
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
-        if (frame != null) {
-            frame.dispose();} // Close the current game window
-            // Optionally, switch back to another view like the main menu
-        }
-
-        public String writeGrid(int[][] matrix) {
-            StringBuilder gridStringBuilder = new StringBuilder();
-            for (int i = 0; i < matrix.length; i++) {
-                for (int j = 0; j < matrix[i].length; j++) {
-                    gridStringBuilder.append(matrix[i][j]).append(" ");
-                }
-            }
-            String gridString = gridStringBuilder.toString().trim(); // Remove trailing space
-            return gridString;
-    
-        }
-
-    
     @Override
     public void run() {
         while (running) {

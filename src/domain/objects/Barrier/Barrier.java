@@ -168,6 +168,10 @@ public abstract class Barrier {
 		this.gridY = gridY;
 	}
 
+	public int getWidth() {
+		return width;
+	}
+
 
 	public String getName() {
 		return name;
