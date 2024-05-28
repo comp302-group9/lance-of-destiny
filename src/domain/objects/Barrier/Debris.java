@@ -4,11 +4,9 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import domain.controllers.CollisionHandler;
-import domain.objects.GameObject;
 import domain.objects.Paddle;//parameter visibility
 
-public class Debris implements GameObject{
+public class Debris {
     private int x, y;
     private int width, height;
     private int fallSpeed;
@@ -51,7 +49,7 @@ public class Debris implements GameObject{
     // Method to check collision with the paddle
     public void checkCollisionWithPaddle(Paddle paddle, ArrayList<Debris> debrisList, int screenHeight) {
         // Check if the debris collides with the paddle
-        if (CollisionHandler.CollisionCheck(paddle, this)) {
+        if (paddle.getBounds().intersects(getBounds())) {
             // Handle collision with the paddle
         	onHit();
             debrisList.remove(this);

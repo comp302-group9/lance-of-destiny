@@ -26,6 +26,7 @@ public class Hex extends Spell{
     public void Activate(){
     	if (paddle != null) {
             paddle.setHexActive(true);
+            System.out.println("Hex spell activated"); // Debug statement
             setActive(true);
             startTimer();
         }
@@ -35,6 +36,7 @@ public class Hex extends Spell{
     public void deActivate() {
     	if (paddle != null) {
             paddle.setHexActive(false);
+            System.out.println("Hex spell deactivated"); // Debug statement
             setActive(false);
         }
     }

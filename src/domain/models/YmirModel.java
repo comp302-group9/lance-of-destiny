@@ -25,8 +25,15 @@ public class YmirModel {
         witchGifs[3] = new ImageIcon("src\\\\ui\\gifs\\witch-succ.gif");
     }
 
-    public ImageIcon getWitchGif(int index) {return witchGifs[index];}
-    public ImageIcon getCoinGif(int index) {return coinGifs[index];}
+    public ImageIcon getWitchGif(int index) {
+        return witchGifs[index];
+    }
 
-    public int getRandomOffset() {return random.nextInt(2);}
+    public ImageIcon getCoinGif(int index) {
+        return coinGifs[index];
+    }
+
+    public int getRandomOffset() {
+        return random.nextInt(2);
+    }
 }

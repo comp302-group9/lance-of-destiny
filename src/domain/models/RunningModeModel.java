@@ -10,7 +10,6 @@ import java.util.Random;
 
 import database.DatabaseConnection;
 import domain.DEFAULT;
-import domain.controllers.CollisionHandler;
 import domain.objects.Box;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
@@ -218,23 +217,30 @@ public class RunningModeModel {
         }
     }
 
-    
+    public Paddle getPaddle() {
+        return paddle;
+    }
+
+    public Fireball getFireball() {
+        return fireball;
+    }
+
     public void update(long currentTime, boolean[] keys) {
         double deltaTime = (currentTime - lastUpdateTime) / 1000.0;
         lastUpdateTime = currentTime;
-        
+
         updateGameElements(deltaTime);
         handleCollisions(currentTime);
-        
+
         if (fireball.getY() >= DEFAULT.screenHeight) {
             decreaseChance();
             return;
         }
-        
+
         if (keys[KeyEvent.VK_W] && !fireball.isLaunched()) {
             fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
         }
-        
+
         if (keys[KeyEvent.VK_LEFT]) {
             paddle.setDeltaX(-1, DEFAULT.screenWidth);
             paddle.setDirection(-1);
@@ -244,7 +250,7 @@ public class RunningModeModel {
         } else {
             paddle.setDirection(0);
         }
-        
+
         if (keys[KeyEvent.VK_A]) {
             paddle.rotateAntiClockwise(deltaTime);
         } else if (keys[KeyEvent.VK_D]) {
@@ -260,31 +266,32 @@ public class RunningModeModel {
         if (keys[KeyEvent.VK_H] && paddle.isHexActive() && currentTime - lastHexShotTime >= hexCooldown) {
             paddle.shootHex();
             lastHexShotTime = currentTime;
+            System.out.println("Hex fired");
         }
-        
+
         paddle.updateProjectiles();
     }
-    
+
     private void updateGameElements(double deltaTime) {
         if (fireball.isLaunched()) {
             fireball.move();
         } else {
             fireball.setPosition(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
         }
-        
+
         for (Barrier barrier : barriers) {
             if (barrier.isMoving) {
                 barrier.move(barriers, deltaTime);
             }
         }
-        
+
         for (int i = 0; i < boxes.size(); i++) {
             Box box = boxes.get(i);
             box.move();
             if (box.getY() > DEFAULT.screenHeight) {
                 boxes.remove(i);
                 i--;
-            } else if (CollisionHandler.CollisionCheck(paddle, box)) {
+            } else if (box.collidesWithPaddle(paddle)) {
                 box.openBox();
                 boxes.remove(i);
                 i--;
@@ -292,38 +299,38 @@ public class RunningModeModel {
             }
         }
     }
-    
+
     private void handleCollisions(long currentTime) {
-        CollisionHandler.checkWallCollision(fireball, DEFAULT.screenWidth, DEFAULT.screenHeight);
-        
+        fireball.checkCollisionWithWalls(DEFAULT.screenWidth, DEFAULT.screenHeight);
         if ((currentTime - lastCollisionTime2) >= cooldownbar) {
             fireball.checkCollisionWithBarriers(barriers, this);
             grid = fireball.getGrid();
             lastCollisionTime2 = currentTime;
         }
-        
-        if (CollisionHandler.CollisionCheck(paddle, fireball) && (currentTime - lastCollisionTime) >= cooldown) {
+
+        if (fireball.collidesWithPaddle(paddle) && (currentTime - lastCollisionTime) >= cooldown) {
             fireball.reflectFromPaddle(paddle);
             fireball.validateSpeed(paddle);
             lastCollisionTime = currentTime;
         }
-        
+
         for (Canons projectile : new ArrayList<>(paddle.getHexProjectiles())) {
             Iterator<Barrier> iterator = barriers.iterator();
             while (iterator.hasNext()) {
                 Barrier barrier = iterator.next();
-                if (CollisionHandler.CollisionCheck(projectile, barrier)) {
+                if (projectile.collidesWithBarrier(barrier)) {
                     if (!barrier.getFrozen() && barrier.onHit()) {
                         increaseScore(currentTime); // Increase score when a barrier is hit
                         iterator.remove();
                     }
                     paddle.removeHexProjectile(projectile);
+                    System.out.println("Hex projectile collided with barrier");
                     break;
                 }
             }
         }
     }
-    
+
     public void initaliseBarrierLocations(int[][] grid) {
         int xStart = DEFAULT.screenHeight / 32;
         int yStart = DEFAULT.screenWidth / 32;
@@ -335,42 +342,42 @@ public class RunningModeModel {
                 int y = yStart + row * (barrierHeight + yGap);
                 switch (grid[row][col]) {
                     case 0:
-                    break;
+                        break;
                     case 1:
-                    Barrier simple = new SimpleBarrier(x, y);
-                    barriers.add(simple);
-                    break;
+                        Barrier simple = new SimpleBarrier(x, y);
+                        barriers.add(simple);
+                        break;
                     case 2:
-                    Barrier reinforced = new ReinforcedBarrier(x, y);
-                    barriers.add(reinforced);
-                    break;
+                        Barrier reinforced = new ReinforcedBarrier(x, y);
+                        barriers.add(reinforced);
+                        break;
                     case 3:
-                    Barrier explosive = new ExplosiveBarrier(x, y);
-                    barriers.add(explosive);
-                    break;
+                        Barrier explosive = new ExplosiveBarrier(x, y);
+                        barriers.add(explosive);
+                        break;
                     case 4:
-                    Barrier rewarding = new RewardingBarrier(x, y);
-                    barriers.add(rewarding);
-                    break;
+                        Barrier rewarding = new RewardingBarrier(x, y);
+                        barriers.add(rewarding);
+                        break;
                 }
             }
         }
     }
-    
-    public void saveGame(int[][] matrix, int gameId) {
+
+        public void saveGame(int[][] matrix, int gameId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         try {
             conn = DatabaseConnection.getConnection();
             String sql = "UPDATE SavedGames SET grid = ? WHERE gameId = ?";
             pstmt = conn.prepareStatement(sql);
-            
-            //            // Convert the 2D array into a single string
-            //            StringBuilder gridBuilder = new StringBuilder();
-            //            for (int i = 0; i < matrix.length; i++) {
-                //                for (int j = 0; j < matrix[i].length; j++) {
-                    //                    gridBuilder.append(matrix[i][j]).append(" ");
-                    //                }
+
+//            // Convert the 2D array into a single string
+//            StringBuilder gridBuilder = new StringBuilder();
+//            for (int i = 0; i < matrix.length; i++) {
+//                for (int j = 0; j < matrix[i].length; j++) {
+//                    gridBuilder.append(matrix[i][j]).append(" ");
+//                }
 //            }
 //            String gridString = gridBuilder.toString().trim(); // Remove trailing space
 
@@ -380,7 +387,6 @@ public class RunningModeModel {
             pstmt.setInt(2, gameId);
 
             int affectedRows = pstmt.executeUpdate();
-
             if (affectedRows == 0) {
                 throw new SQLException("Updating the grid failed, no rows affected.");
             }
@@ -395,20 +401,15 @@ public class RunningModeModel {
             }
         }
     }
-
-    public String writeGrid(int[][] matrix) {
-        StringBuilder gridStringBuilder = new StringBuilder();
-        for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[i].length; j++) {
-                gridStringBuilder.append(matrix[i][j]).append(" ");
+        public String writeGrid(int[][] matrix) {
+            StringBuilder gridStringBuilder = new StringBuilder();
+            for (int i = 0; i < matrix.length; i++) {
+                for (int j = 0; j < matrix[i].length; j++) {
+                    gridStringBuilder.append(matrix[i][j]).append(" ");
+                }
             }
-        }
-        String gridString = gridStringBuilder.toString().trim(); // Remove trailing space
-        return gridString;
-                
-    }
-
-    public Paddle getPaddle() {return paddle;}
-    public Fireball getFireball() {return fireball;}
-}
+            String gridString = gridStringBuilder.toString().trim(); // Remove trailing space
+            return gridString;
     
+        }
+}

@@ -128,6 +128,7 @@ public class ExplosiveBarrier extends Barrier {
     }
 	@Override
 	public boolean onHit() {
+		System.out.println("Explosive barrier destroyed");
 		createFallingDebris();
 		return true;
 	}
