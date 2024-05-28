@@ -1,13 +1,16 @@
 package domain.controllers;
 
-import ui.screens.BuildingModeView;
-import ui.screens.MyGamesView;
-import domain.models.BuildingModeModel;
-import domain.models.RunningModeModel;
-import ui.screens.RunningModeView;
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
+import domain.models.BuildingModeModel;
+import domain.models.RunningModeModel;
+import ui.screens.BuildingModeView;
+import ui.screens.MyGamesView;
+import ui.screens.RunningModeView;
 
 public class BuildingModeController {
     private BuildingModeModel model;
@@ -36,7 +39,7 @@ public class BuildingModeController {
 
             RunningModeModel rmodel = new RunningModeModel(model.getUser(), view.getGrid()); // the model in model.getUser is a BuildingModoModel
             RunningModeView rview = new RunningModeView(rmodel);
-            RunningModeController rcontroller = new RunningModeController(rmodel, rview);
+            RunningModeController rcontroller = new RunningModeController(rmodel, rview, view.getGrid());
 
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
             frame.getContentPane().removeAll();

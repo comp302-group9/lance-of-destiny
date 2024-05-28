@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.Timer;
+
 import domain.models.RunningModeModel;
 import ui.screens.RunningModeView;
 
@@ -16,12 +17,19 @@ public class RunningModeController implements KeyListener, Runnable {
     private boolean isPaused = false;
     private boolean running = true;  // Flag to control the running of the game loop
 
-    public RunningModeController(RunningModeModel model, RunningModeView view) {
+    public RunningModeController(RunningModeModel model, RunningModeView view, int[][] grid) {
         this.model = model;
         this.view = view;
+        this.grid = grid;
         view.addKeyListener(this);
         view.setFocusable(true);
         keys = new boolean[256];  // Array to keep track of key states
+        
+        
+        model.initializeGame();  // Reset or initialize game elements
+        model.initaliseBarrierLocations(grid);
+        model.getFireball().setGrid(grid);
+        
         //setupQuitButtonListener();
         //setupSaveButtonListener();
         model.setGameOverCallback(this::handleGameOver);
