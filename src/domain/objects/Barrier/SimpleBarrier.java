@@ -47,7 +47,6 @@ public class SimpleBarrier extends Barrier {
                 x = Math.min(Math.max(x, 0), DEFAULT.screenWidth - width); // Clamp within boundaries
             }
         }
-		updateMovementState(barriers);
     }
 	 
 	 

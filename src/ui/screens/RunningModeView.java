@@ -9,10 +9,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import domain.DEFAULT;
-import domain.controllers.BuildingModeController;
-import domain.controllers.RunningModeController;
 import domain.controllers.YmirController;
-import domain.models.BuildingModeModel;
 import domain.models.RunningModeModel;
 import domain.models.YmirModel;
 import domain.objects.Box;
@@ -31,15 +28,11 @@ public class RunningModeView extends JPanel {
     private ImageIcon gifIcon;
     private JPanel pausePanel;
     private JButton resumeButton;
-    private JButton quitButton;
-    private JButton saveButton;
-    private JButton backToBuildingModeButton;
     private JLabel gifLabel;
 
     private YmirModel ymirModel;
     private YmirView ymirView;
     private YmirController ymirController;
-    private RunningModeController runningModeController;
 
     public RunningModeView(RunningModeModel model) {
         this.model = model;
@@ -65,6 +58,18 @@ public class RunningModeView extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 setPaused(true);
                 model.setPaused(true);
+            }
+        });
+        topMenuPanel.addQuitButtonListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Add your quit action here
+            }
+        });
+        topMenuPanel.addSaveButtonListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Add your save action here
             }
         });
 
@@ -124,51 +129,16 @@ public class RunningModeView extends JPanel {
             pauseLabel.setFont(new Font("Arial", Font.BOLD, 22));
             pauseLabel.setForeground(Color.WHITE);
 
-            saveButton = new JButton("Save");
-            saveButton.addActionListener(e -> model.saveGame(model.getGrid(), model.getGameId()));
-
             resumeButton = new JButton("Resume");
             resumeButton.addActionListener(e -> setPaused(false));
-
-            quitButton = new JButton("Quit");
-            quitButton.addActionListener(e -> quitGame());
-
-            backToBuildingModeButton = new JButton("Turn Back To Building Mode");
-            backToBuildingModeButton.addActionListener(e -> quitGame());
-
             GridBagConstraints gbc = new GridBagConstraints();
             gbc.gridwidth = GridBagConstraints.REMAINDER;
             gbc.fill = GridBagConstraints.HORIZONTAL;
             pausePanel.add(pauseLabel, gbc);
             pausePanel.add(resumeButton, gbc);
-            pausePanel.add(quitButton, gbc);
-            pausePanel.add(saveButton, gbc);
-            pausePanel.add(backToBuildingModeButton, gbc);
             add(pausePanel, BorderLayout.CENTER);
         }
     }
-
-    public void quitGame() {
-        //running = false; // Stop the game loop
-
-        BuildingModeModel model2 = new BuildingModeModel(model.getUser());
-        BuildingModeView view2 = new BuildingModeView(model2);
-        BuildingModeController controller2 = new BuildingModeController(model2, view2);
-
-        JFrame newFrame = new JFrame();
-        newFrame.add(view2);
-        newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        newFrame.pack();
-        newFrame.setVisible(true);
-
-        //frame.setSize(SignInPage.WIDTH, SignInPage.HEIGHT);
-        newFrame.setLocationRelativeTo(null);
-
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        if (frame != null) {
-            frame.dispose();} // Close the current game window
-            // Optionally, switch back to another view like the main menu
-        }
 
     private void removePauseScreen() {
         if (pausePanel != null) {
