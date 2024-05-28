@@ -1,11 +1,18 @@
 package ui.screens;
 
+import javax.swing.*;
+import domain.models.RunningModeModel;
+import domain.DEFAULT;
+import domain.controllers.MyMouseListener;
+import domain.controllers.RunningModeController;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Window;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -13,32 +20,14 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 
-import domain.DEFAULT;
-import domain.controllers.MyMouseListener;
-import domain.controllers.RunningModeController;
 import domain.models.BuildingModeModel;
-import domain.models.RunningModeModel;
 import domain.objects.Barrier.Barrier;
-import network.ClientController;
-import network.ClientModel;
-import network.ClientView;
-import network.ServerController;
-import network.ServerModel;
-import network.ServerView;
 import ui.screens.BModeUI.BarrierButton;
 import ui.screens.BModeUI.BarrierElement;
+
+import network.*;
 
 public class BuildingModeView extends JPanel {
 	public int WIDTH=DEFAULT.screenWidth;
@@ -324,7 +313,7 @@ public class BuildingModeView extends JPanel {
 		// Create the running mode components and switch views
 		RunningModeModel runningModel = new RunningModeModel(model.getUser(), grid);
 		RunningModeView view = new RunningModeView(runningModel);
-		RunningModeController controller = new RunningModeController(runningModel, view, grid);
+		RunningModeController controller = new RunningModeController(runningModel, view);
 	
 		JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
 		frame.getContentPane().removeAll();

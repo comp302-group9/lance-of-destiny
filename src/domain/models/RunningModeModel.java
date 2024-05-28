@@ -127,7 +127,7 @@ public class RunningModeModel {
         this.gameStartingTime = System.currentTimeMillis();
     }
 
-    public void initializeGame() {
+    private void initializeGame() {
         barriers.clear();
         paddle = new Paddle(WIDTH / 2, HEIGHT - 50, WIDTH / 10, 20);
         fireball = new Fireball(WIDTH / 2, 7 * HEIGHT / 8, 16, 16);
@@ -394,7 +394,6 @@ public class RunningModeModel {
                 ex.printStackTrace();
             }
         }
-        
     }
 
     public String writeGrid(int[][] matrix) {
