@@ -54,8 +54,6 @@ class RunningModeModelTest {
         //model.update(initialTime, keys);
         Fireball fireball = model.getFireball();
         Paddle paddle = model.getPaddle();
-        System.out.println(paddle.getX());
-        System.out.println(fireball.getX());
         assertEquals(paddle.getY() - 25, fireball.getY());
         assertEquals(paddle.getX(), fireball.getX()); 
         

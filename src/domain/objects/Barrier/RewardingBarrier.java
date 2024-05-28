@@ -1,5 +1,6 @@
 package domain.objects.Barrier;
 
+import java.util.ArrayList;
 import java.util.Random;
 import domain.models.RunningModeModel;
 import domain.objects.Box;
@@ -39,5 +40,8 @@ public class RewardingBarrier extends Barrier {
 	public String getImg() {
 		return "/ui/images/rewardingBarrier.png";
 	}
+
+	@Override
+	public void move(ArrayList<Barrier> barriers, double deltaTime) {}
 
 }

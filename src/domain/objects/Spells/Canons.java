@@ -9,9 +9,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import domain.DEFAULT;
+import domain.objects.GameObject;
 import domain.objects.Barrier.Barrier;
 
-public class Canons {
+public class Canons implements GameObject{
 	
 	 private int x, y;
 	    private int width = 10, height = 20;
@@ -33,7 +34,6 @@ public class Canons {
 	            e.printStackTrace();
 	        }
 	        
-	        System.out.println("Hex projectile created at (" + x + ", " + y + ") with angle " + angle); // Debug statement
 	    }
 	    
 	    public void move() {
@@ -42,13 +42,8 @@ public class Canons {
 	        x += dx;
 	        y += dy;
 	        
-	        // Debug statement
-	        System.out.println("Hex projectile moved to (" + x + ", " + y + ")");
-	        
-	        // Deactivate if it moves out of bounds
 	        if (x < 0 || x > DEFAULT.screenWidth || y < 0 || y > DEFAULT.screenHeight) {
 	            active = false;
-	            System.out.println("Hex projectile deactivated due to out of bounds");
 	        }
 	    }
 
@@ -64,15 +59,6 @@ public class Canons {
 
 	    public Rectangle getBounds() {
 	        return new Rectangle(x, y, width, height);
-	    }
-
-	 // Implement collision detection with barriers
-	    public boolean collidesWithBarrier(Barrier barrier) {
-	        if (!active) return false;
-
-	        Rectangle projectileBounds = getBounds();
-	        Rectangle barrierBounds = barrier.getBounds();
-	        return projectileBounds.intersects(barrierBounds);
 	    }
 	    
 	    public boolean isActive() {

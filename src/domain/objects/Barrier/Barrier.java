@@ -14,9 +14,11 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
+import domain.controllers.CollisionHandler;
 import domain.models.RunningModeModel;
+import domain.objects.GameObject;
 
-public abstract class Barrier {
+public abstract class Barrier implements GameObject{
 
 	protected int x;
 	protected int y;
@@ -69,7 +71,6 @@ public abstract class Barrier {
 				unfreeze();
             }
         });
-		
 		freeze();
 	}
 	
@@ -102,135 +103,79 @@ public abstract class Barrier {
 	               (new Random().nextDouble() < 0.2);
     }
 	
-	public void move(ArrayList<Barrier> barriers, double deltaTime) {
-        
+	public boolean isCollidingWithOtherBarriers(ArrayList<Barrier> barriers) {
+		Rectangle bounds = getBounds();
+		for (Barrier barrier : barriers) {
+			if (barrier != this && CollisionHandler.CollisionCheck(barrier, this)) {
+				return true; // Collision detected
+			}
+		}
+		return false; // No collision
 	}
 	
-	 public boolean isCollidingWithOtherBarriers(ArrayList<Barrier> barriers) {
-	        Rectangle bounds = getBounds();
-	        for (Barrier barrier : barriers) {
-	            if (barrier != this && bounds.intersects(barrier.getBounds())) {
-	                return true; // Collision detected
-	            }
-	        }
-	        return false; // No collision
-	    }
-
-	 // Reverse the movement direction
-	 public void reverseDirection() {
-	     direction = -direction;
-	 }
-	
-	
-	
-	
-	public String getImg() { 
-		return img;
+	// Reverse the movement direction
+	public void reverseDirection() {
+	    direction = -direction;
 	}
-
-	public void setImg(String img) {
-		this.img = img;
-	}
-
-	// Method to handle the barrier being hit by the Fire Ball
-	public abstract boolean onHit();
-	
-	// Getter methods
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public int getGridX() {
-		return gridX;
-	}
-
-	public void setGridX(int gridX) {
-		this.gridX = gridX;
-	}
-
-	public int getGridY() {
-		return gridY;
-	}
-
-	public void setGridY(int gridY) {
-		this.gridY = gridY;
-	}
-
-	public int getWidth() {
-		return width;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		name = name;
-	}
-
-	public Boolean getFrozen() {
-		return frozen;
-	}
-
+	 
 	public void draw(Graphics g) {
         // Draw the fireball
         if (image != null) {
-            g.drawImage(image, x, y, RunningModeModel.barrierWidth,  RunningModeModel.barrierHeight, null);
+			g.drawImage(image, x, y, RunningModeModel.barrierWidth,  RunningModeModel.barrierHeight, null);
         } 
 		Graphics2D g2d = (Graphics2D) g.create();
 
-    
-    if(frozen){
-		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
-		g2d.drawImage(freezeImage, x, y, RunningModeModel.barrierWidth, RunningModeModel.barrierHeight, null);
-        // Calculate position and size of the timer circle
-        int circleSize = 12; // Size of the circle
-        int padding = 4; // Padding from top and right edges
-        int circleX = x + width - circleSize + padding; // X position of the circle
-        int circleY = y - padding; // Y position of the circle
-
-        // Calculate the angle to draw the filled arc
-        double fillPercentage = (double) secondsElapsed / 15;
-        int fillAngle = (int) Math.round(fillPercentage * 360);
-
-		g2d.setColor(Color.BLACK);
-        g2d.drawArc(circleX, circleY, circleSize, circleSize, 90, 360);
-        // Draw the filled arc
-        g2d.setColor(Color.BLUE);
-        g2d.fillArc(circleX, circleY, circleSize, circleSize, 90, -fillAngle);
-    }
-
-    g2d.dispose();
-    }
-
-	public Rectangle getBounds() {
-        return new Rectangle(x, y, width, height); 
-    }
-
-	public String getMessage(){
-		return message;
-	
-    }
+		if(frozen){
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.6f));
+			g2d.drawImage(freezeImage, x, y, RunningModeModel.barrierWidth, RunningModeModel.barrierHeight, null);
+			// Calculate position and size of the timer circle
+			int circleSize = 12; // Size of the circle
+			int padding = 4; // Padding from top and right edges
+			int circleX = x + width - circleSize + padding; // X position of the circle
+			int circleY = y - padding; // Y position of the circle
+			
+			// Calculate the angle to draw the filled arc
+			double fillPercentage = (double) secondsElapsed / 15;
+			int fillAngle = (int) Math.round(fillPercentage * 360);
+			
+			g2d.setColor(Color.BLACK);
+			g2d.drawArc(circleX, circleY, circleSize, circleSize, 90, 360);
+			// Draw the filled arc
+			g2d.setColor(Color.BLUE);
+			g2d.fillArc(circleX, circleY, circleSize, circleSize, 90, -fillAngle);
+    	}
+    	g2d.dispose();
+	}
 
 	public void freeze() {
-        frozen = true;
-        freezeTimer.start();
-    }
+		frozen = true;
+		freezeTimer.start();
+	}
 
 	public void unfreeze() {
-        frozen = false;
-    }
+		frozen = false;
+	}
+
+	public Rectangle getBounds() {
+		return new Rectangle(x, y, width, height); 
+	}
+
+	public abstract boolean onHit();
+	public abstract void move(ArrayList<Barrier> barriers, double deltaTime);
+
+	public String getMessage(){return message;}
+	public String getImg() { return img;}
+	public void setImg(String img) {this.img = img;}
+	public int getX() {return x;}
+	public int getY() {return y;}
+	public void setX(int x) {this.x = x;}
+	public void setY(int y) {this.y = y;}
+	public int getGridX() {return gridX;}
+	public void setGridX(int gridX) {this.gridX = gridX;}
+	public int getGridY() {return gridY;}
+	public void setGridY(int gridY) {this.gridY = gridY;}
+	public int getWidth() {return width;}
+	public String getName() {return name;}
+	public void setName(String name) {this.name = name;}
+	public Boolean getFrozen() {return frozen;}
 }

@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
 import domain.models.RunningModeModel;
 import domain.objects.Spells.Spell;
 
-public class Box {
+public class Box implements GameObject{
     private int x;
     private int y;
     private int width=45;
@@ -25,37 +25,16 @@ public class Box {
     public Box(int x,int y){
         this.x=x;
         this.y=y;
-        try {
-            image = ImageIO.read(getClass().getResource("/ui/images/box.png")); // Adjust image path
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        try {image = ImageIO.read(getClass().getResource("/ui/images/box.png"));} // Adjust image path} 
+        catch (IOException e) {e.printStackTrace();}
     } 
 
     public void move(){
         y+=boxSpeed;
     }
+
     public void draw(Graphics g){
         g.drawImage(image, x - (width/2), y - (height/2), width, height, null);
-    }
-    public int getY(){
-        return y;
-    }
-    
-    public int getX() {
-        return x;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public BufferedImage getImage() {
-        return image;
     }
     
     public boolean repOk() {
@@ -74,22 +53,21 @@ public class Box {
     public boolean hasSpell() {
         return spell != null;
     }
-
+    
     public void openBox() {
         if (spell != null) {
-            System.out.println("Box opened and spell retrieved: ");
             spell.Activate();
         }
     }
-    public boolean collidesWithPaddle(Paddle paddle) {
-        Area boxArea = new Area(getBounds());
-        Area paddleArea = new Area(paddle.getBounds());
-        boxArea.intersect(paddleArea);
-        return !boxArea.isEmpty();
+    
+    @Override
+    public Shape getBounds() {
+        return new Rectangle(x - (width / 2), y - (height / 2), width, height);
     }
 
-	private Rectangle getBounds() {
-		
-	   return new Rectangle(x - (width / 2), y - (height / 2), width, height);
-	}
+    public int getY(){return y;}
+    public int getX() {return x;}
+    public int getWidth() {return width;}
+    public int getHeight() {return height;}
+    public BufferedImage getImage() {return image;}
 }

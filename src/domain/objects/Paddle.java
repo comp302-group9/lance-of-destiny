@@ -15,7 +15,7 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Paddle {
+public class Paddle implements GameObject{
 
     private BufferedImage image;
     private BufferedImage cannonImage;
@@ -46,11 +46,6 @@ public class Paddle {
      // Load the cannon image from the class's resources
         try {
             cannonImage = ImageIO.read(getClass().getResource("/ui/images/canon.png"));
-            if (cannonImage == null) {
-                System.err.println("Cannon image not found!");
-            } else {
-                System.out.println("Cannon image loaded successfully.");
-            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -84,7 +79,6 @@ public class Paddle {
         if (!active) {
             hexProjectiles.clear(); // Remove hex projectiles when deactivating
         }
-        System.out.println("Hex active: " + hexActive); // Debug statement
     }
 
     public boolean isHexActive() {
@@ -162,7 +156,6 @@ public class Paddle {
 
             hexProjectiles.add(new Canons(leftCannonX, leftCannonY, rotationAngle));
             hexProjectiles.add(new Canons(rightCannonX, rightCannonY, rotationAngle));
-            System.out.println("Hex projectiles fired"); // Debug statement
         }
     }
 
@@ -180,7 +173,7 @@ public class Paddle {
         g2d.rotate(Math.toRadians(rotationAngle), x + width / 2, y + height / 2);
         g2d.drawImage(image, x, y, width, height, null);
 
-        if (!hexActive) {
+        if (hexActive) {
             int cannonWidth = 10;
             int cannonHeight = 30;
 
@@ -194,10 +187,6 @@ public class Paddle {
             leftCannonY = y - cannonHeight/2;
             rightCannonY = y - cannonHeight/2;
             
-         // Debug statements
-            System.out.println("Left cannon position: (" + leftCannonX + ", " + leftCannonY + ")");
-            System.out.println("Right cannon position: (" + rightCannonX + ", " + rightCannonY + ")");
-
             // Draw left cannon
             g2d.drawImage(cannonImage, leftCannonX, leftCannonY, cannonWidth, cannonHeight, null);
             // Draw right cannon

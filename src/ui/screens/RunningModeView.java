@@ -210,7 +210,8 @@ public class RunningModeView extends JPanel {
                 }
             }
 
-            for (Barrier i : RunningModeModel.barriers) {
+            for (int j = 0; j < RunningModeModel.barriers.size(); j++) {
+                Barrier i = RunningModeModel.barriers.get(j);
                 if (i != null) {
                     i.draw(g);
                 }
