@@ -5,7 +5,6 @@ import domain.models.RunningModeModel;
 import domain.DEFAULT;
 import domain.controllers.MyMouseListener;
 import domain.controllers.RunningModeController;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -14,6 +13,8 @@ import java.awt.Image;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -22,19 +23,28 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
+
+import domain.controllers.MyGamesController;
 import domain.models.BuildingModeModel;
 import domain.objects.Barrier.Barrier;
 import ui.screens.BModeUI.BarrierButton;
 import ui.screens.BModeUI.BarrierElement;
-
-import network.*;
 
 public class BuildingModeView extends JPanel {
 	public int WIDTH=DEFAULT.screenWidth;
 	private int HEIGHT=DEFAULT.screenHeight;
 	private BufferedImage backgroundImage;
 	private BuildingModeModel model;
-    private JButton playButton, placeButton, saveButton, myGamesButton, helpButton, hostPanelButton, clientPanelButton;
+    private JButton playButton, placeButton, saveButton, myGamesButton, helpButton;
 	public int[][] grid;
 	int buttonWidth = RunningModeModel.barrierWidth;
 	int buttonHeight = RunningModeModel.barrierHeight;
@@ -80,16 +90,9 @@ public class BuildingModeView extends JPanel {
         playButton = createButton("Play", 600, 490);
         placeButton = createButton("Place", 600, 525);
         saveButton = createButton("Save", 600, 560);
-        myGamesButton = createButton("My Games", 730, 560);
-
+        myGamesButton = createButton("My Games", 730, 525);
         helpButton = createButton("? Help Menu ?", WIDTH - 200, 5);
         helpButton.addActionListener(e -> showHelpMenu());
-
-        hostPanelButton = createButton("Host", 730, 490);
-        hostPanelButton.addActionListener(e -> hostMenu());
-
-        clientPanelButton = createButton("Client", 730, 525);
-        clientPanelButton.addActionListener(e -> clientPage());
     }
 
     private JButton createButton(String text, int x, int y) {
@@ -301,59 +304,6 @@ public class BuildingModeView extends JPanel {
             elements[i] = barrierElement;
         }
     }
-
-
-    private void switchToRunningMode() {
-		// Validate barriers before switching to the running mode
-		if (!model.validateBarriers()) {
-			showErrorDialog();
-			return;
-		}
-		
-		// Create the running mode components and switch views
-		RunningModeModel runningModel = new RunningModeModel(model.getUser(), grid);
-		RunningModeView view = new RunningModeView(runningModel);
-		RunningModeController controller = new RunningModeController(runningModel, view);
-	
-		JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-		frame.getContentPane().removeAll();
-		frame.getContentPane().add(view);
-		frame.revalidate();
-		frame.repaint();
-	
-		view.requestFocusInWindow();
-		Thread gameThread = new Thread(controller);
-		gameThread.start();
-	}	
-
-    private void hostMenu() {
-            ServerModel model = new ServerModel();
-            ServerView view = new ServerView();
-            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            frame.getContentPane().removeAll();
-            frame.getContentPane().add(view);
-            frame.revalidate();
-            frame.repaint();
-
-            new ServerController(model, view);
-        }
-
-        private void clientPage(){
-
-            String serverAddress = JOptionPane.showInputDialog("Enter server IP address:");
-            String clientName = JOptionPane.showInputDialog("Enter your name:");
-    
-            ClientModel model = new ClientModel(serverAddress, clientName);
-            ClientView view = new ClientView();
-    
-            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
-            frame.getContentPane().removeAll();
-            frame.getContentPane().add(view);
-            frame.revalidate();
-            frame.repaint();
-            
-            new ClientController(model, view);
-        }
 
 	public static boolean isValidInteger(String input) {
         String regex = "^[1-9]\\d*$";
