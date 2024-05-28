@@ -2,7 +2,11 @@ package domain.objects.Barrier;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 
 import domain.controllers.CollisionHandler;
 import domain.objects.GameObject;
@@ -13,17 +17,29 @@ public class Debris implements GameObject{
     private int width, height;
     private int fallSpeed;
     private boolean isFalling;
+    protected BufferedImage image;
+    protected String img = "/ui/images/debris-explosion.png";
    
     public Debris(int x, int y) {
+    	try {
+			this.image = ImageIO.read(getClass().getResource(this.getImg()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.x = x;
         this.y = y;
         this.width = 10; // Arbitrary size, adjust as needed
         this.height = 10; // Arbitrary size, adjust as needed
-        this.fallSpeed = 5; // Adjust speed as needed
+        this.fallSpeed = 1; // Adjust speed as needed
         this.isFalling = true;
     }
 
-    public void update() {
+    private String getImg() {
+		// TODO Auto-generated method stub
+		return img;
+	}
+
+	public void update() {
         if (isFalling) {
         	
             y += fallSpeed;
@@ -37,7 +53,9 @@ public class Debris implements GameObject{
     public Rectangle getBounds() {
         return new Rectangle(x, y, width, height);
     }
-
+    public int getY() {
+        return y;
+    }
     public boolean isFalling() {
         return isFalling;
     }

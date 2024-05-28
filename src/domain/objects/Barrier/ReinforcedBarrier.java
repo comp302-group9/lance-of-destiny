@@ -29,6 +29,17 @@ public class ReinforcedBarrier extends Barrier {
 		updateMovementState(RunningModeModel.barriers); // Update whether it should move
 		
 	}
+	public void addObserver(BarrierObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(BarrierObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers() {
+        
+    }
 	
 	private void updateMovementState(ArrayList<Barrier> barriers) {
         if (!hasBarrierOnImmediateLeft(barriers) && !hasBarrierOnImmediateRight(barriers)) {

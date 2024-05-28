@@ -20,6 +20,17 @@ public class SimpleBarrier extends Barrier {
 		updateMovementState(RunningModeModel.barriers); // Initialize movement state
 		
 	}
+	public void addObserver(BarrierObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(BarrierObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers() {
+        
+    }
 	
 	// Method to update whether the barrier should move based on free space and probability
     private void updateMovementState(ArrayList<Barrier> barriers) {

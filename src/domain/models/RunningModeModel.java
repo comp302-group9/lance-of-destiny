@@ -15,6 +15,8 @@ import domain.objects.Box;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
+import domain.objects.Barrier.Debris;
+import domain.objects.Barrier.BarrierObserver;
 import domain.objects.Barrier.ExplosiveBarrier;
 import domain.objects.Barrier.ReinforcedBarrier;
 import domain.objects.Barrier.RewardingBarrier;
@@ -25,7 +27,7 @@ import domain.objects.Spells.Hex;
 import domain.objects.Spells.Overwhelm;
 import ui.screens.RModeUI.SpellIcon;
 
-public class RunningModeModel {
+public class RunningModeModel implements BarrierObserver{
     public static int barrierWidth = 51;
     public static int barrierHeight = 15;
     private static final int ROWS = DEFAULT.ROWS;
@@ -39,6 +41,7 @@ public class RunningModeModel {
     private boolean paused = false;
     public static ArrayList<Barrier> barriers = new ArrayList<>();
     public static ArrayList<Box> boxes = new ArrayList<>();
+    private ArrayList<Debris> debrisList= new ArrayList<>();
     private Random random = new Random();
     private boolean gameOver = false;
     private String gameOverMessage = "Game Over!";
@@ -151,6 +154,9 @@ public class RunningModeModel {
 
     public int[][] getGrid() {
         return grid;
+    }
+    public ArrayList<Debris> getDebrisList(){
+    	return this.debrisList;
     }
 
     public User getUser() {
@@ -277,6 +283,16 @@ public class RunningModeModel {
                 barrier.move(barriers, deltaTime);
             }
         }
+        if (!debrisList.isEmpty()) {
+            Iterator<Debris> iterator = debrisList.iterator();
+            while (iterator.hasNext()) {
+                Debris debris = iterator.next();
+                debris.update();
+                if (debris.getY() <  0) { 
+                    iterator.remove();
+                }
+            }
+        }
         
         for (int i = 0; i < boxes.size(); i++) {
             Box box = boxes.get(i);
@@ -306,6 +322,16 @@ public class RunningModeModel {
             fireball.reflectFromPaddle(paddle);
             fireball.validateSpeed(paddle);
             lastCollisionTime = currentTime;
+        }
+        if (!debrisList.isEmpty()) {
+        	Iterator<Debris> iterator = debrisList.iterator();
+        	while (iterator.hasNext()) {
+        		Debris d = iterator.next();
+        			if (CollisionHandler.CollisionCheck(d, paddle)) {
+        				decreaseChance();
+        				iterator.remove();
+        			}	
+        	}
         }
         
         for (Canons projectile : new ArrayList<>(paddle.getHexProjectiles())) {
@@ -346,6 +372,7 @@ public class RunningModeModel {
                     break;
                     case 3:
                     Barrier explosive = new ExplosiveBarrier(x, y);
+                    explosive.addObserver(this);
                     barriers.add(explosive);
                     break;
                     case 4:
@@ -356,7 +383,9 @@ public class RunningModeModel {
             }
         }
     }
-    
+    public void onDebrisCreated(ArrayList<Debris> newDebris) {
+        debrisList.addAll(newDebris);
+    }
     public void saveGame(int[][] matrix, int gameId) {
         Connection conn = null;
         PreparedStatement pstmt = null;

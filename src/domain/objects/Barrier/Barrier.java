@@ -36,6 +36,7 @@ public abstract class Barrier implements GameObject{
 	protected Timer freezeTimer;
 	protected int gridX, gridY;
 	private int secondsElapsed;	
+	protected ArrayList<BarrierObserver> observers = new ArrayList<>();
 
 	// Constructor
 	public Barrier() {
@@ -73,6 +74,13 @@ public abstract class Barrier implements GameObject{
         });
 		freeze();
 	}
+	public abstract void addObserver(BarrierObserver observer);
+
+    public void removeObserver(BarrierObserver observer) {
+        
+    };
+
+    public abstract void notifyObservers();;
 	
 	public boolean hasBarrierOnImmediateLeft(ArrayList<Barrier> barriers) {
         Rectangle bounds = getBounds();

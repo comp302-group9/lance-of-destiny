@@ -16,6 +16,7 @@ public class ExplosiveBarrier extends Barrier {
     private static final double L = RunningModeModel.WIDTH/50; //should be /10 but resultant radius is too large
     private static final double RADIUS = 1.5 * L;
     private ArrayList<Debris> debrisList;
+    private ArrayList<BarrierObserver> observers = new ArrayList<>();
     public ExplosiveBarrier(int explosionRadius) {
         super();
         this.explosionRadius = explosionRadius;
@@ -36,6 +37,19 @@ public class ExplosiveBarrier extends Barrier {
         this.angle = 0;
         this.message = "*At least 5*";
         updateMovementState(RunningModeModel.barriers); // Initialize movement state
+    }
+    public void addObserver(BarrierObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(BarrierObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers() {
+        for (BarrierObserver observer : observers) {
+            observer.onDebrisCreated(debrisList);
+        }
     }
 
     // Method to update whether the barrier should move based on free space and probability
@@ -97,9 +111,7 @@ public class ExplosiveBarrier extends Barrier {
 
             
 
-            for (Debris debris : debrisList) {
-                debris.update();
-            }
+            
             
         }
     }
@@ -121,10 +133,11 @@ public class ExplosiveBarrier extends Barrier {
 	private void createFallingDebris() {
         // Create debris pieces and add to the list
         for (int i = 0; i < 5; i++) { // Example: create 5 pieces of debris
-            int debrisX = this.x + new Random().nextInt(this.width);
-            int debrisY = this.y + new Random().nextInt(this.height);
+            int debrisX = this.x + new Random().nextInt(this.width*5);
+            int debrisY = this.y + new Random().nextInt(this.height*5);
             debrisList.add(new Debris(debrisX, debrisY));
         }
+        notifyObservers();
     }
 	@Override
 	public boolean onHit() {

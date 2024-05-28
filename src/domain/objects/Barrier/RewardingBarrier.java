@@ -19,13 +19,24 @@ public class RewardingBarrier extends Barrier {
 		super(x,y);
 		this.containedSpell=spells[new Random().nextInt(spells.length)];
 	}
+	
 
 	@Override
 	public boolean onHit() {
 		RunningModeModel.boxes.add(new Box(x + (RunningModeModel.barrierWidth/2),y + (RunningModeModel.barrierWidth/2)));
 		return true;
 	}
+	public void addObserver(BarrierObserver observer) {
+        observers.add(observer);
+    }
 
+    public void removeObserver(BarrierObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers() {
+        
+    }
 	@Override
 	public String getName() {
 		return "Rewarding Barrier";

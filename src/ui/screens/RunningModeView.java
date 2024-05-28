@@ -19,6 +19,7 @@ import domain.objects.Box;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
+import domain.objects.Barrier.Debris;
 import ui.screens.RModeUI.SpellIcon;
 import ui.screens.RModeUI.TopMenuPanel;
 import ui.screens.RModeUI.YmirView;
@@ -215,6 +216,11 @@ public class RunningModeView extends JPanel {
                 if (i != null) {
                     i.draw(g);
                 }
+            }
+            if (!model.getDebrisList().isEmpty()) {
+            	for (Debris d: model.getDebrisList()) {
+            		d.draw(g);
+            	}
             }
 
             for (int i = 0; i < RunningModeModel.spells.size(); i++) {
