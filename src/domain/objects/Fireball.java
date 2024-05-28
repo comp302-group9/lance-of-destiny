@@ -1,20 +1,15 @@
 package domain.objects;
-import java.awt.*;
-import java.awt.geom.Area;
-
-import javax.swing.*;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
-
-import domain.objects.Paddle;
-
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.ArrayList;
-import domain.objects.Barrier.*;
+
+import javax.imageio.ImageIO;
+
 import domain.models.RunningModeModel;
+import domain.objects.Barrier.Barrier;
 
 public class Fireball implements GameObject{
 
@@ -184,13 +179,17 @@ public class Fireball implements GameObject{
                     model.increaseScore(currentTime); 
                 }
                 if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                     grid[barrier.getGridY()][barrier.getGridX()] = 0;
+                    //System.out.println(writeGrid(grid));
                     barriers.remove(barrier); // Safely remove it from the list
                 }
                 break;
             } else if (isMiddleLeftInside || isMiddleRightInside) {
                 if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                     grid[barrier.getGridY()][barrier.getGridX()] = 0;
+                    //System.out.println(writeGrid(grid));
                     barriers.remove(barrier); // Safely remove it from the list
                 }
                 if (!overwhelmed) {
@@ -205,7 +204,9 @@ public class Fireball implements GameObject{
                         model.increaseScore(currentTime); 
                     }
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                    	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                         grid[barrier.getGridY()][barrier.getGridX()] = 0;
+                        //System.out.println(writeGrid(grid));
                         barriers.remove(barrier); // Safely remove it from the list
                     }
                     break;
@@ -215,7 +216,9 @@ public class Fireball implements GameObject{
                         model.increaseScore(currentTime); 
                     }
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                    	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                         grid[barrier.getGridY()][barrier.getGridX()] = 0;
+                        //System.out.println(writeGrid(grid));
                         barriers.remove(barrier); // Safely remove it from the list
                     }
                     break;
@@ -227,7 +230,9 @@ public class Fireball implements GameObject{
                         model.increaseScore(currentTime); 
                     }
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                    	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                         grid[barrier.getGridY()][barrier.getGridX()] = 0;
+                        //System.out.println(writeGrid(grid));
                         barriers.remove(barrier); // Safely remove it from the list
                     }
                     break;
@@ -237,7 +242,9 @@ public class Fireball implements GameObject{
                         model.increaseScore(currentTime); 
                     }
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
+                    	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                         grid[barrier.getGridY()][barrier.getGridX()] = 0;
+                        //System.out.println(writeGrid(grid));
                         barriers.remove(barrier); // Safely remove it from the list
                     }
                     break;

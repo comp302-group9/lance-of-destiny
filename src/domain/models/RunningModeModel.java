@@ -261,11 +261,14 @@ public class RunningModeModel {
             paddle.shootHex();
             lastHexShotTime = currentTime;
         }
+        System.out.println(writeGrid(grid));
         
         paddle.updateProjectiles();
     }
     
     private void updateGameElements(double deltaTime) {
+    	
+    	
         if (fireball.isLaunched()) {
             fireball.move();
         } else {
@@ -338,18 +341,26 @@ public class RunningModeModel {
                     break;
                     case 1:
                     Barrier simple = new SimpleBarrier(x, y);
+                    simple.setGridX(col);
+                    simple.setGridY(row);
                     barriers.add(simple);
                     break;
                     case 2:
                     Barrier reinforced = new ReinforcedBarrier(x, y);
+                    reinforced.setGridX(col);
+                    reinforced.setGridY(row);
                     barriers.add(reinforced);
                     break;
                     case 3:
                     Barrier explosive = new ExplosiveBarrier(x, y);
+                    explosive.setGridX(col);
+                    explosive.setGridY(row);
                     barriers.add(explosive);
                     break;
                     case 4:
                     Barrier rewarding = new RewardingBarrier(x, y);
+                    rewarding.setGridX(col);
+                    rewarding.setGridY(row);
                     barriers.add(rewarding);
                     break;
                 }
