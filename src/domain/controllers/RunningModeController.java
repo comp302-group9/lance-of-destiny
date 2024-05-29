@@ -26,7 +26,7 @@ public class RunningModeController implements KeyListener, Runnable {
         keys = new boolean[256];  // Array to keep track of key states
         
         
-        model.initializeGame();  // Reset or initialize game elements
+        //model.initializeGame();  // Reset or initialize game elements
         model.initaliseBarrierLocations(grid);
         model.getFireball().setGrid(grid);
         

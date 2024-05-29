@@ -71,7 +71,7 @@ public class RunningModeModel {
         //setupQuitButtonListener();
         //setupSaveButtonListener();
 
-        initializeGame();
+        //initializeGame();
         
         boxes.add(new Box(WIDTH/2,300));
 
@@ -106,21 +106,21 @@ public class RunningModeModel {
 
         initializeGame();
         
-        boxes.add(new Box(WIDTH/2,300));
-
-        // Initialize the paddle
-        paddle = new Paddle(DEFAULT.screenWidth / 2, DEFAULT.screenHeight - 50, DEFAULT.paddleWidth, DEFAULT.paddleHeight); // Adjust parameters as needed
-        
-        // Initialize the fireball
-        fireball = new Fireball( DEFAULT.screenWidth / 2, 7 * DEFAULT.screenHeight / 8, 16, 16); // Adjust parameters as needed
-        if(spells.isEmpty()){
-            spells.add(new SpellIcon(new Overwhelm(fireball)));
-        spells.add(new SpellIcon(new Hex(paddle)));
-        spells.add(new SpellIcon(new Expension(paddle)));
-
-        initaliseBarrierLocations(grid);
-        getFireball().setGrid(grid);;
-        }
+//        boxes.add(new Box(WIDTH/2,300));
+//
+//        // Initialize the paddle
+//        paddle = new Paddle(DEFAULT.screenWidth / 2, DEFAULT.screenHeight - 50, DEFAULT.paddleWidth, DEFAULT.paddleHeight); // Adjust parameters as needed
+//        
+//        // Initialize the fireball
+//        fireball = new Fireball( DEFAULT.screenWidth / 2, 7 * DEFAULT.screenHeight / 8, 16, 16); // Adjust parameters as needed
+//        if(spells.isEmpty()){
+//            spells.add(new SpellIcon(new Overwhelm(fireball)));
+//        spells.add(new SpellIcon(new Hex(paddle)));
+//        spells.add(new SpellIcon(new Expension(paddle)));
+//
+//        initaliseBarrierLocations(grid);
+//        getFireball().setGrid(grid);;
+//        }
         
 
         lastUpdateTime = System.currentTimeMillis();
@@ -132,6 +132,11 @@ public class RunningModeModel {
         paddle = new Paddle(WIDTH / 2, HEIGHT - 50, WIDTH / 10, 20);
         fireball = new Fireball(WIDTH / 2, 7 * HEIGHT / 8, 16, 16);
         lastUpdateTime = System.currentTimeMillis();
+        if(spells.isEmpty()){
+            spells.add(new SpellIcon(new Overwhelm(fireball)));
+            spells.add(new SpellIcon(new Hex(paddle)));
+            spells.add(new SpellIcon(new Expension(paddle)));
+        }
     }
     
     public void setScore(int score) {
@@ -271,7 +276,7 @@ public class RunningModeModel {
             paddle.shootHex();
             lastHexShotTime = currentTime;
         }
-        System.out.println(writeGrid(grid));
+        //System.out.println(writeGrid(grid));
         
         paddle.updateProjectiles();
     }
@@ -327,6 +332,8 @@ public class RunningModeModel {
                 Barrier barrier = iterator.next();
                 if (CollisionHandler.CollisionCheck(projectile, barrier)) {
                     if (!barrier.getFrozen() && barrier.onHit()) {
+                    	System.out.println("Cannon shoot: " + barrier.getGridX() + ", " + barrier.getGridY() );
+                    	grid[barrier.getGridY()][barrier.getGridX()] = 0;
                         increaseScore(currentTime); // Increase score when a barrier is hit
                         iterator.remove();
                     }
@@ -338,6 +345,7 @@ public class RunningModeModel {
     }
     
     public void initaliseBarrierLocations(int[][] grid) {
+    	barriers.clear();
         int xStart = DEFAULT.screenHeight / 32;
         int yStart = DEFAULT.screenWidth / 32;
         int xGap = DEFAULT.screenHeight / 128;
