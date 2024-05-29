@@ -46,6 +46,7 @@ public class BuildingModeController {
             frame.getContentPane().add(rview);
             frame.revalidate();
             frame.repaint();
+            rview.setFocusable(true);
 
             Thread gameThread = new Thread(rcontroller);
             gameThread.start();

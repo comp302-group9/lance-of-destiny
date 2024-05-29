@@ -71,7 +71,7 @@ public abstract class Barrier implements GameObject{
 				unfreeze();
             }
         });
-		freeze();
+		//freeze();
 	}
 	
 	public boolean hasBarrierOnImmediateLeft(ArrayList<Barrier> barriers) {

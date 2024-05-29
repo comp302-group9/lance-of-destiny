@@ -72,7 +72,7 @@ public class RunningModeView extends JPanel {
 
         gifLabel = new JLabel(gifIcon);
         gifLabel.setBounds(WIDTH / 2 - gifIcon.getIconWidth() / 2, HEIGHT / 2 - gifIcon.getIconHeight() / 2, gifIcon.getIconWidth(), gifIcon.getIconHeight());
-        add(gifLabel);
+        //add(gifLabel);
     }
 
     public void updateChances() {

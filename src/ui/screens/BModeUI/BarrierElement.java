@@ -15,7 +15,7 @@ import domain.objects.Barrier.Barrier;
 
 public class BarrierElement extends JPanel {
  
-	JTextField textField = new JTextField();
+	JTextField textField = new JTextField("10");
 	private JButton displayButton;
 
 	public BarrierElement(Barrier b) {
