@@ -13,7 +13,7 @@ public abstract class Spell {
     private int secondsElapsed;
     protected int duration = 30; // Duration of the spell in seconds
     protected Boolean active=false;
-    private int num=2;
+    private int num=0;
     protected Color color=new Color(0, 255, 0, 150);
     
     public Spell(){

@@ -76,6 +76,7 @@ public class RunningModeModel {
         //setupSaveButtonListener();
 
         initializeGame();
+        initializeSpells();
         
 //        boxes.add(new Box(WIDTH/2,300));
 //
@@ -107,6 +108,7 @@ public class RunningModeModel {
         //setupSaveButtonListener();
 
         initializeGame();
+        initializeSpells();
         
 //        boxes.add(new Box(WIDTH/2,300));
 //
@@ -132,25 +134,23 @@ public class RunningModeModel {
         paddle = new Paddle(WIDTH / 2, HEIGHT - 50, WIDTH / 10, 20);
         fireball = new Fireball(WIDTH / 2, 7 * HEIGHT / 8, 16, 16);
         lastUpdateTime = System.currentTimeMillis();
-        if(spells.isEmpty()){
-            spells.add(new SpellIcon(new Overwhelm(fireball)));
-            spells.add(new SpellIcon(new Hex(paddle)));
-            spells.add(new SpellIcon(new Expension(paddle)));
-            spells.add(new SpellIcon(new Felicis(this)));
-        }
+//        if(spells.isEmpty()){
+//            spells.add(new SpellIcon(new Overwhelm(fireball)));
+//            spells.add(new SpellIcon(new Hex(paddle)));
+//            spells.add(new SpellIcon(new Expension(paddle)));
+//            spells.add(new SpellIcon(new Felicis(this)));
+//        }
     }
 
     void initializeSpells() {
-        if(spells.isEmpty()){
-            spells.add(new SpellIcon(new Overwhelm(fireball)));
-            spells.add(new SpellIcon(new Hex(paddle)));
-            spells.add(new SpellIcon(new Expension(paddle)));
-            spells.add(new SpellIcon(new Felicis(this)));
-            spells.add(new SpellIcon(new DoubleAccel(fireball)));
-            spells.add(new SpellIcon(new YmirSpell2()));
-            spells.add(new SpellIcon(new YmirSpell3()));
-
-        }
+    	spells.clear(); // Clear existing spells before initializing new ones
+        spells.add(new SpellIcon(new Overwhelm(fireball)));
+        spells.add(new SpellIcon(new Hex(paddle)));
+        spells.add(new SpellIcon(new Expension(paddle)));
+        spells.add(new SpellIcon(new Felicis(this)));
+        spells.add(new SpellIcon(new DoubleAccel(fireball)));
+        spells.add(new SpellIcon(new YmirSpell2()));
+        spells.add(new SpellIcon(new YmirSpell3()));
     }
     
     public void setScore(int score) {
