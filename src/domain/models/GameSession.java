@@ -11,7 +11,7 @@ public class GameSession {
 
 	public GameSession(User user, int gameId, int life, int score, String grid) {
 		this.setLife(3);
-		this.setScore(0);
+		//this.setScore(0);
 		this.user = user;
 		this.gameId = gameId;
 		this.life = life;

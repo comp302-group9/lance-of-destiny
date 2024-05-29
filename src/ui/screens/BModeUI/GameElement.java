@@ -33,9 +33,16 @@ public class GameElement extends JPanel {
         titleLabel.setBounds(10, 10, 200, 20);
         titleLabel.setForeground(Color.BLACK);
         add(titleLabel);
+        
+     // Life Left Label
+        JLabel scoreLabel = new JLabel("Score: " + g.getScore());
+        scoreLabel.setFont(new Font("Arial", Font.BOLD, 12));
+        scoreLabel.setBounds(10, 30, 70, 20);
+        scoreLabel.setForeground(Color.RED);
+        add(scoreLabel);
 
         // Life Left Label
-        JLabel lifeLeftLabel = new JLabel("Life left:");
+        JLabel lifeLeftLabel = new JLabel("Life left:" + g.getLife());
         lifeLeftLabel.setFont(new Font("Arial", Font.BOLD, 12));
         lifeLeftLabel.setBounds(10, 50, 70, 20);
         lifeLeftLabel.setForeground(Color.RED);

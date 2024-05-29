@@ -57,7 +57,7 @@ public class RunningModeModel {
     private long cooldown = 1000;
     private long cooldownbar = 15;
 
-    private int score = 0;
+    private int score;
     private long gameStartingTime;
 
     private Runnable gameOverCallback;
@@ -136,6 +136,16 @@ public class RunningModeModel {
 
     public int getScore() {
         return score;
+    }
+    
+    public void setScore(int score) {
+        this.score = score;
+        System.out.println("Setting score: " + this.score);
+    }
+
+    // Method to set the number of chances
+    public void setChances(int chances) {
+        this.chances = chances;
     }
 
     public void increaseScore(long currentTime) {
@@ -261,7 +271,7 @@ public class RunningModeModel {
             paddle.shootHex();
             lastHexShotTime = currentTime;
         }
-        System.out.println(writeGrid(grid));
+        //System.out.println(writeGrid(grid));
         
         paddle.updateProjectiles();
     }
@@ -373,7 +383,7 @@ public class RunningModeModel {
         PreparedStatement pstmt = null;
         try {
             conn = DatabaseConnection.getConnection();
-            String sql = "UPDATE SavedGames SET grid = ? WHERE gameId = ?";
+            String sql = "UPDATE SavedGames SET grid = ?, score = ?, life = ? WHERE gameId = ?";
             pstmt = conn.prepareStatement(sql);
             
             //            // Convert the 2D array into a single string
@@ -388,7 +398,9 @@ public class RunningModeModel {
             String gridString = writeGrid(matrix);
 
             pstmt.setString(1, gridString);
-            pstmt.setInt(2, gameId);
+            pstmt.setInt(2, score);  // Set score
+            pstmt.setInt(3, chances);  // Set chances
+            pstmt.setInt(4, gameId);  // Set game ID
 
             int affectedRows = pstmt.executeUpdate();
 
