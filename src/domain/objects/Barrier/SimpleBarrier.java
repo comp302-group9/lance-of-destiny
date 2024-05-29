@@ -1,6 +1,5 @@
 package domain.objects.Barrier;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -33,11 +32,30 @@ public class SimpleBarrier extends Barrier {
 	
 	
 	public void move(ArrayList<Barrier> barriers, double deltaTime) {
+//		if (isMoving) {
+//			if (hasBarrierOnImmediateLeft(barriers) && hasBarrierOnImmediateRight(barriers)) {
+//				return; // Don't move if barriers on both sides
+//            }
+//            double movement = (33 * 900 / 512) / 4 * deltaTime; // L/4 per second
+//
+//            x+=direction;
+//
+//            // Check for collisions with other barriers
+//            if (isCollidingWithOtherBarriers(barriers) || x < 0 || x + width > DEFAULT.screenWidth) {
+//                reverseDirection(); // Reverse if collision or hitting boundaries
+//                x = Math.min(Math.max(x, 0), DEFAULT.screenWidth - width); // Clamp within boundaries
+//            }
+//        }
+//		updateMovementState(barriers);
+		
 		if (isMoving) {
 			if (hasBarrierOnImmediateLeft(barriers) && hasBarrierOnImmediateRight(barriers)) {
-				return; // Don't move if barriers on both sides
+                return; // Don't move if barriers on both sides
             }
+        
             double movement = (33 * 900 / 512) / 4 * deltaTime; // L/4 per second
+            
+            
 
             x+=direction;
 
@@ -46,8 +64,8 @@ public class SimpleBarrier extends Barrier {
                 reverseDirection(); // Reverse if collision or hitting boundaries
                 x = Math.min(Math.max(x, 0), DEFAULT.screenWidth - width); // Clamp within boundaries
             }
+         
         }
-		updateMovementState(barriers);
     }
 	 
 	 
