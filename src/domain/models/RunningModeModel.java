@@ -20,11 +20,11 @@ import domain.objects.Barrier.ReinforcedBarrier;
 import domain.objects.Barrier.RewardingBarrier;
 import domain.objects.Barrier.SimpleBarrier;
 import domain.objects.Spells.Canons;
+import domain.objects.Spells.DoubleAccel;
 import domain.objects.Spells.Expension;
 import domain.objects.Spells.Felicis;
 import domain.objects.Spells.Hex;
 import domain.objects.Spells.Overwhelm;
-import domain.objects.Spells.YmirSpell1;
 import domain.objects.Spells.YmirSpell2;
 import domain.objects.Spells.YmirSpell3;
 import ui.screens.RModeUI.SpellIcon;
@@ -140,7 +140,7 @@ public class RunningModeModel {
             spells.add(new SpellIcon(new Hex(paddle)));
             spells.add(new SpellIcon(new Expension(paddle)));
             spells.add(new SpellIcon(new Felicis(this)));
-            spells.add(new SpellIcon(new YmirSpell1()));
+            spells.add(new SpellIcon(new DoubleAccel(fireball)));
             spells.add(new SpellIcon(new YmirSpell2()));
             spells.add(new SpellIcon(new YmirSpell3()));
 

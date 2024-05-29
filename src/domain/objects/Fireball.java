@@ -44,7 +44,7 @@ public class Fireball implements GameObject{
     }
     
     
-    
+ 
     public void launch(int paddleX, int paddleY) {
         if (!isLaunched) { // Launch only if not already launched
         	// Center the fireball horizontally on the paddle
