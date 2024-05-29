@@ -1,5 +1,6 @@
 package domain.objects.Spells;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import javax.swing.Timer;
@@ -10,9 +11,10 @@ public abstract class Spell {
     protected Boolean isStorable;
     protected Timer timer;
     private int secondsElapsed;
-    private int duration = 30; // Duration of the spell in seconds
+    protected int duration = 30; // Duration of the spell in seconds
     protected Boolean active=false;
     private int num=2;
+    protected Color color=new Color(0, 255, 0, 150);
     
     public Spell(){
         this.secondsElapsed = 0;
@@ -81,6 +83,11 @@ public abstract class Spell {
     public boolean getActive() {
         // TODO Auto-generated method stub
         return active;
+    }
+
+    public Color getColor() {
+        // TODO Auto-generated method stub
+        return color;
     }
 
     public void setActive(boolean b) {

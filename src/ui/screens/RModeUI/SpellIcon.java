@@ -48,7 +48,7 @@ public class SpellIcon extends JPanel implements MouseListener {
             double angle = (double) (spell.getSecondsElapsed()) / spell.getDuration() * 360;
 
             // Draw the green arc
-            g2d.setColor(new Color(0, 255, 0, 150)); // Green color with some transparency
+            g2d.setColor(spell.getColor()); // Green color with some transparency
             if (spell.getSecondsElapsed() > 25) {
                 g2d.setColor(new Color(255, 0, 0, 150));
             }

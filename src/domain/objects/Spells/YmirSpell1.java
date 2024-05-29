@@ -1,19 +1,19 @@
 package domain.objects.Spells;
 
+import java.awt.Color;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import domain.objects.Fireball;
-
-public class Overwhelm extends Spell{
-	private Fireball fireball;
+public class YmirSpell1 extends Spell{
     
 	
-	public Overwhelm(Fireball fireball){
+	public YmirSpell1(){
         super();
-        this.fireball= fireball;
         this.name = "overwhelm";
+        this.duration=15;
+        this.color=new Color(128, 0, 128, 250);
+
         try {
             this.Img=ImageIO.read(getClass().getResource("/ui/images/fireballSpell.png"));
         } catch (IOException e) {
@@ -22,19 +22,11 @@ public class Overwhelm extends Spell{
     }
     @Override
     public void Activate(){
-    	
-    	if (fireball != null) {
-            fireball.setOverwhelmed(true);
-            setActive(true);
-            startTimer();
-        }
+
     }
 
     @Override
     public void deActivate() {
-    	if (fireball != null) {
-            fireball.setOverwhelmed(false);
-            setActive(false);
-        }
+        
     }
 }

@@ -14,7 +14,6 @@ public class Hex extends Spell{
         super();
         this.paddle = paddle;
         this.name="expension";
-        this.isStorable=true;
         try {
             this.Img=ImageIO.read(getClass().getResource("/ui/images/hex.png"));
         } catch (IOException e) {

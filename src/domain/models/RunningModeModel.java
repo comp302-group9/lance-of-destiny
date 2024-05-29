@@ -23,6 +23,9 @@ import domain.objects.Spells.Canons;
 import domain.objects.Spells.Expension;
 import domain.objects.Spells.Hex;
 import domain.objects.Spells.Overwhelm;
+import domain.objects.Spells.YmirSpell1;
+import domain.objects.Spells.YmirSpell2;
+import domain.objects.Spells.YmirSpell3;
 import ui.screens.RModeUI.SpellIcon;
 
 public class RunningModeModel {
@@ -81,9 +84,7 @@ public class RunningModeModel {
         // Initialize the fireball
         fireball = new Fireball( DEFAULT.screenWidth / 2, 7 * DEFAULT.screenHeight / 8, 16, 16); // Adjust parameters as needed
         if(spells.isEmpty()){
-            spells.add(new SpellIcon(new Overwhelm(fireball)));
-        spells.add(new SpellIcon(new Hex(paddle)));
-        spells.add(new SpellIcon(new Expension(paddle)));
+            initializeSpells();
 
         initaliseBarrierLocations(grid);
         getFireball().setGrid(grid);;
@@ -114,12 +115,10 @@ public class RunningModeModel {
         // Initialize the fireball
         fireball = new Fireball( DEFAULT.screenWidth / 2, 7 * DEFAULT.screenHeight / 8, 16, 16); // Adjust parameters as needed
         if(spells.isEmpty()){
-            spells.add(new SpellIcon(new Overwhelm(fireball)));
-        spells.add(new SpellIcon(new Hex(paddle)));
-        spells.add(new SpellIcon(new Expension(paddle)));
+            initializeSpells();
 
         initaliseBarrierLocations(grid);
-        getFireball().setGrid(grid);;
+        getFireball().setGrid(grid);
         }
         
 
@@ -132,6 +131,18 @@ public class RunningModeModel {
         paddle = new Paddle(WIDTH / 2, HEIGHT - 50, WIDTH / 10, 20);
         fireball = new Fireball(WIDTH / 2, 7 * HEIGHT / 8, 16, 16);
         lastUpdateTime = System.currentTimeMillis();
+    }
+
+    void initializeSpells() {
+        if(spells.isEmpty()){
+            spells.add(new SpellIcon(new Overwhelm(fireball)));
+            spells.add(new SpellIcon(new Hex(paddle)));
+            spells.add(new SpellIcon(new Expension(paddle)));
+            spells.add(new SpellIcon(new YmirSpell1()));
+            spells.add(new SpellIcon(new YmirSpell2()));
+            spells.add(new SpellIcon(new YmirSpell3()));
+
+        }
     }
     
     public void setScore(int score) {
