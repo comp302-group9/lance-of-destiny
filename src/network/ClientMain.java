@@ -16,6 +16,6 @@ public class ClientMain {
         frame.add(view);
         frame.setVisible(true);
         
-        new ClientController(model, view);
+        //new ClientController(model, view);
     }
 }

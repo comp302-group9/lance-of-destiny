@@ -13,6 +13,11 @@ public class ServerModel {
         this.clientHandler = clientHandler;
     }
 
+    
+    public ClientHandler getClientHandler() {
+        return  clientHandler;
+    }
+
     public boolean isServerReady() {
         return serverReady;
     }

@@ -51,4 +51,13 @@ public class ClientHandler implements Runnable {
     public void sendMessage(String message) {
         out.println(message);
     }
+
+    public void sendGrid(int[][] grid) {
+        try {
+            ObjectOutputStream objectOut = new ObjectOutputStream(socket.getOutputStream());
+            objectOut.writeObject(grid);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 }

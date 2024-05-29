@@ -12,6 +12,6 @@ public class ServerMain {
         frame.add(view);
         frame.setVisible(true);
 
-        new ServerController(model, view);
+        //new ServerController(model, view);
     }
 }

@@ -3,14 +3,27 @@ package network;
 import java.io.*;
 import java.net.*;
 
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
+import domain.controllers.RunningModeController;
+import domain.models.BuildingModeModel;
+import domain.models.RunningModeModel;
+import ui.screens.BuildingModeView;
+import ui.screens.RunningModeView;
+
 public class ClientController {
     private ClientModel model;
     private ClientView view;
     private PrintWriter out;
+    private BuildingModeModel buildingModel;
+    private BuildingModeView buildingView;
 
-    public ClientController(ClientModel model, ClientView view) {
+    public ClientController(ClientModel model, ClientView view , BuildingModeModel bModel, BuildingModeView bView) {
         this.model = model;
         this.view = view;
+        this.buildingModel = bModel;
+        this.buildingView = bView;
 
         view.addReadyButtonListener(e -> {
             model.setReady(true);
@@ -35,6 +48,8 @@ public class ClientController {
                     view.setServerStatusLabelText("Ready");
                 } else if (message.equals("All players are ready!")) {
                     view.setAllPlayersReadyText(message);
+                    receiveGrid(socket);
+                    startGame();
                 }
                 view.setStatusLabelText(message);
             }
@@ -42,6 +57,34 @@ public class ClientController {
             ex.printStackTrace();
         }
     }
+
+    private void startGame() {
+        // Your logic to start the game on the server side
+        // Replace with actual game start logic
+        RunningModeModel rmodel = new RunningModeModel(buildingModel.getUser(), model.getGrid());
+        RunningModeView rview = new RunningModeView(rmodel);
+        RunningModeController rcontroller = new RunningModeController(rmodel, rview, model.getGrid());
+
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(rview);
+        frame.revalidate();
+        frame.repaint();
+
+        Thread gameThread = new Thread(rcontroller);
+        gameThread.start();
+    }
+
+    private void receiveGrid(Socket socket) {
+        try {
+            ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream());
+            int[][] grid = (int[][]) objectIn.readObject();
+            model.setGrid(grid);
+        } catch (IOException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+
 
     private void sendReadySignal() {
         out.println("READY");

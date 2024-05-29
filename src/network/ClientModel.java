@@ -5,12 +5,14 @@ public class ClientModel {
     private String serverAddress;
     private String clientName;
     private boolean ready;
+    private int[][] grid;
+    
 
     public ClientModel(String serverAddress, String clientName) {
         this.serverAddress = serverAddress;
         this.clientName = clientName;
-        this.ready = false;
-    }
+        this.ready = false; }
+        
 
     public String getServerAddress() {
         return serverAddress;
@@ -26,5 +28,13 @@ public class ClientModel {
 
     public void setReady(boolean ready) {
         this.ready = ready;
+    }
+
+    public void setGrid(int[][] grid) {
+        this.grid = grid;
+    }
+
+    public int[][] getGrid() {
+        return grid;
     }
 }
