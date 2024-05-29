@@ -3,6 +3,9 @@ package network;
 
 import javax.swing.*;
 
+import domain.models.BuildingModeModel;
+import ui.screens.BuildingModeView;
+
 public class ClientMain {
     public static void main(String[] args) {
         String serverAddress = JOptionPane.showInputDialog("Enter server IP address:");
@@ -16,6 +19,7 @@ public class ClientMain {
         frame.add(view);
         frame.setVisible(true);
         
-        //new ClientController(model, view);
+        BuildingModeModel m=new BuildingModeModel(null);
+        new ClientController(model, view, m, new BuildingModeView(m));
     }
 }
