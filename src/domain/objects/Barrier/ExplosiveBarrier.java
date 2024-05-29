@@ -133,8 +133,8 @@ public class ExplosiveBarrier extends Barrier {
 	private void createFallingDebris() {
         // Create debris pieces and add to the list
         for (int i = 0; i < 5; i++) { // Example: create 5 pieces of debris
-            int debrisX = this.x + new Random().nextInt(this.width*5);
-            int debrisY = this.y + new Random().nextInt(this.height*5);
+            int debrisX = this.x + new Random().nextInt(this.width*2);
+            int debrisY = this.y + new Random().nextInt(this.height*2);
             debrisList.add(new Debris(debrisX, debrisY));
         }
         notifyObservers();
