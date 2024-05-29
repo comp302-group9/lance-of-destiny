@@ -21,6 +21,7 @@ import domain.objects.Barrier.RewardingBarrier;
 import domain.objects.Barrier.SimpleBarrier;
 import domain.objects.Spells.Canons;
 import domain.objects.Spells.Expension;
+import domain.objects.Spells.Felicis;
 import domain.objects.Spells.Hex;
 import domain.objects.Spells.Overwhelm;
 import domain.objects.Spells.YmirSpell1;
@@ -138,6 +139,7 @@ public class RunningModeModel {
             spells.add(new SpellIcon(new Overwhelm(fireball)));
             spells.add(new SpellIcon(new Hex(paddle)));
             spells.add(new SpellIcon(new Expension(paddle)));
+            spells.add(new SpellIcon(new Felicis(this)));
             spells.add(new SpellIcon(new YmirSpell1()));
             spells.add(new SpellIcon(new YmirSpell2()));
             spells.add(new SpellIcon(new YmirSpell3()));
@@ -238,6 +240,10 @@ public class RunningModeModel {
             restart();
         }
     }
+    
+    public void increaseChance() {
+        chances++;
+    }
 
     
     public void update(long currentTime, boolean[] keys) {
@@ -270,7 +276,7 @@ public class RunningModeModel {
             paddle.rotateAntiClockwise(deltaTime);
         } else if (keys[KeyEvent.VK_D]) {
             paddle.rotateClockwise(deltaTime);
-        } else {
+        } else { 
             paddle.resetRotation(deltaTime);
         }
 
@@ -282,7 +288,7 @@ public class RunningModeModel {
             paddle.shootHex();
             lastHexShotTime = currentTime;
         }
-        System.out.println(writeGrid(grid));
+        //System.out.println(writeGrid(grid));
         
         paddle.updateProjectiles();
     }
