@@ -7,6 +7,7 @@ public class ClientHandler implements Runnable {
     private Socket socket;
     private boolean ready;
     private PrintWriter out;
+    private BufferedReader in;
     private ServerController controller;
 
     public ClientHandler(Socket socket, ServerController controller) {
@@ -17,7 +18,8 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+        try {
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             String clientName = in.readLine();
             controller.addClientName(clientName); // Add client's name to the right panel
@@ -56,6 +58,22 @@ public class ClientHandler implements Runnable {
         try {
             ObjectOutputStream objectOut = new ObjectOutputStream(socket.getOutputStream());
             objectOut.writeObject(grid);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void cleanUp() {
+        try {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+            if (in != null) {
+                in.close();
+            }
+            if (out != null) {
+                out.close();
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }

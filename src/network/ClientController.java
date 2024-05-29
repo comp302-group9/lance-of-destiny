@@ -16,6 +16,7 @@ public class ClientController {
     private ClientModel model;
     private ClientView view;
     private PrintWriter out;
+    private Socket socket;
     private BuildingModeModel buildingModel;
     private BuildingModeView buildingView;
 
@@ -29,13 +30,15 @@ public class ClientController {
             model.setReady(true);
             sendReadySignal();
         });
+        Runtime.getRuntime().addShutdownHook(new Thread(this::cleanUp));
 
         new Thread(this::startClient).start();
     }
 
     private void startClient() {
-        try (Socket socket = new Socket(model.getServerAddress(), 12345);
-             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+        try {
+            socket = new Socket(model.getServerAddress(), 12345);
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             out.println(model.getClientName());
 
@@ -88,5 +91,18 @@ public class ClientController {
 
     private void sendReadySignal() {
         out.println("READY");
+    }
+
+    private void cleanUp() {
+        try {
+            if (socket != null && !socket.isClosed()) {
+                socket.close();
+            }
+            if (out != null) {
+                out.close();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }

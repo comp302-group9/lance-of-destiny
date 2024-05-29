@@ -30,6 +30,7 @@ public class ServerController {
             model.notifyClient("SERVER_READY");
             checkIfAllReady();
         });
+        Runtime.getRuntime().addShutdownHook(new Thread(this::shutDownServer));
 
         new Thread(this::startServer).start();
     }
@@ -93,5 +94,10 @@ public class ServerController {
 
     public void setClientReadyStatus(String status) {
         view.setClientStatusLabelText(status);
+    }
+
+    private void shutDownServer() {
+        model.getClientHandler().cleanUp();
+        
     }
 }
