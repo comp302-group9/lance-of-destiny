@@ -136,6 +136,7 @@ public class RunningModeModel {
             spells.add(new SpellIcon(new Overwhelm(fireball)));
             spells.add(new SpellIcon(new Hex(paddle)));
             spells.add(new SpellIcon(new Expension(paddle)));
+            spells.add(new SpellIcon(new Felicis(this)));
         }
     }
 
