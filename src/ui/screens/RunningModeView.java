@@ -35,6 +35,7 @@ public class RunningModeView extends JPanel {
     private JButton saveButton;
     private JButton backToBuildingModeButton;
     private JLabel gifLabel;
+    private JLabel countdownLabel;
 
     private YmirModel ymirModel;
     private YmirView ymirView;
@@ -56,6 +57,22 @@ public class RunningModeView extends JPanel {
         setupCallbacks();
     }
 
+    public RunningModeView(RunningModeModel model, boolean isDualPlayer) {
+        this.model = model;
+        try {
+            backgroundImage = ImageIO.read(getClass().getResource("/ui/images/Background.png"));
+            gifIcon = new ImageIcon(getClass().getResource("/ui/gifs/W.gif"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        setFocusable(true);
+        requestFocusInWindow();
+        setupUIComponents();
+        setupDualPlayerComponents();
+        setupYmirComponents();
+        setupCallbacks();
+    }
+
     private void setupUIComponents() {
         setLayout(new BorderLayout());
 
@@ -73,6 +90,13 @@ public class RunningModeView extends JPanel {
         gifLabel = new JLabel(gifIcon);
         gifLabel.setBounds(WIDTH / 2 - gifIcon.getIconWidth() / 2, HEIGHT / 2 - gifIcon.getIconHeight() / 2, gifIcon.getIconWidth(), gifIcon.getIconHeight());
         //add(gifLabel);
+    }
+
+    private void setupDualPlayerComponents() {
+        countdownLabel = new JLabel("", SwingConstants.CENTER);
+        countdownLabel.setFont(new Font("Arial", Font.BOLD, 48));
+        countdownLabel.setForeground(Color.RED);
+        add(countdownLabel, BorderLayout.CENTER);
     }
 
     public void updateChances() {
@@ -223,5 +247,9 @@ public class RunningModeView extends JPanel {
                 add(SI);
             }
         }
+    }
+
+    public void setCountdownText(String text) {
+        countdownLabel.setText(text);
     }
 }

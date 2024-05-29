@@ -15,6 +15,7 @@ import ui.screens.RunningModeView;
 public class ClientController {
     private ClientModel model;
     private ClientView view;
+    private BufferedReader in;
     private PrintWriter out;
     private Socket socket;
     private BuildingModeModel buildingModel;
@@ -38,7 +39,7 @@ public class ClientController {
     private void startClient() {
         try {
             socket = new Socket(model.getServerAddress(), 12345);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             out.println(model.getClientName());
 
@@ -65,8 +66,8 @@ public class ClientController {
         // Your logic to start the game on the server side
         // Replace with actual game start logic
         RunningModeModel rmodel = new RunningModeModel(buildingModel.getUser(), model.getGrid());
-        RunningModeView rview = new RunningModeView(rmodel);
-        RunningModeController rcontroller = new RunningModeController(rmodel, rview, model.getGrid());
+        RunningModeView rview = new RunningModeView(rmodel, true); // new constructor version for dual player mode
+        RunningModeController rcontroller = new RunningModeController(rmodel, rview, model.getGrid(), out, in, true);
 
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
         frame.getContentPane().removeAll();

@@ -78,4 +78,12 @@ public class ClientHandler implements Runnable {
             ex.printStackTrace();
         }
     }
+
+    public PrintWriter getOut() {
+        return out;
+    }
+
+    public BufferedReader getIn() {
+        return in;
+    }
 }
