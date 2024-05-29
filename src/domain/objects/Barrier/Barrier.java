@@ -72,7 +72,7 @@ public abstract class Barrier implements GameObject{
 				unfreeze();
             }
         });
-		freeze();
+		//freeze();
 	}
 	public abstract void addObserver(BarrierObserver observer);
 
