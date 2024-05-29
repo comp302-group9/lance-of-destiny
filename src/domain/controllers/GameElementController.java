@@ -33,6 +33,10 @@ public class GameElementController {
     	// First, setup and display the new RunningModeView in a new JFrame
         JFrame newFrame = new JFrame("Running Mode - Game: " + gameSession.getGameId());
         RunningModeModel runningModel = new RunningModeModel(gameSession.getUser(), setGridToArray(), gameSession.getGameId());
+        runningModel.setScore(gameSession.getScore());
+        runningModel.setChances(gameSession.getLife());
+        
+        
         RunningModeView runningView = new RunningModeView(runningModel);
         RunningModeController runningController = new RunningModeController( runningModel, runningView, setGridToArray());
 
