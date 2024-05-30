@@ -30,8 +30,8 @@ import domain.objects.Spells.DoubleAccel;
 import domain.objects.Spells.Expension;
 import domain.objects.Spells.Felicis;
 import domain.objects.Spells.Hex;
+import domain.objects.Spells.InfiniteVoid;
 import domain.objects.Spells.Overwhelm;
-import domain.objects.Spells.YmirSpell2;
 import domain.objects.Spells.YmirSpell3;
 import ui.screens.RModeUI.SpellIcon;
 
@@ -192,7 +192,7 @@ public class RunningModeModel {
         spells.add(new SpellIcon(new Expension(paddle)));
         spells.add(new SpellIcon(new Felicis(this)));
         spells.add(new SpellIcon(new DoubleAccel(fireball)));
-        spells.add(new SpellIcon(new YmirSpell2()));
+        spells.add(new SpellIcon(new InfiniteVoid(barriers)));
         spells.add(new SpellIcon(new YmirSpell3()));
     }
     
