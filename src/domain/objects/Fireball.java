@@ -176,8 +176,8 @@ public class Fireball implements GameObject{
             if (isMiddleBottomInside || isMiddleTopInside) {
                 if (!overwhelmed) {
                     reflectHorizontal();
-                    model.increaseScore(currentTime); 
                 }
+                model.increaseScore(currentTime); 
                 if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                 	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                 	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
@@ -194,15 +194,15 @@ public class Fireball implements GameObject{
                 }
                 if (!overwhelmed) {
                     reflectVertical();
-                    model.increaseScore(currentTime); 
                 }
+                model.increaseScore(currentTime); 
                 break;
             } else if (isTopLeftInside || isTopRightInside) {
                 if (ballBounds.getMaxY() < barrierBounds.getMaxY() + ballBounds.getHeight() - py) {
                     if (!overwhelmed) {
                         reflectVertical();
-                        model.increaseScore(currentTime); 
                     }
+                    model.increaseScore(currentTime); 
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                     	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                     	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
@@ -213,8 +213,8 @@ public class Fireball implements GameObject{
                 } else if ((ballBounds.getMaxX() < barrierBounds.getMaxX() + ballBounds.getWidth() - px) || ballBounds.getX() > barrierBounds.getX() - ballBounds.getWidth() + px) {
                     if (!overwhelmed) {
                         reflectHorizontal();
-                        model.increaseScore(currentTime); 
                     }
+                    model.increaseScore(currentTime); 
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                     	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                     	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
@@ -227,8 +227,8 @@ public class Fireball implements GameObject{
                 if (ballBounds.getY() > barrierBounds.getY() - ballBounds.getHeight() + py) {
                     if (!overwhelmed) {
                         reflectVertical();
-                        model.increaseScore(currentTime); 
                     }
+                    model.increaseScore(currentTime); 
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                     	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                     	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
@@ -239,8 +239,8 @@ public class Fireball implements GameObject{
                 } else if ((ballBounds.getMaxX() < barrierBounds.getMaxX() + ballBounds.getWidth() - px) || ballBounds.getX() > barrierBounds.getX() - ballBounds.getWidth() + px) {
                     if (!overwhelmed) {
                         reflectHorizontal();
-                        model.increaseScore(currentTime); 
                     }
+                    model.increaseScore(currentTime); 
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                     	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                     	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;

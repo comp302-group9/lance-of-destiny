@@ -4,28 +4,26 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
-import java.util.List;
+import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
-
-
-import java.awt.event.MouseEvent;
-
-import domain.models.User;
 
 public class SignInView extends JPanel { 
     private JFrame frame;
@@ -34,13 +32,14 @@ public class SignInView extends JPanel {
     private JButton signInButton, signUpButton;
     private JLabel statusLabel;
     private Image backgroundImage;
+    private Image smallBackgroundImage;
     
     public SignInView() {
-        this.setLayout(null);
-        //this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        this.setLayout(new GridBagLayout());
         initUI();
         frameSetup();
         backgroundImage = new ImageIcon("src/ui/gifs/back.gif").getImage();
+        smallBackgroundImage = new ImageIcon("src/ui/gifs/small_back.gif").getImage();
     }
 
     public JFrame getFrame(){
@@ -53,17 +52,22 @@ public class SignInView extends JPanel {
         LineBorder offBord = new LineBorder(Color.black,1);
         LineBorder onBord = new LineBorder(Color.black, 3);
 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
         JLabel usernameLabel = new JLabel("Username:");
         usernameLabel.setFont(new Font("Bauhaus 93", Font.PLAIN, 16));
         usernameLabel.setForeground(Color.BLACK);
-        usernameLabel.setBounds(290, 210, 100, 25);
-        this.add(usernameLabel); 
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        this.add(usernameLabel, gbc);
 
-        usernameField = new JTextField();
+        usernameField = new JTextField(20);
         usernameField.setFont(new Font("Bauhaus 93", Font.ROMAN_BASELINE, 14));
-        usernameField.setBounds(370, 210, 200, 25);
-        usernameField.setBorder(new LineBorder(Color.BLACK)); // 2 is the thickness
-        //usernameField.setBackground(original);
+        usernameField.setBorder(new LineBorder(Color.BLACK));
         usernameField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}
@@ -73,24 +77,24 @@ public class SignInView extends JPanel {
             }
             @Override
             public void keyReleased(KeyEvent e) {
-                // Reset border thickness when the key is released
                 usernameField.setBorder(new LineBorder(Color.BLACK, 1));
             }
         });
-        this.add(usernameField);
+        gbc.gridx = 1;
+        gbc.gridwidth = 2;
+        this.add(usernameField, gbc);
         
-        // Password label and field
         JLabel passwordLabel = new JLabel("Password:");
         passwordLabel.setFont(new Font("Bauhaus 93", Font.PLAIN, 16));
         passwordLabel.setForeground(Color.BLACK);
-        passwordLabel.setBounds(290, 260, 100, 25);
-        this.add(passwordLabel);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        this.add(passwordLabel, gbc);
 
-        passwordField = new JPasswordField();
+        passwordField = new JPasswordField(20);
         passwordField.setFont(new Font("Bauhaus 93", Font.PLAIN, 14));
-        passwordField.setBounds(370, 260, 200, 25);
         passwordField.setBorder(new LineBorder(Color.BLACK));
-        //passwordField.setBackground(original);
         passwordField.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {}
@@ -100,103 +104,93 @@ public class SignInView extends JPanel {
             }
             @Override
             public void keyReleased(KeyEvent e) {
-                // Reset border thickness when the key is released
-                passwordField.setBorder(new LineBorder(Color.BLACK));
+                passwordField.setBorder(new LineBorder(Color.BLACK, 1));
             }
         });
-        this.add(passwordField);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        this.add(passwordField, gbc);
 
-        // Similar for other components...
         signInButton = new JButton("Sign In");
-        signInButton.setBounds(370, 310, 100, 30);
-        
+        signInButton.setPreferredSize(new Dimension(120, 30));
         signInButton.setBackground(original);
         signInButton.setBorder(offBord);
         signInButton.setForeground(Color.BLACK);
         signInButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                // Change background to white when mouse enters
                 signInButton.setBackground(oncolor);
                 signInButton.setBorder(onBord);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                // Revert background to original color when mouse exits
                 signInButton.setBackground(original);
                 signInButton.setBorder(offBord);
             }
         });
-        this.add(signInButton);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        this.add(signInButton, gbc);
         
         signUpButton = new JButton("Sign Up");
-        signUpButton.setBounds(480, 310, 100, 30);
+        signUpButton.setPreferredSize(new Dimension(120, 30));
         signUpButton.setBackground(original);
         signUpButton.setBorder(offBord);
         signUpButton.setForeground(Color.BLACK);
         signUpButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                // Change background to white when mouse enters
                 signUpButton.setBackground(oncolor);
                 signUpButton.setBorder(onBord);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                // Revert background to original color when mouse exits
                 signUpButton.setBackground(original);
                 signUpButton.setBorder(offBord);
             }
         });
-        this.add(signUpButton);
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        this.add(signUpButton, gbc);
 
         statusLabel = new JLabel();
-        statusLabel.setBounds(270, 360, 300, 25);
-        this.add(statusLabel);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 3;
+        gbc.anchor = GridBagConstraints.CENTER;
+        this.add(statusLabel, gbc);
     }
     
     private void frameSetup() {
-    	frame = new JFrame("Sign In");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame = new JFrame("Sign In");
         frame.setContentPane(this);
-
-        // Set size and location before making the frame visible
-        frame.setSize(new Dimension(600*16/9, 600));
-        frame.setLocationRelativeTo(null);
-
-        // Finally, make the frame visible after all properties are set
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
         frame.setVisible(true);
+        frame.setSize(new Dimension(600 * 16 / 9, 600)); // Adjusted to match SignInView dimensions
+        frame.setLocationRelativeTo(null); // Center the frame
+        frame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                if (frame.getWidth() < 500) {
+                    backgroundImage = smallBackgroundImage;
+                } else {
+                    backgroundImage = new ImageIcon("src/ui/gifs/back.gif").getImage();
+                }
+                repaint();
+            }
+        });
     }
-    
+
     public void display() {
-        frame.setVisible(true);
-    }
-    
-    public void closeFrame() {
-        if (frame != null) {
-            frame.setVisible(false);
-            frame.dispose();  // Close the frame when switching views
-        }
-    }
-    
-    public JPanel getPanel() {
-        return this;
-    }
-
-    // Getter methods for username and password fields
-    public String getUsername() {
-        return usernameField.getText();
-    }
-
-    public String getPassword() {
-        return new String(passwordField.getPassword());
-    }
-
-    // Method to display status message
-    public void setSignInStatus(String message) {
-        statusLabel.setText(message);
+        frame.setVisible(true); 
     }
 
     public void addSignInButtonListener(ActionListener listener) {
@@ -206,11 +200,35 @@ public class SignInView extends JPanel {
     public void addSignUpButtonListener(ActionListener listener) {
         signUpButton.addActionListener(listener);
     }
+
+    public JPanel getPanel() {
+        return this;
+    }
+
+    public String getUsername() {
+        return usernameField.getText();
+    }
+
+    public String getPassword() {
+        return new String(passwordField.getPassword());
+    }
+
+    public void setSignInStatus(String message) {
+        statusLabel.setText(message);
+    }
+
+    public void closeFrame() {
+        if (frame != null) {
+            frame.setVisible(false);
+            frame.dispose();  // Close the frame when switching views
+        }
+    }
+
+    @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
-
 }

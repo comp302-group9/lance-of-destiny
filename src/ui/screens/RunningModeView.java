@@ -28,13 +28,11 @@ public class RunningModeView extends JPanel {
     private int WIDTH = DEFAULT.screenWidth;
     private RunningModeModel model;
     private BufferedImage backgroundImage;
-    private ImageIcon gifIcon;
     private JPanel pausePanel;
     private JButton resumeButton;
     private JButton quitButton;
     private JButton saveButton;
     private JButton backToBuildingModeButton;
-    private JLabel gifLabel;
     private JLabel countdownLabel;
 
     private YmirModel ymirModel;
@@ -46,7 +44,6 @@ public class RunningModeView extends JPanel {
         this.model = model;
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/ui/images/Background.png"));
-            gifIcon = new ImageIcon(getClass().getResource("/ui/gifs/W.gif"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -61,7 +58,6 @@ public class RunningModeView extends JPanel {
         this.model = model;
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/ui/images/Background.png"));
-            gifIcon = new ImageIcon(getClass().getResource("/ui/gifs/W.gif"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,10 +82,6 @@ public class RunningModeView extends JPanel {
         });
 
         add(topMenuPanel, BorderLayout.NORTH);
-
-        gifLabel = new JLabel(gifIcon);
-        gifLabel.setBounds(WIDTH / 2 - gifIcon.getIconWidth() / 2, HEIGHT / 2 - gifIcon.getIconHeight() / 2, gifIcon.getIconWidth(), gifIcon.getIconHeight());
-        //add(gifLabel);
     }
 
     private void setupDualPlayerComponents() {
@@ -176,8 +168,6 @@ public class RunningModeView extends JPanel {
     }
 
     public void quitGame() {
-        //running = false; // Stop the game loop
-
         BuildingModeModel model2 = new BuildingModeModel(model.getUser());
         BuildingModeView view2 = new BuildingModeView(model2);
         BuildingModeController controller2 = new BuildingModeController(model2, view2);
@@ -208,12 +198,6 @@ public class RunningModeView extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-
-        if (model.getFireball().isLaunched()) {
-            gifLabel.setVisible(false);
-        } else {
-            gifLabel.setVisible(true);
-        }
 
         if (model.isGameOver()) {
             Font font = new Font("Arial", Font.BOLD, 36);

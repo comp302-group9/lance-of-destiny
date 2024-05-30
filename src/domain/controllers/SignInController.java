@@ -84,5 +84,4 @@ public class SignInController {
         //controller.getSignUpView().setVisible(true);
         //controller.getSignInView().setVisible(false);
     }
-
 }
