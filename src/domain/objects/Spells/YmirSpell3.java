@@ -15,10 +15,11 @@ import domain.objects.Barrier.HollowPurpleBarrier;
 
 public class YmirSpell3 extends Spell{
     //Hollow purple
-	private ArrayList<HollowPurpleBarrier> hollowPurpleBarriers;
+	private ArrayList<HollowPurpleBarrier> hollowPurpleBarriers=new ArrayList<>();
 	private RunningModeModel model;
 	public YmirSpell3(RunningModeModel m){
         super();
+        this.duration=0;
         this.model= m;
         this.name = "Hollow Purple";
         //this.color=new Color(128, 0, 128, 250);
@@ -76,7 +77,7 @@ public class YmirSpell3 extends Spell{
         int mapWidth = RunningModeModel.WIDTH;
         int barriersAdded = 0;
         ArrayList<int[]>validPositions = getValidGridPositions(model.getGrid());
-        if (validPositions.isEmpty()){
+        if (validPositions.isEmpty()){System.out.println("in");
         	return;
         }
         HashMap<Integer, ArrayList<Barrier>> map = movingBarriersInRow(validPositions);
@@ -87,11 +88,12 @@ public class YmirSpell3 extends Spell{
             int x = position[0];
             int y = position[1];
             
+            
             if (isValidPosition(x, y,map)) {
                 HollowPurpleBarrier barrier = new HollowPurpleBarrier(x, y);
                 model.addBarrier(barrier);
                 hollowPurpleBarriers.add(barrier);
-                barriersAdded++;
+                barriersAdded++;System.out.println("Barrier added");
             }
         }
         return;

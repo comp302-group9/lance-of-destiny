@@ -24,6 +24,7 @@ import domain.objects.Spells.Canons;
 import domain.objects.Spells.Expension;
 import domain.objects.Spells.Hex;
 import domain.objects.Spells.Overwhelm;
+import domain.objects.Spells.YmirSpell3;
 import ui.screens.RModeUI.SpellIcon;
 
 public class RunningModeModel {
@@ -85,6 +86,7 @@ public class RunningModeModel {
             spells.add(new SpellIcon(new Overwhelm(fireball)));
         spells.add(new SpellIcon(new Hex(paddle)));
         spells.add(new SpellIcon(new Expension(paddle)));
+        spells.add(new SpellIcon(new YmirSpell3(this)));
 
         initaliseBarrierLocations(grid);
         getFireball().setGrid(grid);;
