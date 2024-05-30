@@ -97,7 +97,7 @@ public class YmirSpell3 extends Spell{
     	
     	ArrayList<Barrier> movingToCheck = map.get(x);
         for (Barrier b: movingToCheck) {
-        	if (b.getFutureBounds().intersects(possiblePlacement)) {
+        	if (b.getFutureBounds().intersects(possiblePlacement)|| b.getBounds().intersects(possiblePlacement)) {
         		return false;
         	}
         }
