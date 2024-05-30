@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -19,6 +20,7 @@ import domain.DEFAULT;
 import domain.controllers.CollisionHandler;
 import domain.objects.Box;
 import domain.objects.Fireball;
+import domain.objects.ObjectFactory;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
 import domain.objects.Barrier.ExplosiveBarrier;
@@ -52,7 +54,7 @@ public class RunningModeModel {
     private Random random = new Random();
     private boolean gameOver = false;
     private String gameOverMessage = "Game Over!";
-    public static ArrayList<SpellIcon> spells = new ArrayList<>();
+    public static List<SpellIcon> spells = new ArrayList<>();
     private boolean gameStarted = false;
     private long lastHexShotTime = 0;
     private final long hexCooldown = 300;
@@ -187,15 +189,9 @@ public class RunningModeModel {
 
     void initializeSpells() {
     	spells.clear(); // Clear existing spells before initializing new ones
-        spells.add(new SpellIcon(new Overwhelm(fireball)));
-        spells.add(new SpellIcon(new Hex(paddle)));
-        spells.add(new SpellIcon(new Expension(paddle)));
-        spells.add(new SpellIcon(new Felicis(this)));
-        spells.add(new SpellIcon(new DoubleAccel(fireball)));
-        spells.add(new SpellIcon(new InfiniteVoid()));
-        spells.add(new SpellIcon(new YmirSpell3()));
+        spells=ObjectFactory.getInstance().createSpellIcons(fireball, paddle, this);
     }
-    
+    //
     public void setScore(int score) {
         this.score = score;
         System.out.println("Setting score: " + this.score);
