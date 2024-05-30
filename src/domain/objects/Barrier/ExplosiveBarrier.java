@@ -14,8 +14,11 @@ public class ExplosiveBarrier extends Barrier {
     private double angularSpeed;// Speed of rotation rad/s
     private static final double L = RunningModeModel.WIDTH/50; //should be /10 but resultant radius is too large
     private static final double RADIUS = 1.5 * L;
+    
     private ArrayList<Debris> debrisList;
     private ArrayList<BarrierObserver> observers = new ArrayList<>();
+    
+    
     public ExplosiveBarrier(int explosionRadius) {
         super();
         this.explosionRadius = explosionRadius;

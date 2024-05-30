@@ -16,6 +16,7 @@ import domain.objects.Spells.Hex;
 import domain.objects.Spells.InfiniteVoid;
 import domain.objects.Spells.Overwhelm;
 import domain.objects.Spells.Spell;
+import domain.objects.Spells.YmirSpell3;
 import ui.screens.RModeUI.SpellIcon;
 
 public class ObjectFactory {
@@ -85,6 +86,7 @@ public class ObjectFactory {
         spellIcons.add(new SpellIcon(new Felicis(model)));
         spellIcons.add(new SpellIcon(new DoubleAccel(model.getFireball())));
         spellIcons.add(new SpellIcon(new InfiniteVoid()));
+        spellIcons.add(new SpellIcon(new YmirSpell3(model)));
         return spellIcons;
     }
 
@@ -101,6 +103,7 @@ public class ObjectFactory {
         List<Spell> spell = new ArrayList<>();
         spell.add(new DoubleAccel(model.getFireball()));
         spell.add(new InfiniteVoid());
+        spell.add(new YmirSpell3(model));
         return spell;
     }
 }
