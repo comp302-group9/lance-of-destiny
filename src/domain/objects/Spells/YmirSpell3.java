@@ -91,7 +91,7 @@ public class YmirSpell3 extends Spell{
             
             if (isValidPosition(x, y,map)) {
                 HollowPurpleBarrier barrier = new HollowPurpleBarrier(x, y);
-                model.addBarrier(barrier);
+                model.addPurpleBarrier(barrier);
                 hollowPurpleBarriers.add(barrier);
                 barriersAdded++;System.out.println("Barrier added");
             }
@@ -112,9 +112,10 @@ public class YmirSpell3 extends Spell{
     }
 
     private void removeHollowPurpleBarriers() {
+    	if (!model.getPurpleList().isEmpty()) {
         for (HollowPurpleBarrier barrier : hollowPurpleBarriers) {
-            model.removeBarrier(barrier);
-        }
+            model.removePurpleBarrier(barrier);
+        }}
         hollowPurpleBarriers.clear();
     }
     

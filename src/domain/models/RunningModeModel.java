@@ -45,6 +45,7 @@ public class RunningModeModel {
     private boolean gameOver = false;
     private String gameOverMessage = "Game Over!";
     public static ArrayList<SpellIcon> spells = new ArrayList<>();
+    private ArrayList<HollowPurpleBarrier> purpleList = new ArrayList<>();
     private boolean gameStarted = false;
     private long lastHexShotTime = 0;
     private final long hexCooldown = 300;
@@ -180,7 +181,9 @@ public class RunningModeModel {
     public int getGameId() {
         return gameId;
     }
-
+    public ArrayList<HollowPurpleBarrier> getPurpleList(){
+    	return this.purpleList;
+    }
 
     public void setGameOverCallback(Runnable gameOverCallback) {
         this.gameOverCallback = gameOverCallback;
@@ -299,6 +302,8 @@ public class RunningModeModel {
                 barrier.move(barriers, deltaTime);
             }
         }
+        //ArrayList<HollowPurpleBarrier> purpleListCopy = new ArrayList<>(purpleList);
+      
         
         for (int i = 0; i < boxes.size(); i++) {
             Box box = boxes.get(i);
@@ -329,6 +334,19 @@ public class RunningModeModel {
             fireball.validateSpeed(paddle);
             lastCollisionTime = currentTime;
         }
+        if (!purpleList.isEmpty()) {
+            Iterator<HollowPurpleBarrier> iterator = purpleList.iterator();
+            while (iterator.hasNext()) {
+            	HollowPurpleBarrier b = iterator.next();
+            	if(CollisionHandler.CollisionCheck(fireball, b)) {
+            		iterator.remove();
+            	}
+            	
+            	
+            	
+            	
+            }
+            }
         
         for (Canons projectile : new ArrayList<>(paddle.getHexProjectiles())) {
             Iterator<Barrier> iterator = barriers.iterator();
@@ -448,20 +466,22 @@ public class RunningModeModel {
     public Fireball getFireball() {return fireball;}
 
 
-	public void addBarrier(Barrier barrier) {
+	public void addPurpleBarrier(HollowPurpleBarrier barrier) {
 		// TODO Auto-generated method stub
 		//assumes barriers only placed with respect to grid.
+		grid[barrier.getX()][barrier.getY()]= 1;
 		barrier.setGridX(barrier.getX());
 		barrier.setGridY(barrier.getY());
-		barriers.add(barrier);
+		purpleList.add(barrier);
 		
 	}
 
 
-	public void removeBarrier(Barrier barrier) {
+	public void removePurpleBarrier(HollowPurpleBarrier barrier) {
+		grid[barrier.getX()][barrier.getY()]= 0;
 		barrier.setGridX(0);
 		barrier.setGridY(0);
-		barriers.remove(barrier);
+		purpleList.remove(barrier);
 		
 	}
 }

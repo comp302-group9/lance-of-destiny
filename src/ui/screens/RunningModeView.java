@@ -19,6 +19,7 @@ import domain.objects.Box;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
+import domain.objects.Barrier.HollowPurpleBarrier;
 import ui.screens.RModeUI.SpellIcon;
 import ui.screens.RModeUI.TopMenuPanel;
 import ui.screens.RModeUI.YmirView;
@@ -208,6 +209,9 @@ public class RunningModeView extends JPanel {
                 if (i != null) {
                     i.draw(g);
                 }
+            }
+            for (HollowPurpleBarrier b :model.getPurpleList()) {
+            	b.draw(g);
             }
 
             for (int j = 0; j < RunningModeModel.barriers.size(); j++) {
