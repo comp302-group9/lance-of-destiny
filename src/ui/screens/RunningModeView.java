@@ -29,6 +29,7 @@ import domain.models.RunningModeModel;
 import domain.models.YmirModel;
 import domain.objects.Box;
 import domain.objects.Fireball;
+import domain.objects.ObjectFactory;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
 import domain.objects.Barrier.Debris;
@@ -133,6 +134,8 @@ public class RunningModeView extends JPanel {
 
         ymirView.setBounds(WIDTH - 127, HEIGHT - 90, 300, 200);
         add(ymirView);
+
+        ymirModel.setSpell(ObjectFactory.getInstance().createSpellIcons3(model));
 
         ymirController.start();
     }

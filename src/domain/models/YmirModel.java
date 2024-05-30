@@ -1,16 +1,22 @@
 package domain.models;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
 
+import domain.objects.ObjectFactory;
 import domain.objects.Spells.InfiniteVoid;
+import domain.objects.Spells.Spell;
 
 public class YmirModel {
     private ImageIcon[] coinGifs;
     private ImageIcon[] witchGifs;
     private Random random;
     private int flag=1;
+    private List<Spell> spells;
+    Random rand=new Random();
 
     public YmirModel() {
         coinGifs = new ImageIcon[4];
@@ -35,12 +41,16 @@ public class YmirModel {
     public int getFlag(){return flag;}
 
     public void castSpell() {
-        new InfiniteVoid().Activate();
+        spells.get(rand.nextInt(spells.size())).Activate();
         System.out.println("Bad spell");
     }
 
     public void setFlag(int i) {
         flag=i;    
+    }
+
+    public void setSpell(List<Spell> list){
+        this.spells=list;
     }
 }
  

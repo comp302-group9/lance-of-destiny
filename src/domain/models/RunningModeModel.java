@@ -190,7 +190,7 @@ public class RunningModeModel implements BarrierObserver {
 //        spells.add(new SpellIcon(new DoubleAccel(fireball)));
 //        spells.add(new SpellIcon(new InfiniteVoid()));
 //        spells.add(new SpellIcon(new YmirSpell3()));
-        spells=ObjectFactory.getInstance().createSpellIcons(fireball, paddle, this);
+        spells=ObjectFactory.getInstance().createSpellIcons(this);
     }
     //
     public void setScore(int score) {

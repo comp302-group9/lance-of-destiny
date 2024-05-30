@@ -67,29 +67,29 @@ public class ObjectFactory {
         return new Fireball(x, y, width, height);
     }
 
-    public List<SpellIcon> createSpellIcons(Fireball fireball, Paddle paddle, RunningModeModel model) {
+    public List<SpellIcon> createSpellIcons(RunningModeModel model) {
         List<SpellIcon> spellIcons = new ArrayList<>();
-        spellIcons.add(new SpellIcon(new Overwhelm(fireball)));
-        spellIcons.add(new SpellIcon(new Hex(paddle)));
-        spellIcons.add(new SpellIcon(new Expension(paddle)));
+        spellIcons.add(new SpellIcon(new Overwhelm(model.getFireball())));
+        spellIcons.add(new SpellIcon(new Hex(model.getPaddle())));
+        spellIcons.add(new SpellIcon(new Expension(model.getPaddle())));
         spellIcons.add(new SpellIcon(new Felicis(model)));
-        spellIcons.add(new SpellIcon(new DoubleAccel(fireball)));
+        spellIcons.add(new SpellIcon(new DoubleAccel(model.getFireball())));
         spellIcons.add(new SpellIcon(new InfiniteVoid()));
         return spellIcons;
     }
 
-    public List<SpellIcon> createSpellIcons2(Fireball fireball, Paddle paddle, RunningModeModel model) {
+    public List<SpellIcon> createSpellIcons2(RunningModeModel model) {
         List<SpellIcon> spellIcons = new ArrayList<>();
-        spellIcons.add(new SpellIcon(new Overwhelm(fireball)));
-        spellIcons.add(new SpellIcon(new Hex(paddle)));
-        spellIcons.add(new SpellIcon(new Expension(paddle)));
+        spellIcons.add(new SpellIcon(new Overwhelm(model.getFireball())));
+        spellIcons.add(new SpellIcon(new Hex(model.getPaddle())));
+        spellIcons.add(new SpellIcon(new Expension(model.getPaddle())));
         spellIcons.add(new SpellIcon(new Felicis(model)));
         return spellIcons;
     }
 
-    public List<Spell> createSpellIcons3(Fireball fireball, Paddle paddle, RunningModeModel model) {
+    public List<Spell> createSpellIcons3(RunningModeModel model) {
         List<Spell> spell = new ArrayList<>();
-        spell.add(new DoubleAccel(fireball));
+        spell.add(new DoubleAccel(model.getFireball()));
         spell.add(new InfiniteVoid());
         return spell;
     }
