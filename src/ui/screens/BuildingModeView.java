@@ -39,6 +39,11 @@ import network.ServerModel;
 import network.ServerView;
 import ui.screens.BModeUI.BarrierButton;
 import ui.screens.BModeUI.BarrierElement;
+import ui.screens.BModeUI.BarrierStates.EmptyState;
+import ui.screens.BModeUI.BarrierStates.ExplosiveState;
+import ui.screens.BModeUI.BarrierStates.ReinforcedState;
+import ui.screens.BModeUI.BarrierStates.RewardingState;
+import ui.screens.BModeUI.BarrierStates.SimpleState;
 
 public class BuildingModeView extends JPanel {
 	public int WIDTH=DEFAULT.screenWidth;
@@ -223,34 +228,42 @@ public class BuildingModeView extends JPanel {
         closeDialogTimer.start();
     }
 	
-    public void readGrid(int[][] grid){
-        for (int i=0; i<DEFAULT.ROWS ;i++){
-            for (int j=0; j<DEFAULT.COLUMNS ;j++){
-                switch (grid[i][j]) {
-					case 0:
-                        buttons[DEFAULT.COLUMNS*i+j].setIcon(empty);
-                        break;
-                    case 1:
-                        model.number_simple++;
-                        buttons[DEFAULT.COLUMNS*i+j].setIcon(simple);
-                        break;
-                    case 2:
-                        model.number_reinforced++;
-                        buttons[DEFAULT.COLUMNS*i+j].setIcon(firm);
-                        break;
-                    case 3:
-                        model.number_explosive++;
-                        buttons[DEFAULT.COLUMNS*i+j].setIcon(explosive);
-                        break;
-                    case 4:
-                        model.number_rewarding++;
-                        buttons[DEFAULT.COLUMNS*i+j].setIcon(rewarding);
-                        break;
-                    }
-                
+    public void readGrid(int[][] grid) {
+    resetCurrentState(); // Reset current state before reading the grid
+    for (int i = 0; i < DEFAULT.ROWS; i++) {
+        for (int j = 0; j < DEFAULT.COLUMNS; j++) {
+            BarrierButton button = buttons[DEFAULT.COLUMNS * i + j];
+            switch (grid[i][j]) {
+                case 0:
+                    button.setState(new EmptyState());
+                    button.setIcon(button.getEmptyIcon());
+                    break;
+                case 1:
+                    model.setNumber_simple(model.getNumber_simple() + 1);
+                    button.setState(new SimpleState());
+                    button.setIcon(button.getSimpleIcon());
+                    break;
+                case 2:
+                    model.setNumber_reinforced(model.getNumber_reinforced() + 1);
+                    button.setState(new ReinforcedState());
+                    button.setIcon(button.getFirmIcon());
+                    break;
+                case 3:
+                    model.setNumber_explosive(model.getNumber_explosive() + 1);
+                    button.setState(new ExplosiveState());
+                    button.setIcon(button.getExplosiveIcon());
+                    break;
+                case 4:
+                    model.setNumber_rewarding(model.getNumber_rewarding() + 1);
+                    button.setState(new RewardingState());
+                    button.setIcon(button.getRewardingIcon());
+                    break;
             }
         }
     }
+    updateCurrentState(); // Update the current state labels after reading the grid
+}
+
 
 	public void updateCurrentState() {
         simpleLabel.setText("Simple: " + model.number_simple);
