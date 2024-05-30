@@ -192,7 +192,7 @@ public class RunningModeModel {
         spells.add(new SpellIcon(new Expension(paddle)));
         spells.add(new SpellIcon(new Felicis(this)));
         spells.add(new SpellIcon(new DoubleAccel(fireball)));
-        spells.add(new SpellIcon(new InfiniteVoid(barriers)));
+        spells.add(new SpellIcon(new InfiniteVoid()));
         spells.add(new SpellIcon(new YmirSpell3()));
     }
     

@@ -11,12 +11,10 @@ import domain.models.RunningModeModel;
 import domain.objects.Barrier.Barrier;
 
 public class InfiniteVoid extends Spell {
-	ArrayList<Barrier> barriers;
 	Random random = new Random();
 
-	public InfiniteVoid(ArrayList<Barrier> barriers) {
+	public InfiniteVoid() {
 		super();
-		this.barriers = RunningModeModel.barriers;
 		this.name = "InfiniteVoid";
 		this.color = new Color(128, 0, 128, 250);
 		this.duration=15;
@@ -32,10 +30,11 @@ public class InfiniteVoid extends Spell {
 	@Override
 	public void Activate() {
 		int l=8;
-		if(RunningModeModel.barriers.size()<8)l=RunningModeModel.barriers.size();
+		int size=RunningModeModel.barriers.size();
+		if(size<8)l=size;
 		
 		for(int i=0;i<l;i++) {
-			Barrier bar=RunningModeModel.barriers.get(random.nextInt(barriers.size()));
+			Barrier bar=RunningModeModel.barriers.get(random.nextInt(size));
 			if (!bar.getFrozen())bar.freeze();
 			else i--;
 		}
