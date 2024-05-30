@@ -51,7 +51,7 @@ public class YmirModel {
     }
 
     public void setSpell(List<Spell> list){
-    	//spells.clear();
+    	if (spells!=null){spells.clear();}
         this.spells=list;
     }
 }
