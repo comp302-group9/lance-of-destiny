@@ -23,7 +23,7 @@ public class RunningModeController implements KeyListener, Runnable {
     private boolean countdownActive = false; // Flag to check if countdown is active
     private PrintWriter out;  // To send messages to the client or server
     private BufferedReader in;  // To receive messages from the client or server
-    private boolean isDualPlayer = false;
+    private boolean isHost = false;
 
     public RunningModeController(RunningModeModel model, RunningModeView view, int[][] grid) {
         this.model = model;
@@ -40,14 +40,14 @@ public class RunningModeController implements KeyListener, Runnable {
         model.setGameOverCallback(this::handleGameOver);
        
     }
-
-    public RunningModeController(RunningModeModel model, RunningModeView view, int[][] grid, PrintWriter out, BufferedReader in, boolean isDualPlayer) {
+    /* 
+    public RunningModeController(RunningModeModel model, RunningModeView view, int[][] grid, PrintWriter out, BufferedReader in, boolean isHost) {
         this.model = model;
         this.view = view;
         this.grid = grid;
         this.out = out;
         this.in = in;
-        this.isDualPlayer = isDualPlayer;
+        this.isHost = isHost;
         view.addKeyListener(this);
         view.setFocusable(true);
         keys = new boolean[256];  // Array to keep track of key states
@@ -56,8 +56,8 @@ public class RunningModeController implements KeyListener, Runnable {
         model.getFireball().setGrid(grid);
         model.setGameOverCallback(this::handleGameOver);
 
-        new Thread(this::receiveMessages).start();  // Start a thread to receive messages
-    }
+        //new Thread(this::receiveMessages).start();  // Start a thread to receive messages
+    } */
 
 
     private void handleGameOver() {
@@ -88,50 +88,6 @@ public class RunningModeController implements KeyListener, Runnable {
         }
     }
 
-    private void startCountdownAndLaunchFireball() {
-        countdownActive = true;
-        new Thread(() -> {
-            try {
-                for (int i = 3; i > 0; i--) {
-                    final int count = i;
-                    SwingUtilities.invokeLater(() -> view.setCountdownText(String.valueOf(count)));
-                    out.println("COUNTDOWN_" + count);
-                    Thread.sleep(1000);
-                }
-                SwingUtilities.invokeLater(() -> {
-                    view.setCountdownText("");
-                    model.getFireball().launch(model.getPaddle().getX() + model.getPaddle().getWidth() / 2, model.getPaddle().getY() - model.getFireball().getHeight());
-                });
-
-                out.println("LAUNCH_FIREBALL");  // Send launch fireball message to the client
-                
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                countdownActive = false;
-            }
-        }).start();
-    }
-
-    private void receiveMessages() {
-        try {
-            String message;
-            while ((message = in.readLine()) != null) {
-                if (message.startsWith("COUNTDOWN_")) {
-                    int count = Integer.parseInt(message.split("_")[1]);
-                    SwingUtilities.invokeLater(() -> view.setCountdownText(String.valueOf(count)));
-                } else if (message.equals("LAUNCH_FIREBALL")) {
-                    SwingUtilities.invokeLater(() -> {
-                        view.setCountdownText("");
-                        model.getFireball().launch(model.getPaddle().getX() + model.getPaddle().getWidth() / 2, model.getPaddle().getY() - model.getFireball().getHeight());
-                    });
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
@@ -140,12 +96,6 @@ public class RunningModeController implements KeyListener, Runnable {
         // Toggle pause state when 'P' is pressed
         if (keyCode == KeyEvent.VK_P) {
             model.setPaused(!model.isPaused());
-        }
-
-        // Start countdown and launch fireball when space key is pressed and fireball is not launched
-        if (isDualPlayer && keyCode == KeyEvent.VK_SPACE && !model.getFireball().isLaunched() && !countdownActive) {
-            out.println("START_COUNTDOWN");  // Send message to start countdown
-            startCountdownAndLaunchFireball();
         }
     }
 

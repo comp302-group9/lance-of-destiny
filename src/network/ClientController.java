@@ -65,9 +65,9 @@ public class ClientController {
     private void startGame() {
         // Your logic to start the game on the server side
         // Replace with actual game start logic
-        RunningModeModel rmodel = new RunningModeModel(buildingModel.getUser(), model.getGrid());
+        RunningModeModel rmodel = new RunningModeModel(buildingModel.getUser(), model.getGrid(), in, out, false);
         RunningModeView rview = new RunningModeView(rmodel, true); // new constructor version for dual player mode
-        RunningModeController rcontroller = new RunningModeController(rmodel, rview, model.getGrid(), out, in, true);
+        RunningModeController rcontroller = new RunningModeController(rmodel, rview, model.getGrid());
 
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
         frame.getContentPane().removeAll();

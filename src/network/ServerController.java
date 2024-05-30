@@ -76,9 +76,9 @@ public class ServerController {
         PrintWriter serverOut = model.getClientHandler().getOut();
         BufferedReader serverIn = model.getClientHandler().getIn();
         
-        RunningModeModel rmodel = new RunningModeModel(buildingModel.getUser(), buildingView.getGrid());
+        RunningModeModel rmodel = new RunningModeModel(buildingModel.getUser(), buildingView.getGrid(), serverIn, serverOut, true);
         RunningModeView rview = new RunningModeView(rmodel, true); // new constructor version for dual player mode
-        RunningModeController rcontroller = new RunningModeController(rmodel, rview, buildingView.getGrid(), serverOut, serverIn, true);
+        RunningModeController rcontroller = new RunningModeController(rmodel, rview, buildingView.getGrid());
 
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
         frame.getContentPane().removeAll();

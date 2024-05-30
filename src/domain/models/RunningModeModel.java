@@ -1,12 +1,18 @@
 package domain.models;
 
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import database.DatabaseConnection;
 import domain.DEFAULT;
@@ -68,6 +74,11 @@ public class RunningModeModel {
 
     private Runnable scoreChangeCallback; // Add a callback for score change
 
+    private BufferedReader in;  // To receive messages from the client or server
+    private PrintWriter out;    // To send messages to the client or server
+    private boolean isHost = false;
+    private ConcurrentLinkedQueue<String> incomingMessages = new ConcurrentLinkedQueue<>();
+
     public RunningModeModel(User user, int[][] grid) {
         this.user =user;
         this.grid = grid;
@@ -90,6 +101,9 @@ public class RunningModeModel {
 //
 //        initaliseBarrierLocations(grid);
 //        getFireball().setGrid(grid);;
+
+        // Start a separate thread to handle incoming messages
+        new Thread(this::handleIncomingMessages).start();
 //        }
         
 
@@ -97,7 +111,7 @@ public class RunningModeModel {
         this.gameStartingTime = System.currentTimeMillis();
     }
 
-
+    // CONSTRUCTOR FOR SAVED GAMES
     public RunningModeModel(User user, int[][] grid, int gameId) {
         
         this.user =user;
@@ -123,6 +137,35 @@ public class RunningModeModel {
 //        initaliseBarrierLocations(grid);
 //        getFireball().setGrid(grid);
 //        }
+        
+
+        lastUpdateTime = System.currentTimeMillis();
+        this.gameStartingTime = System.currentTimeMillis();
+    }
+
+    // CONSTRUCTOR FOR DUAL PLAYER MODE
+    public RunningModeModel(User user, int[][] grid, BufferedReader in, PrintWriter out, boolean isHost) {
+        this.user =user;
+        this.grid = grid;
+        this.in = in;
+        this.out = out;
+        this.isHost = isHost;
+
+        initializeGame();
+        
+        boxes.add(new Box(WIDTH/2,300));
+
+        // Initialize the paddle
+        paddle = new Paddle(DEFAULT.screenWidth / 2, DEFAULT.screenHeight - 50, DEFAULT.paddleWidth, DEFAULT.paddleHeight); // Adjust parameters as needed
+        
+        // Initialize the fireball
+        fireball = new Fireball( DEFAULT.screenWidth / 2, 7 * DEFAULT.screenHeight / 8, 16, 16); // Adjust parameters as needed
+        if(spells.isEmpty()){
+            initializeSpells();
+
+        initaliseBarrierLocations(grid);
+        getFireball().setGrid(grid);;
+        }
         
 
         lastUpdateTime = System.currentTimeMillis();
@@ -255,7 +298,17 @@ public class RunningModeModel {
     public void update(long currentTime, boolean[] keys) {
         double deltaTime = (currentTime - lastUpdateTime) / 1000.0;
         lastUpdateTime = currentTime;
-        
+
+
+        /*/
+        // Process incoming messages
+        while (!incomingMessages.isEmpty()) {
+            String message = incomingMessages.poll();
+            if (message != null) {
+                processMessage(message);
+            }
+        }
+        */
         updateGameElements(deltaTime);
         handleCollisions(currentTime);
         
@@ -264,10 +317,10 @@ public class RunningModeModel {
             return;
         }
         
-        if (keys[KeyEvent.VK_W] && !fireball.isLaunched()) {
+        /*if (keys[KeyEvent.VK_W] && !fireball.isLaunched()) {
             fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
         }
-        
+        */
         if (keys[KeyEvent.VK_LEFT]) {
             paddle.setDeltaX(-1, DEFAULT.screenWidth);
             paddle.setDirection(-1);
@@ -288,7 +341,18 @@ public class RunningModeModel {
 
         if (keys[KeyEvent.VK_SPACE] && !fireball.isLaunched()) {
             fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
-        }
+        } 
+        
+        /*
+        // Handle game start logic
+        if (keys[KeyEvent.VK_SPACE] && !fireball.isLaunched()) {
+            if (isHost) {
+                fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
+                out.println("LAUNCH_FIREBALL");  // Send launch message to the client
+            } else {
+                out.println("REQUEST_LAUNCH_FIREBALL");  // Send request to launch message to the host
+            }
+        } */
 
         if (keys[KeyEvent.VK_H] && paddle.isHexActive() && currentTime - lastHexShotTime >= hexCooldown) {
             paddle.shootHex();
@@ -361,9 +425,28 @@ public class RunningModeModel {
             }
         }
     }
+    private void handleIncomingMessages() {
+        try {
+            String message;
+            while ((message = in.readLine()) != null) {
+                incomingMessages.add(message);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void processMessage(String message) {
+        if (message.equals("LAUNCH_FIREBALL")) {
+            fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
+        } else if (message.equals("REQUEST_LAUNCH_FIREBALL") && isHost) {
+            fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
+            out.println("LAUNCH_FIREBALL");  // Notify client to launch fireball
+        }
+    }
+
     
     public void initaliseBarrierLocations(int[][] grid) {
-    	barriers.clear();
         int xStart = DEFAULT.screenHeight / 32;
         int yStart = DEFAULT.screenWidth / 32;
         int xGap = DEFAULT.screenHeight / 128;

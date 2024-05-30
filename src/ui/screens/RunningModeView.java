@@ -93,9 +93,12 @@ public class RunningModeView extends JPanel {
     }
 
     private void setupDualPlayerComponents() {
+        JPanel countdownPanel = new JPanel(new GridBagLayout());
+        countdownPanel.setOpaque(false); // Make the panel transparent
         countdownLabel = new JLabel("", SwingConstants.CENTER);
         countdownLabel.setFont(new Font("Arial", Font.BOLD, 48));
         countdownLabel.setForeground(Color.RED);
+        countdownPanel.add(countdownLabel);
         add(countdownLabel, BorderLayout.CENTER);
     }
 
