@@ -255,4 +255,10 @@ public class RunningModeView extends JPanel {
     public void setCountdownText(String text) {
         countdownLabel.setText(text);
     }
+
+    @Override
+    public void addNotify() {
+        super.addNotify();
+        requestFocusInWindow();  
+    }
 }

@@ -97,6 +97,11 @@ public class RunningModeController implements KeyListener, Runnable {
         if (keyCode == KeyEvent.VK_P) {
             model.setPaused(!model.isPaused());
         }
+        
+        // Launch the fireball when space is pressed
+        if (keyCode == KeyEvent.VK_SPACE && !model.getFireball().isLaunched()) {
+            model.getFireball().launch(model.getPaddle().getX() + model.getPaddle().getWidth() / 2, model.getPaddle().getY() - model.getFireball().getHeight());
+        }
     }
 
     @Override
