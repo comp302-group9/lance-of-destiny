@@ -4,7 +4,7 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 
-import domain.objects.Spells.YmirSpell2;
+import domain.objects.Spells.InfiniteVoid;
 
 public class YmirModel {
     private ImageIcon[] coinGifs;
@@ -35,6 +35,7 @@ public class YmirModel {
     public int getFlag(){return flag;}
 
     public void castSpell() {
+        new InfiniteVoid().Activate();
         System.out.println("Bad spell");
     }
 
