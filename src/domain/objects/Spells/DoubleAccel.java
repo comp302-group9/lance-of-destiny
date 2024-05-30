@@ -1,11 +1,8 @@
 package domain.objects.Spells;
 
-import java.awt.Color;
-import java.awt.print.Paper;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
 
 import domain.objects.Fireball;
 
@@ -30,6 +27,7 @@ public class DoubleAccel extends Spell{
 
     @Override
     public void Activate() {
+    	System.out.println("DOUBLE ACCEL");
         originalDx = fireball.getVelocityX();
         originalDy = fireball.getVelocityY();
         fireball.setVelocity(originalDx / 2, originalDy / 2);
@@ -41,8 +39,8 @@ public class DoubleAccel extends Spell{
 
     @Override
     public void deActivate() {
-        fireball.setVelocity(originalDx, originalDy);
-       
+        fireball.setVelocity(fireball.getVelocityX()*2, fireball.getVelocityY()*2);
+        System.out.println("double accel deactivated");
         
         setActive(false);
         

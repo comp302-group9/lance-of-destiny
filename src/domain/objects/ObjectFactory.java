@@ -1,12 +1,22 @@
 package domain.objects;
 
-import domain.models.RunningModeModel;
-import domain.objects.Barrier.*;
-import domain.objects.Spells.*;
-import ui.screens.RModeUI.SpellIcon;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import domain.models.RunningModeModel;
+import domain.objects.Barrier.Barrier;
+import domain.objects.Barrier.ExplosiveBarrier;
+import domain.objects.Barrier.ReinforcedBarrier;
+import domain.objects.Barrier.RewardingBarrier;
+import domain.objects.Barrier.SimpleBarrier;
+import domain.objects.Spells.DoubleAccel;
+import domain.objects.Spells.Expension;
+import domain.objects.Spells.Felicis;
+import domain.objects.Spells.Hex;
+import domain.objects.Spells.InfiniteVoid;
+import domain.objects.Spells.Overwhelm;
+import domain.objects.Spells.Spell;
+import ui.screens.RModeUI.SpellIcon;
 
 public class ObjectFactory {
 

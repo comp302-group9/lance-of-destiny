@@ -14,7 +14,7 @@ public class WaitState implements YmirState {
 
     @Override
     public int getDelay() {
-        return 1000; // 25 seconds
+        return 15000; // 25 secondss
     }
 }
 

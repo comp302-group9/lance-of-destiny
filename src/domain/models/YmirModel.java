@@ -1,13 +1,10 @@
 package domain.models;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
 
-import domain.objects.ObjectFactory;
-import domain.objects.Spells.InfiniteVoid;
 import domain.objects.Spells.Spell;
 
 public class YmirModel {
@@ -41,7 +38,11 @@ public class YmirModel {
     public int getFlag(){return flag;}
 
     public void castSpell() {
-        spells.get(rand.nextInt(spells.size())).Activate();
+        Spell spell=spells.get(rand.nextInt(spells.size()));
+        spell.increase();
+        spell.setActive(true);
+        spell.startTimer();
+        spell.Activate();
         System.out.println("Bad spell");
     }
 
@@ -50,6 +51,7 @@ public class YmirModel {
     }
 
     public void setSpell(List<Spell> list){
+    	//spells.clear();
         this.spells=list;
     }
 }
