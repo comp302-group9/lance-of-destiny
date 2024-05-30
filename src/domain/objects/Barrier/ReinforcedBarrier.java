@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -103,4 +102,16 @@ public class ReinforcedBarrier extends Barrier {
 	public String getImg() {
 		return "/ui/images/reinforcedBarrier.png";
 	}
+	
+	public void addObserver(BarrierObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(BarrierObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers() {
+
+    }
 }

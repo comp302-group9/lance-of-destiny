@@ -1,12 +1,24 @@
 package ui.screens;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import domain.DEFAULT;
 import domain.controllers.BuildingModeController;
@@ -19,9 +31,11 @@ import domain.objects.Box;
 import domain.objects.Fireball;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
+import domain.objects.Barrier.Debris;
 import ui.screens.RModeUI.SpellIcon;
 import ui.screens.RModeUI.TopMenuPanel;
 import ui.screens.RModeUI.YmirView;
+
 
 public class RunningModeView extends JPanel {
     private int HEIGHT = DEFAULT.screenHeight;
@@ -34,6 +48,7 @@ public class RunningModeView extends JPanel {
     private JButton saveButton;
     private JButton backToBuildingModeButton;
     private JLabel countdownLabel;
+    
 
     private YmirModel ymirModel;
     private YmirView ymirView;
@@ -226,6 +241,12 @@ public class RunningModeView extends JPanel {
                 if (i != null) {
                     i.draw(g);
                 }
+            }
+            
+            if (!model.getDebrisList().isEmpty()) {
+            	for (Debris d: model.getDebrisList()) {
+            		d.draw(g);
+            	}
             }
 
             for (int i = 0; i < RunningModeModel.spells.size(); i++) {

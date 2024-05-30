@@ -2,6 +2,7 @@ package domain.objects.Barrier;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 import domain.models.RunningModeModel;
 import domain.objects.Box;
 
@@ -43,5 +44,17 @@ public class RewardingBarrier extends Barrier {
 
 	@Override
 	public void move(ArrayList<Barrier> barriers, double deltaTime) {}
+	
+	public void addObserver(BarrierObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(BarrierObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers() {
+
+    }
 
 }

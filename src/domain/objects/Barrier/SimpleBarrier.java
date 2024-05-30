@@ -83,4 +83,16 @@ public class SimpleBarrier extends Barrier {
 	public String getImg() {
 		return "/ui/images/SimpleBarrier.png";
 	}
+	
+	public void addObserver(BarrierObserver observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(BarrierObserver observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers() {
+
+    }
 }

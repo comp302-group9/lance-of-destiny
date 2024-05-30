@@ -3,14 +3,11 @@ package domain.controllers;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import domain.models.RunningModeModel;
-import domain.objects.ObjectFactory;
 import ui.screens.RunningModeView;
 
 
@@ -35,7 +32,7 @@ public class RunningModeController implements KeyListener, Runnable {
         keys = new boolean[256];  // Array to keep track of key states
         //model.initializeGame();  // Reset or initialize game elements
         model.initaliseBarrierLocations(grid);
-        model.setFireball(ObjectFactory.getInstance().createFireball(0, 0, 16, 16));
+        //model.setFireball(ObjectFactory.getInstance().createFireball(0, 0, 16, 16));
         model.getFireball().setGrid(grid);
         //setupQuitButtonListener();
         //setupSaveButtonListener();

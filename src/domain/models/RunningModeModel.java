@@ -4,8 +4,6 @@ import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -23,21 +21,16 @@ import domain.objects.Fireball;
 import domain.objects.ObjectFactory;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
+import domain.objects.Barrier.BarrierObserver;
+import domain.objects.Barrier.Debris;
 import domain.objects.Barrier.ExplosiveBarrier;
 import domain.objects.Barrier.ReinforcedBarrier;
 import domain.objects.Barrier.RewardingBarrier;
 import domain.objects.Barrier.SimpleBarrier;
 import domain.objects.Spells.Canons;
-import domain.objects.Spells.DoubleAccel;
-import domain.objects.Spells.Expension;
-import domain.objects.Spells.Felicis;
-import domain.objects.Spells.Hex;
-import domain.objects.Spells.InfiniteVoid;
-import domain.objects.Spells.Overwhelm;
-import domain.objects.Spells.YmirSpell3;
 import ui.screens.RModeUI.SpellIcon;
 
-public class RunningModeModel {
+public class RunningModeModel implements BarrierObserver {
     public static int barrierWidth = 51;
     public static int barrierHeight = 15;
     private static final int ROWS = DEFAULT.ROWS;
@@ -58,6 +51,7 @@ public class RunningModeModel {
     private boolean gameStarted = false;
     private long lastHexShotTime = 0;
     private final long hexCooldown = 300;
+    private ArrayList<Debris> debrisList= new ArrayList<>();
 
     private int[][] grid;
     private int gameId;
@@ -189,6 +183,13 @@ public class RunningModeModel {
 
     void initializeSpells() {
     	spells.clear(); // Clear existing spells before initializing new ones
+//    	spells.add(new SpellIcon(new Overwhelm(fireball)));
+//        spells.add(new SpellIcon(new Hex(paddle)));
+//        spells.add(new SpellIcon(new Expension(paddle)));
+//        spells.add(new SpellIcon(new Felicis(this)));
+//        spells.add(new SpellIcon(new DoubleAccel(fireball)));
+//        spells.add(new SpellIcon(new InfiniteVoid()));
+//        spells.add(new SpellIcon(new YmirSpell3()));
         spells=ObjectFactory.getInstance().createSpellIcons(fireball, paddle, this);
     }
     //
@@ -219,6 +220,10 @@ public class RunningModeModel {
 
     public int[][] getGrid() {
         return grid;
+    }
+    
+    public ArrayList<Debris> getDebrisList(){
+    	return this.debrisList;
     }
 
     public User getUser() {
@@ -374,6 +379,17 @@ public class RunningModeModel {
             }
         }
         
+        if (!debrisList.isEmpty()) {
+            Iterator<Debris> iterator = debrisList.iterator();
+            while (iterator.hasNext()) {
+                Debris debris = iterator.next();
+                debris.update();
+                if (debris.getY() <  0) { 
+                    iterator.remove();
+                }
+            }
+        }
+        
         for (int i = 0; i < boxes.size(); i++) {
             Box box = boxes.get(i);
             box.move();
@@ -403,6 +419,18 @@ public class RunningModeModel {
             fireball.validateSpeed(paddle);
             lastCollisionTime = currentTime;
         }
+        
+        if (!debrisList.isEmpty()) {
+        	Iterator<Debris> iterator = debrisList.iterator();
+        	while (iterator.hasNext()) {
+        		Debris d = iterator.next();
+        			if (CollisionHandler.CollisionCheck(d, paddle)) {
+        				decreaseChance();
+        				iterator.remove();
+        			}	
+        	}
+        }
+        
         
         for (Canons projectile : new ArrayList<>(paddle.getHexProjectiles())) {
             Iterator<Barrier> iterator = barriers.iterator();
@@ -471,6 +499,7 @@ public class RunningModeModel {
                     explosive.setGridX(col);
                     explosive.setGridY(row);
                     barriers.add(explosive);
+                    explosive.addObserver(this);
                     break;
                     case 4:
                     Barrier rewarding = new RewardingBarrier(x, y);
@@ -482,6 +511,11 @@ public class RunningModeModel {
             }
         }
     }
+    
+    public void onDebrisCreated(ArrayList<Debris> newDebris) {
+        debrisList.addAll(newDebris);
+    }
+    
     
     public void saveGame(int[][] matrix, int gameId) {
         Connection conn = null;
