@@ -16,6 +16,7 @@ import domain.objects.Fireball;
 import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
 import domain.objects.Barrier.ExplosiveBarrier;
+import domain.objects.Barrier.HollowPurpleBarrier;
 import domain.objects.Barrier.ReinforcedBarrier;
 import domain.objects.Barrier.RewardingBarrier;
 import domain.objects.Barrier.SimpleBarrier;
@@ -167,6 +168,7 @@ public class RunningModeModel {
     public int[][] getGrid() {
         return grid;
     }
+   
 
     public User getUser() {
         return user;
@@ -442,5 +444,23 @@ public class RunningModeModel {
 
     public Paddle getPaddle() {return paddle;}
     public Fireball getFireball() {return fireball;}
+
+
+	public void addBarrier(Barrier barrier) {
+		// TODO Auto-generated method stub
+		//assumes barriers only placed with respect to grid.
+		barrier.setGridX(barrier.getX());
+		barrier.setGridY(barrier.getY());
+		barriers.add(barrier);
+		
+	}
+
+
+	public void removeBarrier(Barrier barrier) {
+		barrier.setGridX(0);
+		barrier.setGridY(0);
+		barriers.remove(barrier);
+		
+	}
 }
     
