@@ -6,11 +6,15 @@ public class WaitState implements YmirState {
         context.getView().updateWitchGif(context.getModel().getWitchGif(0));
         context.getView().updateCoinGif(context.getModel().getCoinGif(0));
         context.setCurrentState(context.getNextState());
+        if (context.getModel().getFlag()==0){
+            context.getModel().castSpell();
+            context.getModel().setFlag(1);
+        }
     }
 
     @Override
     public int getDelay() {
-        return 10000; // 25 seconds
+        return 1000; // 25 seconds
     }
 }
 
