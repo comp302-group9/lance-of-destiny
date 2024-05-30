@@ -41,7 +41,7 @@ public class YmirSpell3 extends Spell{
     	setActive(false);
     	
     }
-    public ArrayList<int[]> getValidGridPositions(int[][] grid) {
+    public ArrayList<int[]> getValidGridPositions(int[][] grid) { // assumes x is row and y is column index
         ArrayList<int[]> validPositions = new ArrayList<>();
 
         for (int x = 0; x < grid.length; x++) {
@@ -55,7 +55,7 @@ public class YmirSpell3 extends Spell{
         return validPositions;
     }
     
-    public HashMap<Integer, ArrayList<Barrier> > movingBarriersInRow(ArrayList<int[]> validPositions){
+    public HashMap<Integer, ArrayList<Barrier> > movingBarriersInRow(ArrayList<int[]> validPositions){ 
     	HashMap<Integer, ArrayList<Barrier>> map = new HashMap<Integer, ArrayList<Barrier>>();
     	for (int[] position: validPositions) {
     	 ArrayList<Barrier> moving = new ArrayList<Barrier>();
@@ -76,6 +76,9 @@ public class YmirSpell3 extends Spell{
         int mapWidth = RunningModeModel.WIDTH;
         int barriersAdded = 0;
         ArrayList<int[]>validPositions = getValidGridPositions(model.getGrid());
+        if (validPositions.isEmpty()){
+        	return;
+        }
         HashMap<Integer, ArrayList<Barrier>> map = movingBarriersInRow(validPositions);
 
         while (barriersAdded < 8 || barriersAdded == validPositions.size()) {
@@ -91,6 +94,7 @@ public class YmirSpell3 extends Spell{
                 barriersAdded++;
             }
         }
+        return;
     }
     private boolean isValidPosition(int x, int y, HashMap<Integer,ArrayList<Barrier>> map) {
     	Rectangle possiblePlacement = new Rectangle(x,y+model.barrierWidth, model.barrierWidth, model.barrierHeight);
