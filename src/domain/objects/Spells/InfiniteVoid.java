@@ -17,7 +17,7 @@ public class InfiniteVoid extends Spell {
 	public InfiniteVoid(ArrayList<Barrier> barriers) {
 		super();
 		this.barriers = RunningModeModel.barriers;
-		this.name = "overwhelm";
+		this.name = "InfiniteVoid";
 		this.color = new Color(128, 0, 128, 250);
 		this.duration=15;
 		try {
