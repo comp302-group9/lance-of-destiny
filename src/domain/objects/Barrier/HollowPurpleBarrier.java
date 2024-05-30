@@ -7,6 +7,8 @@ public class HollowPurpleBarrier extends SimpleBarrier{
 
 	public HollowPurpleBarrier(int x, int y) {
 		super(x,y);// TODO Auto-generated constructor stub
+		this.x=x;
+		this.y=y;
 		this.img="/src/ui/images/purplebarrier.png";
 		
 	}

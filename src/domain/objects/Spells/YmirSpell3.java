@@ -9,6 +9,7 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import domain.DEFAULT;
 import domain.models.RunningModeModel;
 import domain.objects.Barrier.Barrier;
 import domain.objects.Barrier.HollowPurpleBarrier;
@@ -38,7 +39,7 @@ public class YmirSpell3 extends Spell{
 
     @Override
     public void deActivate() {
-    	removeHollowPurpleBarriers();
+    	//removeHollowPurpleBarriers();
     	setActive(false);
     	
     }
@@ -65,7 +66,10 @@ public class YmirSpell3 extends Spell{
     			 moving.add(b);
     		 }
     	 }
+    	 
     	 map.put(position[0], moving);
+    	 
+    	 
     	 
     	}
     	return map;
@@ -77,36 +81,55 @@ public class YmirSpell3 extends Spell{
         int mapWidth = RunningModeModel.WIDTH;
         int barriersAdded = 0;
         ArrayList<int[]>validPositions = getValidGridPositions(model.getGrid());
+        HashMap<Integer, ArrayList<Barrier>> map = movingBarriersInRow(validPositions);
         if (validPositions.isEmpty()){System.out.println("in");
         	return;
         }
-        HashMap<Integer, ArrayList<Barrier>> map = movingBarriersInRow(validPositions);
+        
 
         while (barriersAdded < 8 || barriersAdded == validPositions.size()) {
         	
+        	
             int [] position = validPositions.get(random.nextInt(validPositions.size()));
-            int x = position[0];
-            int y = position[1];
+            int row = position[0];
+            int col = position[1];
+            int xStart = DEFAULT.screenHeight / 32;
+            int yStart = DEFAULT.screenWidth / 32;
+            int xGap = DEFAULT.screenHeight / 128;
+            int yGap = DEFAULT.screenHeight / 96;
+            int x = xStart + col * (model.barrierWidth + xGap);
+            int y = yStart + row * (model.barrierHeight + yGap);
             
-            
-            if (isValidPosition(x, y,map)) {
+            if (isValidPosition(row, col, x,y, map)) {
+            	
                 HollowPurpleBarrier barrier = new HollowPurpleBarrier(x, y);
-                model.addPurpleBarrier(barrier);
+                
+        		barrier.setGridX(row);
+        		barrier.setGridY(col);
                 hollowPurpleBarriers.add(barrier);
-                barriersAdded++;System.out.println("Barrier added");
+                model.addPurpleBarrier(barrier);
+                System.out.printf("Barrier added at position %d %d %n", barrier.getX(), barrier.getY());
+                
+                barriersAdded++;//System.out.println("Barrier added");
             }
         }
         return;
     }
-    private boolean isValidPosition(int x, int y, HashMap<Integer,ArrayList<Barrier>> map) {
+    private boolean isValidPosition(int gridX, int gridY, int x, int y, HashMap<Integer,ArrayList<Barrier>> map) {
     	Rectangle possiblePlacement = new Rectangle(x,y+model.barrierWidth, model.barrierWidth, model.barrierHeight);
     	
-    	ArrayList<Barrier> movingToCheck = map.get(x);
+    	System.out.println(gridX);
+    	ArrayList<Barrier> movingToCheck = map.get(gridX);
+    	if (movingToCheck.isEmpty()) {
+    		return true;
+    	}
+    	
+    	else {
         for (Barrier b: movingToCheck) {
         	if (b.getFutureBounds().intersects(possiblePlacement)|| b.getBounds().intersects(possiblePlacement)) {
         		return false;
         	}
-        }
+        }}
     	
         return true;
     }

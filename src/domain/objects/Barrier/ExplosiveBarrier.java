@@ -15,7 +15,7 @@ public class ExplosiveBarrier extends Barrier {
     private double angularSpeed;// Speed of rotation rad/s
     private static final double L = RunningModeModel.WIDTH/50; //should be /10 but resultant radius is too large
     private static final double RADIUS = 1.5 * L;
-    private ArrayList<HollowPurpleBarrier> purpleList;
+    
     private ArrayList<Debris> debrisList;
     public ExplosiveBarrier(int explosionRadius) {
         super();
@@ -25,6 +25,7 @@ public class ExplosiveBarrier extends Barrier {
         this.centerY = (this.y + this.height/2) - 1.5 * L; // Center for circular movement
         this.angle = 0;
         this.message = "*At least 5*";
+        
         updateMovementState(RunningModeModel.barriers); // Initialize movement state
     }
 

@@ -84,10 +84,11 @@ public class RunningModeModel {
         // Initialize the fireball
         fireball = new Fireball( DEFAULT.screenWidth / 2, 7 * DEFAULT.screenHeight / 8, 16, 16); // Adjust parameters as needed
         if(spells.isEmpty()){
-            spells.add(new SpellIcon(new Overwhelm(fireball)));
-        spells.add(new SpellIcon(new Hex(paddle)));
-        spells.add(new SpellIcon(new Expension(paddle)));
+         //spells.add(new SpellIcon(new Overwhelm(fireball)));
+        //spells.add(new SpellIcon(new Hex(paddle)));
+        //spells.add(new SpellIcon(new Expension(paddle)));
         spells.add(new SpellIcon(new YmirSpell3(this)));
+        
 
         initaliseBarrierLocations(grid);
         getFireball().setGrid(grid);;
@@ -469,18 +470,15 @@ public class RunningModeModel {
 	public void addPurpleBarrier(HollowPurpleBarrier barrier) {
 		// TODO Auto-generated method stub
 		//assumes barriers only placed with respect to grid.
-		grid[barrier.getX()][barrier.getY()]= 1;
-		barrier.setGridX(barrier.getX());
-		barrier.setGridY(barrier.getY());
+		grid[barrier.getGridX()][barrier.getGridY()]= 1;
 		purpleList.add(barrier);
 		
 	}
 
 
 	public void removePurpleBarrier(HollowPurpleBarrier barrier) {
-		grid[barrier.getX()][barrier.getY()]= 0;
-		barrier.setGridX(0);
-		barrier.setGridY(0);
+		grid[barrier.getGridX()][barrier.getGridY()]= 0;
+		
 		purpleList.remove(barrier);
 		
 	}

@@ -12,7 +12,7 @@ public abstract class Spell {
     private int secondsElapsed;
     protected int duration = 30; // Duration of the spell in seconds
     protected Boolean active=false;
-    private int num=2;
+    private int num=5;
     
     public Spell(){
         this.secondsElapsed = 0;
