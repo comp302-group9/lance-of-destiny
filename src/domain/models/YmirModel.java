@@ -41,7 +41,10 @@ public class YmirModel {
     public int getFlag(){return flag;}
 
     public void castSpell() {
-        spells.get(rand.nextInt(spells.size())).Activate();
+        Spell spell=spells.get(rand.nextInt(spells.size()));
+        spell.setActive(true);
+        spell.startTimer();
+        spell.Activate();
         System.out.println("Bad spell");
     }
 
