@@ -86,8 +86,10 @@ public class RunningModeController implements KeyListener, Runnable {
 
     @Override
     public void run() {
-        model.startCountdown();
-        updateCountdown();
+        if (model.getConnectableObject() != null) {
+            model.startCountdown();
+            updateCountdown();
+        }
         while (running) {
             if (!model.isPaused() && !model.isGameOver()) {
                 long currentTime = System.currentTimeMillis();
