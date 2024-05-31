@@ -119,21 +119,7 @@ public class RunningModeModel implements BarrierObserver {
         this.isHost = isHost;
 
         initializeGame();
-        
-        boxes.add(new Box(WIDTH/2,300));
-
-        // Initialize the paddle
-        paddle = new Paddle(DEFAULT.screenWidth / 2, DEFAULT.screenHeight - 50, DEFAULT.paddleWidth, DEFAULT.paddleHeight); // Adjust parameters as needed
-        
-        // Initialize the fireball
-        fireball = new Fireball( DEFAULT.screenWidth / 2, 7 * DEFAULT.screenHeight / 8, 16, 16); // Adjust parameters as needed
-        if(spells.isEmpty()){
-            initializeSpellsDual();
-
-        initaliseBarrierLocations(grid);
-        getFireball().setGrid(grid);;
-        }
-        
+        initializeSpellsDual();        
 
         lastUpdateTime = System.currentTimeMillis();
         this.gameStartingTime = System.currentTimeMillis();
