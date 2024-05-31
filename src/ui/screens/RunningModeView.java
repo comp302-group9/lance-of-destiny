@@ -118,9 +118,12 @@ public class RunningModeView extends JPanel {
 
     // Additional methods to update GameStatusPanel
     public void updateGameStatusPanel() {
-        connectable.sendScore(model.getScore());
-        connectable.sendLives(model.getChances());
+        if(connectable!=null){
+            connectable.sendScore(model.getScore());
+            connectable.sendLives(model.getChances());
         //connectable.sendScore(model.getBarriersLeft());
+        }
+        
 
         //Task 1
         //Panel update yeri
