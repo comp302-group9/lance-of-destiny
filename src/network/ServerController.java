@@ -1,17 +1,25 @@
 package network;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketException;
+import java.util.Enumeration;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import domain.controllers.RunningModeController;
+import domain.models.BuildingModeModel;
 import domain.models.RunningModeModel;
+import ui.screens.BuildingModeView;
 import ui.screens.RunningModeView;
 import ui.screens.RModeUI.GameStatusPanel;
-import domain.models.BuildingModeModel;
-import ui.screens.BuildingModeView;
 
 public class ServerController implements Connectable{
     private static ServerController instance;
@@ -48,7 +56,8 @@ public class ServerController implements Connectable{
 
     private void startServer() {
         try (ServerSocket serverSocket = new ServerSocket(12345)) {
-            String serverIp = InetAddress.getLocalHost().getHostAddress();
+            //String serverIp = InetAddress.getLocalHost().getHostAddress();
+            String serverIp = getLocalIPv4Address();
             view.setIpLabelText(serverIp);
 
             while (true) {
@@ -61,6 +70,25 @@ public class ServerController implements Connectable{
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+    
+    private String getLocalIPv4Address() throws SocketException {
+        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+        while (interfaces.hasMoreElements()) {
+            NetworkInterface iface = interfaces.nextElement();
+            // Filters out 127.0.0.1 and inactive interfaces
+            if (iface.isLoopback() || !iface.isUp())
+                continue;
+
+            Enumeration<InetAddress> addresses = iface.getInetAddresses();
+            while (addresses.hasMoreElements()) {
+                InetAddress addr = addresses.nextElement();
+                if (addr instanceof Inet4Address) {
+                    return addr.getHostAddress();
+                }
+            }
+        }
+        throw new SocketException("No IPv4 address found");
     }
 
     public void checkIfAllReady() {

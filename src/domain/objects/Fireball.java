@@ -184,14 +184,16 @@ public class Fireball implements GameObject{
                 }
                 break;
             } else if (isMiddleLeftInside || isMiddleRightInside) {
+            	
                 if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                 	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
                     barriers.remove(barrier); // Safely remove it from the list
                 }
                 if (!overwhelmed) {
-                    reflectVertical();
+                    reflectVertical();   
                 }
-                model.increaseScore(currentTime); 
+                model.increaseScore(currentTime);
+               
                 break;
             } else if (isTopLeftInside || isTopRightInside) {
                 if (ballBounds.getMaxY() < barrierBounds.getMaxY() + ballBounds.getHeight() - py) {
