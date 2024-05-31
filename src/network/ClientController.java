@@ -118,7 +118,7 @@ public class ClientController implements Connectable{
     }
 
     private void startGame() {
-        RunningModeModel rmodel = new RunningModeModel(buildingModel.getUser(), model.getGrid(), in, out, false, this);
+        RunningModeModel rmodel = new RunningModeModel(buildingModel.getUser(), model.getGrid(), this);
         RunningModeView rview = new RunningModeView(rmodel, true, this);
         RunningModeController rcontroller = new RunningModeController(rmodel, rview, model.getGrid());
 

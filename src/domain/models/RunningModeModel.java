@@ -59,6 +59,7 @@ public class RunningModeModel implements BarrierObserver {
     private final long hexCooldown = 300;
     private ArrayList<Debris> debrisList= new ArrayList<>();
     private Connectable con;
+    
 
     private int[][] grid;
     private int gameId;
@@ -76,11 +77,10 @@ public class RunningModeModel implements BarrierObserver {
     private Runnable gameOverCallback;
 
     private Runnable scoreChangeCallback; // Add a callback for score change
-
-    private BufferedReader in;  // To receive messages from the client or server
-    private PrintWriter out;    // To send messages to the client or server
-    private boolean isHost = false;
-    private ConcurrentLinkedQueue<String> incomingMessages = new ConcurrentLinkedQueue<>();
+    private boolean countdownActive = false;
+    private int countdownValue = 3;
+    private Runnable countdownCallback;
+    
 
     public RunningModeModel(User user, int[][] grid) {
         this.user =user;
@@ -111,12 +111,9 @@ public class RunningModeModel implements BarrierObserver {
     }
 
     // CONSTRUCTOR FOR DUAL PLAYER MODE
-    public RunningModeModel(User user, int[][] grid, BufferedReader in, PrintWriter out, boolean isHost, Connectable con) {
+    public RunningModeModel(User user, int[][] grid, Connectable con) {
         this.user =user;
         this.grid = grid;
-        this.in = in;
-        this.out = out;
-        this.isHost = isHost;
         this.con=con;
         System.out.println(con);
 
@@ -125,6 +122,7 @@ public class RunningModeModel implements BarrierObserver {
 
         lastUpdateTime = System.currentTimeMillis();
         this.gameStartingTime = System.currentTimeMillis();
+        
     }
 
     // Method to set the game win callback
@@ -166,6 +164,27 @@ public class RunningModeModel implements BarrierObserver {
 
     public int getScore() {
         return score;
+    }
+
+    public int getCountDownValue() {
+        return countdownValue;
+    }
+
+    public Connectable getConnectableObject() {
+        return con;
+    }
+
+    public boolean isCountdownActive() {
+        return countdownActive; 
+    }
+
+    
+    public void decreaseCountdownValue() {
+        countdownValue--;
+    }
+
+    public void setCountdownActive(boolean active) {
+        this.countdownActive = active;
     }
 
     public int getBarriersLeft() {
@@ -233,6 +252,18 @@ public class RunningModeModel implements BarrierObserver {
 
     public String gameOverMessage() {
         return gameOverMessage;
+    }
+
+    public void setCountdownCallback(Runnable callback) {
+        this.countdownCallback = callback;
+    }
+    
+    public void startCountdown() {
+        countdownActive = true;
+        countdownValue = 4;
+        if (countdownCallback != null) {
+            countdownCallback.run();
+        }
     }
 
     public void restart() {

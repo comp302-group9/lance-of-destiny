@@ -40,25 +40,10 @@ public class RunningModeController implements KeyListener, Runnable {
         model.getFireball().setGrid(grid);
         model.setGameOverCallback(this::handleGameOver);
         model.setGameWinCallback(this::handleGameWin);
+        if (model.getConnectableObject() != null) {
+            model.setCountdownCallback(() -> view.setCountdownText(String.valueOf(model.getCountDownValue())));
+        }
     }
-    /* 
-    public RunningModeController(RunningModeModel model, RunningModeView view, int[][] grid, PrintWriter out, BufferedReader in, boolean isHost) {
-        this.model = model;
-        this.view = view;
-        this.grid = grid;
-        this.out = out;
-        this.in = in;
-        this.isHost = isHost;
-        view.addKeyListener(this);
-        view.setFocusable(true);
-        keys = new boolean[256];  // Array to keep track of key states
-        //model.initializeGame();  // Reset or initialize game elements
-        model.initaliseBarrierLocations(grid);
-        model.getFireball().setGrid(grid);
-        model.setGameOverCallback(this::handleGameOver);
-
-        //new Thread(this::receiveMessages).start();  // Start a thread to receive messages
-    } */
 
     private void handleGameOver() {
         SwingUtilities.invokeLater(() -> {
@@ -78,10 +63,31 @@ public class RunningModeController implements KeyListener, Runnable {
         stopGame();
     }
 
+    private void updateCountdown() {
+        if (model.isCountdownActive()) {
+            if (model.getCountDownValue() > 0) {
+                model.decreaseCountdownValue();
+                view.setCountdownText(String.valueOf(model.getCountDownValue()));
+                try {
+                    Thread.sleep(1000); // Wait for 1 second
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                updateCountdown(); // Recursive call to continue countdown
+            } else {
+                model.setCountdownActive(false);
+                view.setCountdownText(""); // Clear countdown text
+                running = true;
+            }
+        }
+    }
+
     
 
     @Override
     public void run() {
+        model.startCountdown();
+        updateCountdown();
         while (running) {
             if (!model.isPaused() && !model.isGameOver()) {
                 long currentTime = System.currentTimeMillis();

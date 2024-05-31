@@ -81,7 +81,7 @@ public class ServerController implements Connectable{
         PrintWriter serverOut = model.getClientHandler().getOut();
         BufferedReader serverIn = model.getClientHandler().getIn();
 
-        RunningModeModel rmodel = new RunningModeModel(buildingModel.getUser(), buildingView.getGrid(), serverIn, serverOut, true, this);
+        RunningModeModel rmodel = new RunningModeModel(buildingModel.getUser(), buildingView.getGrid(), this);
         RunningModeView rview = new RunningModeView(rmodel, true, this);
         RunningModeController rcontroller = new RunningModeController(rmodel, rview, buildingView.getGrid());
 

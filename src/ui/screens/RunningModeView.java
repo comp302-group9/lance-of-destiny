@@ -2,6 +2,7 @@ package ui.screens;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -15,7 +16,9 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.OverlayLayout;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
@@ -56,7 +59,6 @@ public class RunningModeView extends JPanel {
     private YmirModel ymirModel;
     private YmirView ymirView;
     private YmirController ymirController;
-    private RunningModeController runningModeController;
 
     public RunningModeView(RunningModeModel model) {
         this.model = model;
@@ -100,6 +102,8 @@ public class RunningModeView extends JPanel {
         });
 
         add(topMenuPanel, BorderLayout.NORTH);
+
+        
     }
 
     void SetupTwoPlayerPanel(){
@@ -107,6 +111,30 @@ public class RunningModeView extends JPanel {
         connectable.setGSP(gameStatusPanel);
         connectable.setModel(model);
         add(gameStatusPanel, BorderLayout.SOUTH);
+
+        // Initialize countdown label
+        countdownLabel = new JLabel("", SwingConstants.CENTER);
+        countdownLabel.setFont(new Font("Arial", Font.BOLD, 48));
+        countdownLabel.setForeground(Color.WHITE);
+        // Add countdown label to a layered pane to ensure visibility
+        JLayeredPane layeredPane = new JLayeredPane();
+        layeredPane.setLayout(new OverlayLayout(layeredPane));
+        layeredPane.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+
+        JPanel backgroundPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        backgroundPanel.setBounds(0, 0, WIDTH, HEIGHT);
+        layeredPane.add(backgroundPanel, JLayeredPane.DEFAULT_LAYER);
+
+        countdownLabel.setBounds(0, 0, WIDTH, HEIGHT);
+        layeredPane.add(countdownLabel, JLayeredPane.PALETTE_LAYER);
+        add(countdownLabel, BorderLayout.CENTER);
+
     }
 
     public void updateChances() {
@@ -123,12 +151,7 @@ public class RunningModeView extends JPanel {
             connectable.sendScore(model.getScore());
             connectable.sendLives(model.getChances());
             connectable.sendBarriersLeft(model.getBarriersLeft());
-        //connectable.sendScore(model.getBarriersLeft());
         }
-        
-
-        //Task 1
-        //Panel update yeri
     }
 
     private void setupCallbacks() {
@@ -280,6 +303,8 @@ public class RunningModeView extends JPanel {
 
     public void setCountdownText(String text) {
         countdownLabel.setText(text);
+        revalidate();
+        repaint();
     }
 
     @Override
