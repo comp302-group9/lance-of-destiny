@@ -30,7 +30,6 @@ public class YmirSpell3 extends Spell{
     }
     @Override
     public void Activate(){
-    	System.out.println("hollowPurple!!");
     	addHollowPurpleBarriers();
     	setActive(true);
         startTimer();
@@ -107,7 +106,6 @@ public class YmirSpell3 extends Spell{
         		barrier.setGridY(col);
                 hollowPurpleBarriers.add(barrier);
                 model.addPurpleBarrier(barrier);
-                System.out.printf("Barrier added at position %d %d %n", barrier.getX(), barrier.getY());
 
                 barriersAdded++;
             }
@@ -118,7 +116,6 @@ public class YmirSpell3 extends Spell{
     	Rectangle possiblePlacement = new Rectangle(x,y+model.barrierWidth, model.barrierWidth, model.barrierHeight);
 
     	//ArrayList<Barrier> movingToCheck = map.get(x);
-    	System.out.println(gridX);
     	ArrayList<Barrier> movingToCheck = map.get(gridX);
     	if (movingToCheck.isEmpty()) {
     		return true;

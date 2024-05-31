@@ -60,7 +60,6 @@ public class ClientController implements Connectable{
                 if (message == null) {
                     break;
                 }
-                System.out.println(message);
                 if (message.equals("SERVER_READY")) {
                     view.setServerStatusLabelText("Ready");
                 } else if (message.equals("All players are ready!")) {
@@ -68,12 +67,9 @@ public class ClientController implements Connectable{
                     receiveGrid(socket);
                     startGame();
                 }else if (message.startsWith("S")) {
-                    System.out.println("second "+message);
                     String numberPart = message.substring(1); // Extract the part of the message after "S"
                     try {
                         int number = Integer.parseInt(numberPart); // Convert the extracted part to an integer
-                        System.out.println("Score: "+number);
-                        System.out.println(panel);
                         panel.setScore(number);
 
                     } catch (NumberFormatException e) {}
@@ -146,7 +142,6 @@ public class ClientController implements Connectable{
 
     @Override
     public Connectable getInstance() {
-        System.out.println(instance);
         // TODO Auto-generated method stub
         if(instance!=null)return instance;
         return null;

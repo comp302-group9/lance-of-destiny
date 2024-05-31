@@ -49,11 +49,9 @@ public class ServerController implements Connectable{
         try (ServerSocket serverSocket = new ServerSocket(12345)) {
             String serverIp = InetAddress.getLocalHost().getHostAddress();
             view.setIpLabelText(serverIp);
-            System.out.println("Server is listening on port 12345");
 
             while (true) {
                 Socket socket = serverSocket.accept();
-                System.out.println("Client connected");
                 clientHandler = new ClientHandler(socket, this);
                 model.setClientHandler(clientHandler);
                 new Thread(clientHandler).start();
@@ -66,7 +64,6 @@ public class ServerController implements Connectable{
 
     public void checkIfAllReady() {
         if (model.isServerReady() && model.isClientReady()) {
-            view.setStatusLabelText("All players are ready!");
             view.setAllPlayersReadyText("All players are ready!");
             model.notifyClient("All players are ready!");
             sendGridToClient();

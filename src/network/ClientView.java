@@ -12,8 +12,10 @@ public class ClientView extends JPanel {
     private JPanel rightPanelCenter;
     private JLabel serverStatusLabel;
     private JLabel allPlayersReadyLabel;
+    private String name;
 
-    public ClientView() {
+    public ClientView(String clientName) {
+        this.name=clientName;
         // Load the background GIF
         ImageIcon backgroundIcon = new ImageIcon("src/ui/gifs/versus.gif");
         backgroundImage = backgroundIcon.getImage();
@@ -23,7 +25,6 @@ public class ClientView extends JPanel {
 
         // Initialize the buttons and labels
         readyButton = new JButton("I'm Ready");
-        statusLabel = new JLabel("Not Ready");
         serverStatusLabel = new JLabel("Not Ready");
         allPlayersReadyLabel = new JLabel();
         allPlayersReadyLabel.setForeground(Color.WHITE); // Set all players ready label text color to white
@@ -102,7 +103,7 @@ public class ClientView extends JPanel {
         rightPanel.add(rightPanelCenter, gbcRight);
 
         // Add a placeholder label to the right center panel
-        JLabel rightPlaceholderLabel = new JLabel("Client");
+        JLabel rightPlaceholderLabel = new JLabel(name);
         rightPlaceholderLabel.setForeground(Color.WHITE); // White text for visibility
         rightPlaceholderLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Set the font size to 24
         GridBagConstraints gbcRightLabel = new GridBagConstraints();
@@ -117,13 +118,6 @@ public class ClientView extends JPanel {
         gbcButton.gridy = 1; // Position the button below the label
         gbcButton.anchor = GridBagConstraints.CENTER;
         rightPanelCenter.add(readyButton, gbcButton);
-
-        // Add the client status label below the button
-        GridBagConstraints gbcStatusLabel = new GridBagConstraints();
-        gbcStatusLabel.gridx = 0;
-        gbcStatusLabel.gridy = 2; // Position the status label below the button
-        gbcStatusLabel.anchor = GridBagConstraints.CENTER;
-        rightPanelCenter.add(statusLabel, gbcStatusLabel);
 
         // Set up GridBagConstraints for the all players ready label
         GridBagConstraints gbcAllReady = new GridBagConstraints();
@@ -151,10 +145,6 @@ public class ClientView extends JPanel {
 
     public void setReadyButtonEnabled(boolean enabled) {
         readyButton.setEnabled(enabled);
-    }
-
-    public void setStatusLabelText(String text) {
-        statusLabel.setText(text);
     }
 
     public void setServerStatusLabelText(String text) {

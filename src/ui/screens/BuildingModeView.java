@@ -305,7 +305,7 @@ public class BuildingModeView extends JPanel {
 
     private void hostMenu() {
             ServerModel model = new ServerModel();
-            ServerView view = new ServerView();
+            ServerView view = new ServerView(this.model.getUser().getUsername());
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
             frame.getContentPane().removeAll();
             frame.getContentPane().add(view);
@@ -318,10 +318,10 @@ public class BuildingModeView extends JPanel {
         private void clientPage(){
 
             String serverAddress = JOptionPane.showInputDialog("Enter server IP address:");
-            String clientName = JOptionPane.showInputDialog("Enter your name:");
+            String clientName = model.getUser().getUsername();
     
             ClientModel model = new ClientModel(serverAddress, clientName);
-            ClientView view = new ClientView();
+            ClientView view = new ClientView(clientName);
     
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
             frame.getContentPane().removeAll();

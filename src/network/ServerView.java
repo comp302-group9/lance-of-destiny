@@ -14,8 +14,10 @@ public class ServerView extends JPanel {
     private JLabel clientStatusLabel;
     private JLabel ipLabel;
     private JLabel allPlayersReadyLabel;
+    private String name;
 
-    public ServerView() {
+    public ServerView(String serverName) {
+        this.name=serverName;
         // Load the background GIF
         ImageIcon backgroundIcon = new ImageIcon("src/ui/gifs/versus.gif");
         backgroundImage = backgroundIcon.getImage();
@@ -75,7 +77,7 @@ public class ServerView extends JPanel {
         leftPanel.add(leftPanelCenter, gbcLeft);
 
         // Add a placeholder label to the left center panel
-        JLabel leftPlaceholderLabel = new JLabel("Server");
+        JLabel leftPlaceholderLabel = new JLabel(name);
         leftPlaceholderLabel.setForeground(Color.WHITE); // White text for visibility
         leftPlaceholderLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Set the font size to 24
         GridBagConstraints gbcLeftLabel = new GridBagConstraints();
@@ -159,10 +161,6 @@ public class ServerView extends JPanel {
 
     public void setReadyButtonEnabled(boolean enabled) {
         readyButton.setEnabled(enabled);
-    }
-
-    public void setStatusLabelText(String text) {
-        statusLabel.setText(text);
     }
 
     public void setLeftPanelCenterText(String text) {

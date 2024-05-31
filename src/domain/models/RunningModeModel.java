@@ -144,7 +144,6 @@ public class RunningModeModel implements BarrierObserver {
     //
     public void setScore(int score) {
         this.score = score;
-        System.out.println("Setting score: " + this.score);
     }
 
     // Method to set the number of chances
@@ -399,7 +398,6 @@ public class RunningModeModel implements BarrierObserver {
                 Barrier barrier = iterator.next();
                 if (CollisionHandler.CollisionCheck(projectile, barrier)) {
                     if (!barrier.getFrozen() && barrier.onHit()) {
-                    	System.out.println("Cannon shoot: " + barrier.getGridX() + ", " + barrier.getGridY() );
                     	grid[barrier.getGridY()][barrier.getGridX()] = 0;
                         increaseScore(currentTime); // Increase score when a barrier is hit
                         iterator.remove();
