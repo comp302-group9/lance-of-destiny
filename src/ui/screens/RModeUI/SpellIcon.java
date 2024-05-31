@@ -98,8 +98,8 @@ public class SpellIcon extends JPanel implements MouseListener{
     @Override
     public void mouseClicked(MouseEvent e) {
         if(con!=null){
-            
             if (spell.getNum() > 0) {
+                spell.decrease();
                 if(spell instanceof YmirSpell3){System.out.println("Clicked3");
                     con.sendSpell3();
                 }else if(spell instanceof InfiniteVoid){System.out.println("Clicked1");

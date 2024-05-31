@@ -97,4 +97,7 @@ public abstract class Spell {
     public void increase() {
     	num++;
     }
+    public void decrease() {
+    	num--;
+    }
 }
