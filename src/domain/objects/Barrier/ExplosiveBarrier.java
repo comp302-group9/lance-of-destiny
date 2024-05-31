@@ -81,7 +81,6 @@ public class ExplosiveBarrier extends Barrier {
                 return false; // Not enough space if another barrier intersects the circular path
             }
         }
-        System.out.println("Enough space!");
         return true;
     }
 

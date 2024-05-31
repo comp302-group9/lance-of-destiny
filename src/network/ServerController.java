@@ -9,16 +9,19 @@ import javax.swing.SwingUtilities;
 import domain.controllers.RunningModeController;
 import domain.models.RunningModeModel;
 import ui.screens.RunningModeView;
+import ui.screens.RModeUI.GameStatusPanel;
 import domain.models.BuildingModeModel;
 import ui.screens.BuildingModeView;
 
-public class ServerController {
+public class ServerController implements Connectable{
+    private static ServerController instance;
     private ServerModel model;
     private ServerView view;
     private BuildingModeModel buildingModel;
     private BuildingModeView buildingView;
+    private ClientHandler clientHandler;
 
-    public ServerController(ServerModel model, ServerView view, BuildingModeModel bModel, BuildingModeView bView) {
+    private ServerController(ServerModel model, ServerView view, BuildingModeModel bModel, BuildingModeView bView) {
         this.model = model;
         this.view = view;
         this.buildingModel = bModel;
@@ -35,6 +38,13 @@ public class ServerController {
         new Thread(this::startServer).start();
     }
 
+    public static synchronized ServerController getInstance(ServerModel model, ServerView view, BuildingModeModel bModel, BuildingModeView bView) {
+        if (instance == null) {
+            instance = new ServerController(model, view, bModel, bView);
+        }
+        return instance;
+    }
+
     private void startServer() {
         try (ServerSocket serverSocket = new ServerSocket(12345)) {
             String serverIp = InetAddress.getLocalHost().getHostAddress();
@@ -44,7 +54,7 @@ public class ServerController {
             while (true) {
                 Socket socket = serverSocket.accept();
                 System.out.println("Client connected");
-                ClientHandler clientHandler = new ClientHandler(socket, this);
+                clientHandler = new ClientHandler(socket, this);
                 model.setClientHandler(clientHandler);
                 new Thread(clientHandler).start();
                 break;  // Only allow one client to connect
@@ -69,15 +79,12 @@ public class ServerController {
         model.getClientHandler().sendGrid(grid);
     }
 
-
     private void startGame() {
-        // Your logic to start the game on the server side
-        // Replace with actual game start logic
         PrintWriter serverOut = model.getClientHandler().getOut();
         BufferedReader serverIn = model.getClientHandler().getIn();
-        
+
         RunningModeModel rmodel = new RunningModeModel(buildingModel.getUser(), buildingView.getGrid(), serverIn, serverOut, true);
-        RunningModeView rview = new RunningModeView(rmodel, true); // new constructor version for dual player mode
+        RunningModeView rview = new RunningModeView(rmodel, true, this);
         RunningModeController rcontroller = new RunningModeController(rmodel, rview, buildingView.getGrid());
 
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
@@ -101,6 +108,34 @@ public class ServerController {
 
     private void shutDownServer() {
         model.getClientHandler().cleanUp();
+    }
+
+    @Override
+    public Connectable getInstance() {
+        // TODO Auto-generated method stub
+        return instance;
+    }
+
+    @Override
+    public void sendScore(int i) {
+        // TODO Auto-generated method stub
+        model.notifyClient("S"+i);
         
+    }
+
+    @Override
+    public void sendBarriers(int i) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'sendBarriers'");
+    }
+
+    @Override
+    public void sendLives(int i) {
+        //Mesaj buradan göneriliyor
+        //Task 1
+    }
+
+    public void setGSP(GameStatusPanel g){
+        this.clientHandler.setGSP(g);
     }
 }

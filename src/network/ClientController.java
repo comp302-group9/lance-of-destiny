@@ -1,9 +1,11 @@
 package network;
 
+import java.awt.Color;
 import java.io.*;
 import java.net.*;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import domain.controllers.RunningModeController;
@@ -11,8 +13,10 @@ import domain.models.BuildingModeModel;
 import domain.models.RunningModeModel;
 import ui.screens.BuildingModeView;
 import ui.screens.RunningModeView;
+import ui.screens.RModeUI.GameStatusPanel;
 
-public class ClientController {
+public class ClientController implements Connectable{
+    private static Connectable instance;
     private ClientModel model;
     private ClientView view;
     private BufferedReader in;
@@ -20,8 +24,9 @@ public class ClientController {
     private Socket socket;
     private BuildingModeModel buildingModel;
     private BuildingModeView buildingView;
+    private GameStatusPanel panel;
 
-    public ClientController(ClientModel model, ClientView view , BuildingModeModel bModel, BuildingModeView bView) {
+    private ClientController(ClientModel model, ClientView view, BuildingModeModel bModel, BuildingModeView bView) {
         this.model = model;
         this.view = view;
         this.buildingModel = bModel;
@@ -36,6 +41,13 @@ public class ClientController {
         new Thread(this::startClient).start();
     }
 
+    public static synchronized Connectable getInstance(ClientModel model, ClientView view, BuildingModeModel bModel, BuildingModeView bView) {
+        if (instance == null) {
+            instance = new ClientController(model, view, bModel, bView);
+        }
+        return instance;
+    }
+
     private void startClient() {
         try {
             socket = new Socket(model.getServerAddress(), 12345);
@@ -48,14 +60,26 @@ public class ClientController {
                 if (message == null) {
                     break;
                 }
+                System.out.println(message);
                 if (message.equals("SERVER_READY")) {
                     view.setServerStatusLabelText("Ready");
                 } else if (message.equals("All players are ready!")) {
                     view.setAllPlayersReadyText(message);
                     receiveGrid(socket);
                     startGame();
+                }else if (message.startsWith("S")) {
+                    System.out.println("second "+message);
+                    String numberPart = message.substring(1); // Extract the part of the message after "S"
+                    try {
+                        int number = Integer.parseInt(numberPart); // Convert the extracted part to an integer
+                        System.out.println("Score: "+number);
+                        System.out.println(panel);
+                        panel.setScore(number);
+
+                    } catch (NumberFormatException e) {}
                 }
-                view.setStatusLabelText(message);
+                //Mesajlar buradan alınıyor Lives ve barrier number eklenecek
+                //Task 1
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -63,10 +87,8 @@ public class ClientController {
     }
 
     private void startGame() {
-        // Your logic to start the game on the server side
-        // Replace with actual game start logic
         RunningModeModel rmodel = new RunningModeModel(buildingModel.getUser(), model.getGrid(), in, out, false);
-        RunningModeView rview = new RunningModeView(rmodel, true); // new constructor version for dual player mode
+        RunningModeView rview = new RunningModeView(rmodel, true, this);
         RunningModeController rcontroller = new RunningModeController(rmodel, rview, model.getGrid());
 
         JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
@@ -89,9 +111,12 @@ public class ClientController {
         }
     }
 
-
     private void sendReadySignal() {
         out.println("READY");
+    }
+
+    public void sendScore(int score){
+        out.println("S"+score);
     }
 
     private void cleanUp() {
@@ -105,5 +130,32 @@ public class ClientController {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public void sendBarriers(int i) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'sendBarriers'");
+    }
+
+    @Override
+    public void sendLives(int i) {
+        // Task 1
+        //Mesajlar buradan gönderiliyor
+    }
+
+    @Override
+    public Connectable getInstance() {
+        System.out.println(instance);
+        // TODO Auto-generated method stub
+        if(instance!=null)return instance;
+        return null;
+
+    }
+
+    @Override
+    public void setGSP(GameStatusPanel g) {
+        // TODO Auto-generated method stub
+        this.panel=g;
     }
 }

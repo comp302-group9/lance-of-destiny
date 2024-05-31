@@ -179,17 +179,13 @@ public class Fireball implements GameObject{
                 }
                 model.increaseScore(currentTime); 
                 if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
-                	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                 	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
-                    System.out.println(writeGrid(model.getGrid()));
                     barriers.remove(barrier); // Safely remove it from the list
                 }
                 break;
             } else if (isMiddleLeftInside || isMiddleRightInside) {
                 if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
-                	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                 	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
-                    System.out.println(writeGrid(model.getGrid()));
                     barriers.remove(barrier); // Safely remove it from the list
                 }
                 if (!overwhelmed) {
@@ -204,9 +200,7 @@ public class Fireball implements GameObject{
                     }
                     model.increaseScore(currentTime); 
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
-                    	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                     	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
-                        System.out.println(writeGrid(model.getGrid()));
                         barriers.remove(barrier); // Safely remove it from the list
                     }
                     break;
@@ -216,9 +210,7 @@ public class Fireball implements GameObject{
                     }
                     model.increaseScore(currentTime); 
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
-                    	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                     	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
-                        System.out.println(writeGrid(model.getGrid()));
                         barriers.remove(barrier); // Safely remove it from the list
                     }
                     break;
@@ -230,9 +222,7 @@ public class Fireball implements GameObject{
                     }
                     model.increaseScore(currentTime); 
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
-                    	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                     	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
-                        System.out.println(writeGrid(model.getGrid()));
                         barriers.remove(barrier); // Safely remove it from the list
                     }
                     break;
@@ -242,9 +232,7 @@ public class Fireball implements GameObject{
                     }
                     model.increaseScore(currentTime); 
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
-                    	System.out.println(barrier.getGridX() + ", " + barrier.getGridY() );
                     	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
-                        System.out.println(writeGrid(model.getGrid()));
                         barriers.remove(barrier); // Safely remove it from the list
                     }
                     break;

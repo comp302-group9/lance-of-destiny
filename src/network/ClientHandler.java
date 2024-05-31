@@ -1,7 +1,12 @@
 package network;
 
+import java.awt.Color;
 import java.io.*;
 import java.net.*;
+
+import javax.swing.JPanel;
+
+import ui.screens.RModeUI.GameStatusPanel;
 
 public class ClientHandler implements Runnable {
     private Socket socket;
@@ -9,6 +14,7 @@ public class ClientHandler implements Runnable {
     private PrintWriter out;
     private BufferedReader in;
     private ServerController controller;
+    private GameStatusPanel gsp;
 
     public ClientHandler(Socket socket, ServerController controller) {
         this.socket = socket;
@@ -32,8 +38,15 @@ public class ClientHandler implements Runnable {
                     ready = true;
                     controller.setClientReadyStatus("Ready");
                     controller.checkIfAllReady();
+                }else if (message.startsWith("S")) {
+                    String numberPart = message.substring(1); // Extract the part of the message after "S"
+                    try {
+                        int number = Integer.parseInt(numberPart); // Convert the extracted part to an integer
+                        gsp.setScore(number);
+                    } catch (NumberFormatException e) {}
                 }
-                System.out.println("Received from client: " + message);
+                //Mesajlar buradan alınıyor Lives ve barrier number eklenecek
+                //Task 1
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -85,5 +98,9 @@ public class ClientHandler implements Runnable {
 
     public BufferedReader getIn() {
         return in;
+    }
+
+    public void setGSP(GameStatusPanel g) {
+        this.gsp=g;
     }
 }

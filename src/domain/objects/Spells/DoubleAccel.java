@@ -27,7 +27,6 @@ public class DoubleAccel extends Spell{
 
     @Override
     public void Activate() {
-    	System.out.println("DOUBLE ACCEL");
         originalDx = fireball.getVelocityX();
         originalDy = fireball.getVelocityY();
         fireball.setVelocity(originalDx / 2, originalDy / 2);

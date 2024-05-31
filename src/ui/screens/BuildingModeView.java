@@ -312,7 +312,7 @@ public class BuildingModeView extends JPanel {
             frame.revalidate();
             frame.repaint();
 
-            new ServerController(model, view, this.model, this);
+            ServerController.getInstance(model, view, this.model, this);
         }
 
         private void clientPage(){
@@ -329,7 +329,7 @@ public class BuildingModeView extends JPanel {
             frame.revalidate();
             frame.repaint();
             
-            new ClientController(model, view, this.model, this);
+            ClientController.getInstance(model, view, this.model, this);
         }
 
 	public static boolean isValidInteger(String input) {

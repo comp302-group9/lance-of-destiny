@@ -80,7 +80,6 @@ public class YmirSpell3 extends Spell{
         HashMap<Integer, ArrayList<Barrier>> map = movingBarriersInRow(validPositions);
         
         if (validPositions.isEmpty()){
-        	System.out.println("in");
         	return;
         }
         	
@@ -110,7 +109,7 @@ public class YmirSpell3 extends Spell{
                 model.addPurpleBarrier(barrier);
                 System.out.printf("Barrier added at position %d %d %n", barrier.getX(), barrier.getY());
 
-                barriersAdded++;//System.out.println("Barrier added");
+                barriersAdded++;
             }
         }
         return;

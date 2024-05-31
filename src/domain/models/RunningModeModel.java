@@ -325,9 +325,7 @@ public class RunningModeModel implements BarrierObserver {
         if (keys[KeyEvent.VK_H] && paddle.isHexActive() && currentTime - lastHexShotTime >= hexCooldown) {
             paddle.shootHex();
             lastHexShotTime = currentTime;
-        }
-        //System.out.println(writeGrid(grid));
-        
+        }        
         paddle.updateProjectiles();
     }
     

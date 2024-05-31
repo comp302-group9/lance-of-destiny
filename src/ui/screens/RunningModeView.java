@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -34,10 +33,11 @@ import domain.objects.Paddle;
 import domain.objects.Barrier.Barrier;
 import domain.objects.Barrier.Debris;
 import domain.objects.Barrier.HollowPurpleBarrier;
+import network.Connectable;
+import ui.screens.RModeUI.GameStatusPanel;
 import ui.screens.RModeUI.SpellIcon;
 import ui.screens.RModeUI.TopMenuPanel;
 import ui.screens.RModeUI.YmirView;
-
 
 public class RunningModeView extends JPanel {
     private int HEIGHT = DEFAULT.screenHeight;
@@ -50,8 +50,9 @@ public class RunningModeView extends JPanel {
     private JButton saveButton;
     private JButton backToBuildingModeButton;
     private JLabel countdownLabel;
+    private GameStatusPanel gameStatusPanel; // Declare GameStatusPanel
+    private Connectable connectable;
     
-
     private YmirModel ymirModel;
     private YmirView ymirView;
     private YmirController ymirController;
@@ -71,7 +72,8 @@ public class RunningModeView extends JPanel {
         setupCallbacks();
     }
 
-    public RunningModeView(RunningModeModel model, boolean isDualPlayer) {
+    public RunningModeView(RunningModeModel model, boolean isDualPlayer, Connectable con) {
+        this.connectable=con;
         this.model = model;
         try {
             backgroundImage = ImageIO.read(getClass().getResource("/ui/images/Background.png"));
@@ -81,7 +83,7 @@ public class RunningModeView extends JPanel {
         setFocusable(true);
         requestFocusInWindow();
         setupUIComponents();
-        setupDualPlayerComponents();
+        SetupTwoPlayerPanel();
         setupCallbacks();
     }
 
@@ -100,14 +102,10 @@ public class RunningModeView extends JPanel {
         add(topMenuPanel, BorderLayout.NORTH);
     }
 
-    private void setupDualPlayerComponents() {
-        JPanel countdownPanel = new JPanel(new GridBagLayout());
-        countdownPanel.setOpaque(false); // Make the panel transparent
-        countdownLabel = new JLabel("", SwingConstants.CENTER);
-        countdownLabel.setFont(new Font("Arial", Font.BOLD, 48));
-        countdownLabel.setForeground(Color.RED);
-        countdownPanel.add(countdownLabel);
-        add(countdownLabel, BorderLayout.CENTER);
+    void SetupTwoPlayerPanel(){
+        gameStatusPanel = new GameStatusPanel();
+        connectable.setGSP(gameStatusPanel);
+        add(gameStatusPanel, BorderLayout.SOUTH);
     }
 
     public void updateChances() {
@@ -118,11 +116,22 @@ public class RunningModeView extends JPanel {
         ((TopMenuPanel) getComponent(0)).updateScore(model.getScore());
     }
 
+    // Additional methods to update GameStatusPanel
+    public void updateGameStatusPanel() {
+        connectable.sendScore(model.getScore());
+        connectable.sendLives(model.getChances());
+        //connectable.sendScore(model.getBarriersLeft());
+
+        //Task 1
+        //Panel update yeri
+    }
+
     private void setupCallbacks() {
         model.setScoreChangeCallback(new Runnable() {
             @Override
             public void run() {
                 updateScore();
+                updateGameStatusPanel(); // Update GameStatusPanel
             }
         });
     }
@@ -216,7 +225,7 @@ public class RunningModeView extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-
+        if(this.connectable!=null){updateGameStatusPanel();}
         if (model.isGameOver()) {
             Font font = new Font("Arial", Font.BOLD, 36);
             g.setFont(font);
@@ -240,7 +249,7 @@ public class RunningModeView extends JPanel {
             }
             
             for (HollowPurpleBarrier b :model.getPurpleList()) {
-            	b.draw(g);
+                b.draw(g);
             }
 
             for (int j = 0; j < RunningModeModel.barriers.size(); j++) {
@@ -251,9 +260,9 @@ public class RunningModeView extends JPanel {
             }
             
             if (!model.getDebrisList().isEmpty()) {
-            	for (Debris d: model.getDebrisList()) {
-            		d.draw(g);
-            	}
+                for (Debris d: model.getDebrisList()) {
+                    d.draw(g);
+                }
             }
 
             for (int i = 0; i < RunningModeModel.spells.size(); i++) {
