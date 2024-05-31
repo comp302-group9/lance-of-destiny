@@ -102,8 +102,8 @@ public class YmirSpell3 extends Spell{
             if (isValidPosition(row, col, x,y, map)) {
                 HollowPurpleBarrier barrier = new HollowPurpleBarrier(x, y);
                 //model.addPurpleBarrier(barrier);
-                barrier.setGridX(row);
-        		barrier.setGridY(col);
+                barrier.setGridX(col);
+        		barrier.setGridY(row);
                 hollowPurpleBarriers.add(barrier);
                 model.addPurpleBarrier(barrier);
 

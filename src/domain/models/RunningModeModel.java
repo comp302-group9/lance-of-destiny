@@ -557,7 +557,7 @@ public class RunningModeModel implements BarrierObserver {
     public void addPurpleBarrier(HollowPurpleBarrier barrier) {
 		// TODO Auto-generated method stub
 		//assumes barriers only placed with respect to grid.
-    	grid[barrier.getGridX()][barrier.getGridY()]= 1;
+    	grid[barrier.getGridY()][barrier.getGridX()]= 1;
 		purpleList.add(barrier);
 
 	}
