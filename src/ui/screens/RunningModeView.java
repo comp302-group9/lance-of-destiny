@@ -105,6 +105,7 @@ public class RunningModeView extends JPanel {
     void SetupTwoPlayerPanel(){
         gameStatusPanel = new GameStatusPanel();
         connectable.setGSP(gameStatusPanel);
+        connectable.setModel(model);
         add(gameStatusPanel, BorderLayout.SOUTH);
     }
 

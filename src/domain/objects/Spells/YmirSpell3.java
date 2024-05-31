@@ -30,6 +30,7 @@ public class YmirSpell3 extends Spell{
     }
     @Override
     public void Activate(){
+        System.out.println(model.getUser().getUsername());
     	addHollowPurpleBarriers();
     	setActive(true);
         startTimer();

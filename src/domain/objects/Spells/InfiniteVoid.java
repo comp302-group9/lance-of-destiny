@@ -8,9 +8,11 @@ import javax.imageio.ImageIO;
 
 import domain.models.RunningModeModel;
 import domain.objects.Barrier.Barrier;
+import network.Connectable;
 
 public class InfiniteVoid extends Spell {
 	Random random = new Random();
+	Connectable con;
 
 	public InfiniteVoid() {
 		super();
@@ -23,8 +25,6 @@ public class InfiniteVoid extends Spell {
 			e.printStackTrace();
 		}
 	}
-
-	
 
 	@Override
 	public void Activate() {

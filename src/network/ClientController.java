@@ -25,6 +25,7 @@ public class ClientController implements Connectable{
     private BuildingModeModel buildingModel;
     private BuildingModeView buildingView;
     private GameStatusPanel panel;
+    private RunningModeModel rmodel;
 
     private ClientController(ClientModel model, ClientView view, BuildingModeModel bModel, BuildingModeView bView) {
         this.model = model;
@@ -73,6 +74,18 @@ public class ClientController implements Connectable{
                         panel.setScore(number);
 
                     } catch (NumberFormatException e) {}
+                }else if (message.equals("Ymir1")) {
+                    rmodel.badspells.get(0).increase();
+                    rmodel.badspells.get(0).Activate();
+                    rmodel.badspells.get(0).startTimer();
+                }else if (message.equals("Ymir2")) {
+                    rmodel.badspells.get(1).increase();
+                    rmodel.badspells.get(1).Activate();
+                    rmodel.badspells.get(1).startTimer();
+                }else if (message.equals("Ymir3")) {
+                    rmodel.badspells.get(2).increase();
+                    rmodel.badspells.get(2).Activate();
+                    rmodel.badspells.get(2).startTimer();
                 }
                 //Mesajlar buradan alınıyor Lives ve barrier number eklenecek
                 //Task 1
@@ -83,7 +96,7 @@ public class ClientController implements Connectable{
     }
 
     private void startGame() {
-        RunningModeModel rmodel = new RunningModeModel(buildingModel.getUser(), model.getGrid(), in, out, false);
+        RunningModeModel rmodel = new RunningModeModel(buildingModel.getUser(), model.getGrid(), in, out, false, this);
         RunningModeView rview = new RunningModeView(rmodel, true, this);
         RunningModeController rcontroller = new RunningModeController(rmodel, rview, model.getGrid());
 
@@ -141,6 +154,23 @@ public class ClientController implements Connectable{
     }
 
     @Override
+    public void sendSpell1() {
+        out.println("Ymir1");
+    }
+    
+    @Override
+    public void sendSpell2() {
+        // TODO Auto-generated method stub
+        out.println("Ymir2");
+    }
+    
+    @Override
+    public void sendSpell3() {
+        // TODO Auto-generated method stub
+        out.println("Ymir3");
+    }
+    
+    @Override
     public Connectable getInstance() {
         // TODO Auto-generated method stub
         if(instance!=null)return instance;
@@ -152,5 +182,11 @@ public class ClientController implements Connectable{
     public void setGSP(GameStatusPanel g) {
         // TODO Auto-generated method stub
         this.panel=g;
+    }
+
+    @Override
+    public void setModel(RunningModeModel m) {
+        // TODO Auto-generated method stub
+        this.rmodel=m;
     }
 }

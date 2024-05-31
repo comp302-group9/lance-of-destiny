@@ -17,6 +17,8 @@ import domain.objects.Spells.InfiniteVoid;
 import domain.objects.Spells.Overwhelm;
 import domain.objects.Spells.Spell;
 import domain.objects.Spells.YmirSpell3;
+import network.Connectable;
+import ui.screens.RModeUI.BadSpellIcon;
 import ui.screens.RModeUI.SpellIcon;
 
 public class ObjectFactory {
@@ -78,15 +80,15 @@ public class ObjectFactory {
         return new Fireball(x, y, width, height);
     }
 
-    public List<SpellIcon> createSpellIcons(RunningModeModel model) {
+    public List<SpellIcon> createSpellIcons(RunningModeModel model,Connectable con) {
         List<SpellIcon> spellIcons = new ArrayList<>();
         spellIcons.add(new SpellIcon(new Overwhelm(model.getFireball())));
         spellIcons.add(new SpellIcon(new Hex(model.getPaddle())));
         spellIcons.add(new SpellIcon(new Expension(model.getPaddle())));
         spellIcons.add(new SpellIcon(new Felicis(model)));
-        spellIcons.add(new SpellIcon(new DoubleAccel(model.getFireball())));
-        spellIcons.add(new SpellIcon(new InfiniteVoid()));
-        spellIcons.add(new SpellIcon(new YmirSpell3(model)));
+        spellIcons.add(new SpellIcon(new DoubleAccel(model.getFireball()),con));
+        spellIcons.add(new SpellIcon(new InfiniteVoid(),con));
+        spellIcons.add(new SpellIcon(new YmirSpell3(model),con));
         return spellIcons;
     }
 

@@ -1,5 +1,6 @@
 package network;
 
+import domain.models.RunningModeModel;
 import ui.screens.RModeUI.GameStatusPanel;
 
 public interface Connectable {
@@ -7,5 +8,9 @@ public interface Connectable {
     void sendScore(int i);
     void sendBarriers(int i);
     void sendLives(int i);
+    void sendSpell1();
+    void sendSpell2();
+    void sendSpell3();
     void setGSP(GameStatusPanel g);
+    void setModel(RunningModeModel m);
 }

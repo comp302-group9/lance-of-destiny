@@ -20,6 +20,7 @@ public class ServerController implements Connectable{
     private BuildingModeModel buildingModel;
     private BuildingModeView buildingView;
     private ClientHandler clientHandler;
+    private RunningModeModel rmodel;
 
     private ServerController(ServerModel model, ServerView view, BuildingModeModel bModel, BuildingModeView bView) {
         this.model = model;
@@ -80,7 +81,7 @@ public class ServerController implements Connectable{
         PrintWriter serverOut = model.getClientHandler().getOut();
         BufferedReader serverIn = model.getClientHandler().getIn();
 
-        RunningModeModel rmodel = new RunningModeModel(buildingModel.getUser(), buildingView.getGrid(), serverIn, serverOut, true);
+        RunningModeModel rmodel = new RunningModeModel(buildingModel.getUser(), buildingView.getGrid(), serverIn, serverOut, true, this);
         RunningModeView rview = new RunningModeView(rmodel, true, this);
         RunningModeController rcontroller = new RunningModeController(rmodel, rview, buildingView.getGrid());
 
@@ -134,5 +135,29 @@ public class ServerController implements Connectable{
 
     public void setGSP(GameStatusPanel g){
         this.clientHandler.setGSP(g);
+    }
+
+    @Override
+    public void sendSpell1() {
+        // TODO Auto-generated method stub
+        model.notifyClient("Ymir1");
+    }
+
+    @Override
+    public void sendSpell2() {
+        // TODO Auto-generated method stub
+        model.notifyClient("Ymir2");
+    }
+
+    @Override
+    public void sendSpell3() {
+        // TODO Auto-generated method stub
+        model.notifyClient("Ymir3");
+    }
+
+    @Override
+    public void setModel(RunningModeModel m) {
+        // TODO Auto-generated method stub
+        this.rmodel=m;
     }
 }

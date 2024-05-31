@@ -6,6 +6,7 @@ import java.net.*;
 
 import javax.swing.JPanel;
 
+import domain.models.RunningModeModel;
 import ui.screens.RModeUI.GameStatusPanel;
 
 public class ClientHandler implements Runnable {
@@ -15,6 +16,7 @@ public class ClientHandler implements Runnable {
     private BufferedReader in;
     private ServerController controller;
     private GameStatusPanel gsp;
+    private RunningModeModel rmodel;
 
     public ClientHandler(Socket socket, ServerController controller) {
         this.socket = socket;
@@ -44,6 +46,18 @@ public class ClientHandler implements Runnable {
                         int number = Integer.parseInt(numberPart); // Convert the extracted part to an integer
                         gsp.setScore(number);
                     } catch (NumberFormatException e) {}
+                }else if (message.equals("Ymir1")) {
+                    rmodel.badspells.get(0).increase();
+                    rmodel.badspells.get(0).Activate();
+                    rmodel.badspells.get(0).startTimer();
+                }else if (message.equals("Ymir2")) {
+                    rmodel.badspells.get(1).increase();
+                    rmodel.badspells.get(1).Activate();
+                    rmodel.badspells.get(1).startTimer();
+                }else if (message.equals("Ymir3")) {
+                    rmodel.badspells.get(2).increase();
+                    rmodel.badspells.get(2).Activate();
+                    rmodel.badspells.get(2).startTimer();
                 }
                 //Mesajlar buradan alınıyor Lives ve barrier number eklenecek
                 //Task 1
@@ -102,5 +116,9 @@ public class ClientHandler implements Runnable {
 
     public void setGSP(GameStatusPanel g) {
         this.gsp=g;
+    }
+
+    public void setModel(RunningModeModel m){
+        this.rmodel=m;
     }
 }

@@ -12,25 +12,21 @@ import domain.objects.Spells.Spell;
 import domain.objects.Spells.YmirSpell3;
 import network.Connectable;
 
-public class SpellIcon extends JPanel implements MouseListener{
+public class BadSpellIcon extends JPanel implements MouseListener{
     private BufferedImage image;
     private boolean Onit = false;
     public Spell spell;
     private Connectable con;
 
-    public SpellIcon(Spell spell) {
-        this.spell = spell;
-        image = spell.getImg();
-        setPreferredSize(new Dimension(120, 120));
-        setOpaque(false);
-        addMouseListener(this);
-    }
-    public SpellIcon(Spell spell, Connectable con) {
+    public BadSpellIcon(Spell spell, Connectable con) {
         this.con=con;
         this.spell = spell;
+
         image = spell.getImg();
+
         setPreferredSize(new Dimension(120, 120));
         setOpaque(false);
+
         addMouseListener(this);
     }
 
@@ -97,23 +93,15 @@ public class SpellIcon extends JPanel implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(con!=null){
-            
-            if (spell.getNum() > 0) {
-                if(spell instanceof YmirSpell3){System.out.println("Clicked3");
-                    con.sendSpell3();
-                }else if(spell instanceof InfiniteVoid){System.out.println("Clicked1");
-                    con.sendSpell2();
-                }else{
-                    con.sendSpell1();System.out.println("Clicked3");
+        System.out.println("Clicked");
+        if (spell.getNum() > 0) {
+            if(spell instanceof YmirSpell3){
+                con.sendSpell1();
+            }else if(spell instanceof InfiniteVoid){
+                con.sendSpell1();
+            }else{
+                con.sendSpell2();
             }
-        }
-        }
-        else if (spell.getNum() > 0) {
-            spell.setActive(true);
-            spell.startTimer();
-            spell.Activate();
-            repaint();
         }
     }
 

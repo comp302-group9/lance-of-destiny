@@ -29,6 +29,8 @@ import domain.objects.Barrier.ReinforcedBarrier;
 import domain.objects.Barrier.RewardingBarrier;
 import domain.objects.Barrier.SimpleBarrier;
 import domain.objects.Spells.Canons;
+import domain.objects.Spells.Spell;
+import network.Connectable;
 import ui.screens.RModeUI.SpellIcon;
 
 public class RunningModeModel implements BarrierObserver {
@@ -50,10 +52,12 @@ public class RunningModeModel implements BarrierObserver {
     private boolean gameOver = false;
     private String gameOverMessage = "Game Over!";
     public static List<SpellIcon> spells = new ArrayList<>();
+    public static List<Spell> badspells = new ArrayList<>();
     private boolean gameStarted = false;
     private long lastHexShotTime = 0;
     private final long hexCooldown = 300;
     private ArrayList<Debris> debrisList= new ArrayList<>();
+    private Connectable con;
 
     private int[][] grid;
     private int gameId;
@@ -111,12 +115,14 @@ public class RunningModeModel implements BarrierObserver {
     }
 
     // CONSTRUCTOR FOR DUAL PLAYER MODE
-    public RunningModeModel(User user, int[][] grid, BufferedReader in, PrintWriter out, boolean isHost) {
+    public RunningModeModel(User user, int[][] grid, BufferedReader in, PrintWriter out, boolean isHost, Connectable con) {
         this.user =user;
         this.grid = grid;
         this.in = in;
         this.out = out;
         this.isHost = isHost;
+        this.con=con;
+        System.out.println(con);
 
         initializeGame();
         initializeSpellsDual();        
@@ -139,7 +145,8 @@ public class RunningModeModel implements BarrierObserver {
 
     void initializeSpellsDual() {
     	spells.clear();
-        spells=ObjectFactory.getInstance().createSpellIcons(this);
+        spells=ObjectFactory.getInstance().createSpellIcons(this, con);
+        badspells=ObjectFactory.getInstance().createSpellIcons3(this);
     }
     //
     public void setScore(int score) {
