@@ -122,15 +122,17 @@ public class ServerController implements Connectable{
     }
 
     @Override
-    public void sendBarriers(int i) {
+    public void sendBarriersLeft(int i) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'sendBarriers'");
+        model.notifyClient("B"+i);
+        //throw new UnsupportedOperationException("Unimplemented method 'sendBarriers'");
     }
 
     @Override
     public void sendLives(int i) {
         //Mesaj buradan göneriliyor
         //Task 1
+        model.notifyClient("L"+i);
     }
 
     public void setGSP(GameStatusPanel g){

@@ -10,9 +10,9 @@ public class GameStatusPanel extends JPanel {
 
     public GameStatusPanel() {
         // Initialize the labels
-        scoreLabel = new JLabel("Score: 100");
+        scoreLabel = new JLabel("Score: 0");
         livesLabel = new JLabel("Lives: 3");
-        barriersLeftLabel = new JLabel("Barriers Left: 5");
+        barriersLeftLabel = new JLabel("Barriers Left: 0");
 
         // Set the layout of the panel
         setLayout(new GridLayout(1, 3));

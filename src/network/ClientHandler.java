@@ -46,7 +46,23 @@ public class ClientHandler implements Runnable {
                         int number = Integer.parseInt(numberPart); // Convert the extracted part to an integer
                         gsp.setScore(number);
                     } catch (NumberFormatException e) {}
-                }else if (message.equals("Ymir1")) {
+                }
+                else if (message.startsWith("B")) {
+                    String numberPart = message.substring(1); // Extract the part of the message after "S"
+                    try {
+                        int number = Integer.parseInt(numberPart); // Convert the extracted part to an integer
+                        gsp.setBarriersLeft(number);
+                    } catch (NumberFormatException e) {}
+                }
+
+                else if (message.startsWith("L")) {
+                    String numberPart = message.substring(1); // Extract the part of the message after "S"
+                    try {
+                        int number = Integer.parseInt(numberPart); // Convert the extracted part to an integer
+                        gsp.setLives(number);
+                    } catch (NumberFormatException e) {}
+                }
+                else if (message.equals("Ymir1")) {
                     rmodel.badspells.get(0).increase();
                     rmodel.badspells.get(0).Activate();
                     rmodel.badspells.get(0).startTimer();

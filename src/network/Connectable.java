@@ -6,7 +6,7 @@ import ui.screens.RModeUI.GameStatusPanel;
 public interface Connectable {
     Connectable getInstance();
     void sendScore(int i);
-    void sendBarriers(int i);
+    void sendBarriersLeft(int i);
     void sendLives(int i);
     void sendSpell1();
     void sendSpell2();

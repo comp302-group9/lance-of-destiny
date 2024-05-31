@@ -122,6 +122,7 @@ public class RunningModeView extends JPanel {
         if(connectable!=null){
             connectable.sendScore(model.getScore());
             connectable.sendLives(model.getChances());
+            connectable.sendBarriersLeft(model.getBarriersLeft());
         //connectable.sendScore(model.getBarriersLeft());
         }
         

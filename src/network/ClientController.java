@@ -74,7 +74,29 @@ public class ClientController implements Connectable{
                         panel.setScore(number);
 
                     } catch (NumberFormatException e) {}
-                }else if (message.equals("Ymir1")) {
+                }
+                else if (message.startsWith("B")) {
+                    System.out.println("second "+message);
+                    String numberPart = message.substring(1); // Extract the part of the message after "S"
+                    try {
+                        int number = Integer.parseInt(numberPart); // Convert the extracted part to an integer
+                        System.out.println("Barriers Left: "+number);
+                        panel.setBarriersLeft(number);
+
+                    } catch (NumberFormatException e) {}
+                }
+
+                else if (message.startsWith("L")) {
+                    System.out.println("second "+message);
+                    String numberPart = message.substring(1); // Extract the part of the message after "S"
+                    try {
+                        int number = Integer.parseInt(numberPart); // Convert the extracted part to an integer
+                        System.out.println("Lives: "+number);
+                        panel.setLives(number);
+
+                    } catch (NumberFormatException e) {}
+                }
+                else if (message.equals("Ymir1")) {
                     rmodel.badspells.get(0).increase();
                     rmodel.badspells.get(0).Activate();
                     rmodel.badspells.get(0).startTimer();
@@ -142,15 +164,17 @@ public class ClientController implements Connectable{
     }
 
     @Override
-    public void sendBarriers(int i) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'sendBarriers'");
+    public void sendBarriersLeft(int barriersLeft) {
+
+        out.println("B"+ barriersLeft);
+        //throw new UnsupportedOperationException("Unimplemented method 'sendBarriers'");
     }
 
     @Override
-    public void sendLives(int i) {
+    public void sendLives(int lives) {
         // Task 1
         //Mesajlar buradan gönderiliyor
+        out.println("L"+ lives);
     }
 
     @Override

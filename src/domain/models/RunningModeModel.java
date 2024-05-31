@@ -90,12 +90,7 @@ public class RunningModeModel implements BarrierObserver {
         //setupSaveButtonListener();
 
         initializeGame();
-        initializeSpellsSingle();
-
-        // Start a separate thread to handle incoming messages
-        new Thread(this::handleIncomingMessages).start();
-//        }
-        
+        initializeSpellsSingle();        
 
         lastUpdateTime = System.currentTimeMillis();
         this.gameStartingTime = System.currentTimeMillis();
@@ -139,7 +134,7 @@ public class RunningModeModel implements BarrierObserver {
 
     // Method to check if all barriers are destroyed
     public boolean areAllBarriersDestroyed() {
-        return barriers.isEmpty();
+        return barriers.isEmpty() && purpleList.isEmpty();
     }
 
     public void initializeGame() {
@@ -164,13 +159,17 @@ public class RunningModeModel implements BarrierObserver {
         this.score = score;
     }
 
-    // Method to set the number of chances
+
     public void setChances(int chances) {
         this.chances = chances;
     }
 
     public int getScore() {
         return score;
+    }
+
+    public int getBarriersLeft() {
+        return barriers.size();
     }
 
     public void increaseScore(long currentTime) {
@@ -196,7 +195,6 @@ public class RunningModeModel implements BarrierObserver {
         return user;
     }
 
-    
     public int getGameId() {
         return gameId;
     }
@@ -204,7 +202,6 @@ public class RunningModeModel implements BarrierObserver {
     public ArrayList<HollowPurpleBarrier> getPurpleList(){
     	return this.purpleList;
     }
-
 
     public void setGameOverCallback(Runnable gameOverCallback) {
         this.gameOverCallback = gameOverCallback;
@@ -265,21 +262,10 @@ public class RunningModeModel implements BarrierObserver {
         chances++;
     }
 
-    
     public void update(long currentTime, boolean[] keys) {
         double deltaTime = (currentTime - lastUpdateTime) / 1000.0;
         lastUpdateTime = currentTime;
 
-
-        /*/
-        // Process incoming messages
-        while (!incomingMessages.isEmpty()) {
-            String message = incomingMessages.poll();
-            if (message != null) {
-                processMessage(message);
-            }
-        }
-        */
         updateGameElements(deltaTime);
         handleCollisions(currentTime);
         
@@ -288,10 +274,6 @@ public class RunningModeModel implements BarrierObserver {
             return;
         }
         
-        /*if (keys[KeyEvent.VK_W] && !fireball.isLaunched()) {
-            fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
-        }
-        */
         if (keys[KeyEvent.VK_LEFT]) {
             paddle.setDeltaX(-1, DEFAULT.screenWidth);
             paddle.setDirection(-1);
@@ -314,16 +296,11 @@ public class RunningModeModel implements BarrierObserver {
             fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
         } 
         
-        /*
-        // Handle game start logic
-        if (keys[KeyEvent.VK_SPACE] && !fireball.isLaunched()) {
-            if (isHost) {
+        // Handle game start logic for Dual Player Game
+        if (!fireball.isLaunched() && con != null) {
+            
                 fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
-                out.println("LAUNCH_FIREBALL");  // Send launch message to the client
-            } else {
-                out.println("REQUEST_LAUNCH_FIREBALL");  // Send request to launch message to the host
-            }
-        } */
+        } 
 
         if (keys[KeyEvent.VK_H] && paddle.isHexActive() && currentTime - lastHexShotTime >= hexCooldown) {
             paddle.shootHex();
@@ -440,26 +417,6 @@ public class RunningModeModel implements BarrierObserver {
             }
         }
     }
-    private void handleIncomingMessages() {
-        try {
-            String message;
-            while ((message = in.readLine()) != null) {
-                incomingMessages.add(message);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void processMessage(String message) {
-        if (message.equals("LAUNCH_FIREBALL")) {
-            fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
-        } else if (message.equals("REQUEST_LAUNCH_FIREBALL") && isHost) {
-            fireball.launch(paddle.getX() + paddle.getWidth() / 2, paddle.getY() - fireball.getHeight());
-            out.println("LAUNCH_FIREBALL");  // Notify client to launch fireball
-        }
-    }
-
     
     public void initaliseBarrierLocations(int[][] grid) {
         int xStart = DEFAULT.screenHeight / 32;
