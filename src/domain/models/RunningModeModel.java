@@ -34,6 +34,7 @@ import network.Connectable;
 import ui.screens.RModeUI.SpellIcon;
 
 public class RunningModeModel implements BarrierObserver {
+    private Runnable gameWinCallback;
     public static int barrierWidth = 51;
     public static int barrierHeight = 15;
     private static final int ROWS = DEFAULT.ROWS;
@@ -129,6 +130,16 @@ public class RunningModeModel implements BarrierObserver {
 
         lastUpdateTime = System.currentTimeMillis();
         this.gameStartingTime = System.currentTimeMillis();
+    }
+
+    // Method to set the game win callback
+    public void setGameWinCallback(Runnable gameWinCallback) {
+        this.gameWinCallback = gameWinCallback;
+    }
+
+    // Method to check if all barriers are destroyed
+    public boolean areAllBarriersDestroyed() {
+        return barriers.isEmpty();
     }
 
     public void initializeGame() {
@@ -319,6 +330,20 @@ public class RunningModeModel implements BarrierObserver {
             lastHexShotTime = currentTime;
         }        
         paddle.updateProjectiles();
+
+        // Check for game over condition
+        if (fireball.getY() >= DEFAULT.screenHeight) {
+            decreaseChance();
+            return;
+        }
+
+        // Check for game win condition
+        if (areAllBarriersDestroyed()) {
+            setGameOver(true);
+            if (gameWinCallback != null) {
+                gameWinCallback.run();
+            }
+        }
     }
     
     private void updateGameElements(double deltaTime) {

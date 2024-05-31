@@ -286,4 +286,9 @@ public class RunningModeView extends JPanel {
         super.addNotify();
         requestFocusInWindow();  
     }
+
+    
+
+    
+
 }

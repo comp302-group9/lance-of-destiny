@@ -5,9 +5,13 @@ import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
 
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import domain.models.RunningModeModel;
+import ui.screens.GameOverView;
+import ui.screens.GameWinView;
 import ui.screens.RunningModeView;
 
 
@@ -35,6 +39,7 @@ public class RunningModeController implements KeyListener, Runnable {
         //model.setFireball(ObjectFactory.getInstance().createFireball(0, 0, 16, 16));
         model.getFireball().setGrid(grid);
         model.setGameOverCallback(this::handleGameOver);
+        model.setGameWinCallback(this::handleGameWin);
     }
     /* 
     public RunningModeController(RunningModeModel model, RunningModeView view, int[][] grid, PrintWriter out, BufferedReader in, boolean isHost) {
@@ -55,13 +60,25 @@ public class RunningModeController implements KeyListener, Runnable {
         //new Thread(this::receiveMessages).start();  // Start a thread to receive messages
     } */
 
-
     private void handleGameOver() {
-        // Display game over message for 5 seconds
-        Timer timer = new Timer(5000, e -> view.quitGame());
-        timer.setRepeats(false);
-        timer.start();
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
+            frame.setContentPane(new GameOverView(model.getUser().getUsername(), model.getScore()));
+            frame.revalidate();
+        });
+        stopGame();
     }
+
+    private void handleGameWin() {
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(view);
+            frame.setContentPane(new GameWinView(model.getUser().getUsername(), model.getChances(), model.getScore()));
+            frame.revalidate();
+        });
+        stopGame();
+    }
+
+    
 
     @Override
     public void run() {
