@@ -76,22 +76,19 @@ public class ClientController implements Connectable{
                     } catch (NumberFormatException e) {}
                 }
                 else if (message.startsWith("B")) {
-                    System.out.println("second "+message);
+                    
                     String numberPart = message.substring(1); // Extract the part of the message after "S"
                     try {
                         int number = Integer.parseInt(numberPart); // Convert the extracted part to an integer
-                        System.out.println("Barriers Left: "+number);
                         panel.setBarriersLeft(number);
 
                     } catch (NumberFormatException e) {}
                 }
 
                 else if (message.startsWith("L")) {
-                    System.out.println("second "+message);
                     String numberPart = message.substring(1); // Extract the part of the message after "S"
                     try {
                         int number = Integer.parseInt(numberPart); // Convert the extracted part to an integer
-                        System.out.println("Lives: "+number);
                         panel.setLives(number);
 
                     } catch (NumberFormatException e) {}

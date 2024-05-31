@@ -93,7 +93,6 @@ public class BadSpellIcon extends JPanel implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println("Clicked");
         if (spell.getNum() > 0) {
             if(spell instanceof YmirSpell3){
                 con.sendSpell1();

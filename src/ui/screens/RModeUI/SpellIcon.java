@@ -100,12 +100,12 @@ public class SpellIcon extends JPanel implements MouseListener{
         if(con!=null){
             if (spell.getNum() > 0) {
                 spell.decrease();
-                if(spell instanceof YmirSpell3){System.out.println("Clicked3");
+                if(spell instanceof YmirSpell3){
                     con.sendSpell3();
-                }else if(spell instanceof InfiniteVoid){System.out.println("Clicked1");
+                }else if(spell instanceof InfiniteVoid){
                     con.sendSpell2();
                 }else{
-                    con.sendSpell1();System.out.println("Clicked3");
+                    con.sendSpell1();
             }
         }
         }

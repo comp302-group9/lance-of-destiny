@@ -13,7 +13,7 @@ public class HollowPurpleBarrier extends SimpleBarrier{
 	}
 	
 	public boolean onHit() {
-		return false;
+		return true;
 	}
 	
 	public void update() {

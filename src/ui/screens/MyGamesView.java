@@ -46,8 +46,8 @@ public class MyGamesView extends JPanel {
         this.add(scrollPane);
 
         // Sample label
-        JLabel b = new JLabel("bartu");
-        b.setBounds(50, 50, 150, 30);
+        JLabel b = new JLabel("WELCOME TRAVELER, WHICH GAME WOULD YOU LIKE TO PLAY");
+        b.setBounds(50, 50, 1050, 30);
         gamesPanel.add(b); // Adding label to gamesPanel so it's within the scrollable area
 
         // Back button setup

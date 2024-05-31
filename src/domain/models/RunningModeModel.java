@@ -115,7 +115,6 @@ public class RunningModeModel implements BarrierObserver {
         this.user =user;
         this.grid = grid;
         this.con=con;
-        System.out.println(con);
 
         initializeGame();
         initializeSpellsDual();        
@@ -276,6 +275,7 @@ public class RunningModeModel implements BarrierObserver {
     public int getChances() {
         return chances;
     }
+    
 
     public void decreaseChance() {
         chances--;
@@ -403,7 +403,7 @@ public class RunningModeModel implements BarrierObserver {
             grid = fireball.getGrid();
             lastCollisionTime2 = currentTime;
         }
-        
+
         if (CollisionHandler.CollisionCheck(paddle, fireball) && (currentTime - lastCollisionTime) >= cooldown) {
             fireball.reflectFromPaddle(paddle);
             fireball.validateSpeed(paddle);
@@ -411,13 +411,14 @@ public class RunningModeModel implements BarrierObserver {
         }
         
         if (!purpleList.isEmpty()) {
-            Iterator<HollowPurpleBarrier> iterator = purpleList.iterator();
-            while (iterator.hasNext()) {
-            	HollowPurpleBarrier b = iterator.next();
-            	if(CollisionHandler.CollisionCheck(fireball, b)) {
-            		iterator.remove();
-            	}
+            List<HollowPurpleBarrier> barriersToRemove = new ArrayList<>();
+
+            for (HollowPurpleBarrier b : purpleList) {
+                if (CollisionHandler.CollisionCheck(fireball, b)) {
+                    barriersToRemove.add(b);
+                }
             }
+            purpleList.removeAll(barriersToRemove); 
         }
         
         if (!debrisList.isEmpty()) {

@@ -30,7 +30,6 @@ public class YmirSpell3 extends Spell{
     }
     @Override
     public void Activate(){
-        System.out.println(model.getUser().getUsername());
     	addHollowPurpleBarriers();
     	setActive(true);
         startTimer();
@@ -86,12 +85,12 @@ public class YmirSpell3 extends Spell{
         
         
         //HashMap<Integer, ArrayList<Barrier>> map = movingBarriersInRow(validPositions);
-
+        ArrayList<int[]>usedvalidPositions = new ArrayList<>();
         while (barriersAdded < 8 || barriersAdded == validPositions.size()) {
-
-            int [] position = validPositions.get(random.nextInt(validPositions.size()));
             
-            int row = position[0];
+            int [] position = validPositions.get(random.nextInt(validPositions.size()));
+            if(usedvalidPositions!=null && !usedvalidPositions.contains(position))
+            {int row = position[0];
             int col = position[1];
             int xStart = DEFAULT.screenHeight / 32;
             int yStart = DEFAULT.screenWidth / 32;
@@ -108,8 +107,9 @@ public class YmirSpell3 extends Spell{
                 hollowPurpleBarriers.add(barrier);
                 model.addPurpleBarrier(barrier);
 
+                usedvalidPositions.add(position);
                 barriersAdded++;
-            }
+            }}
         }
         return;
     }

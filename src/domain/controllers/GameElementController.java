@@ -3,6 +3,7 @@ package domain.controllers;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import domain.DEFAULT;
 import domain.models.GameSession;
 import domain.models.RunningModeModel;
 import ui.screens.MyGamesView;
@@ -43,7 +44,7 @@ public class GameElementController {
         newFrame.setContentPane(runningView);
         newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         newFrame.pack();
-        newFrame.setSize(600 * 16 / 9, 600); // Ensure aspect ratio is maintained
+        newFrame.setSize(DEFAULT.screenWidth, DEFAULT.screenHeight); // Ensure aspect ratio is maintained
         newFrame.setLocationRelativeTo(null); // Center on screen
         newFrame.setVisible(true);
 
@@ -74,6 +75,6 @@ public class GameElementController {
 	}
     
     public void writeSomething(String s) {
-    	System.out.println(s);
+    	//System.out.println(s);
     }
 }

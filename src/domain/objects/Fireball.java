@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 
 import domain.models.RunningModeModel;
 import domain.objects.Barrier.Barrier;
+import domain.objects.Barrier.HollowPurpleBarrier;
 
 public class Fireball implements GameObject{
 
@@ -120,6 +121,9 @@ public class Fireball implements GameObject{
     
     public void checkCollisionWithBarriers(ArrayList<Barrier> barriers, RunningModeModel model) {
         ArrayList<Barrier> barriersCopy = new ArrayList<>(barriers); // Create a copy of the list
+        if (model.getPurpleList() != null) {
+        barriersCopy.addAll(model.getPurpleList());
+        }
         
         long currentTime = System.currentTimeMillis(); // Get the current time
         
@@ -173,69 +177,96 @@ public class Fireball implements GameObject{
             boolean isBottomRightInside = (bottomRight.getX() >= barrierBounds.getMinX() && bottomRight.getX() <= barrierBounds.getMaxX())
             && (bottomRight.getY() >= barrierBounds.getMinY() && bottomRight.getY() <= barrierBounds.getMaxY());
             
+            boolean check =!overwhelmed || barrier.getFrozen();
+
             if (isMiddleBottomInside || isMiddleTopInside) {
-                if (!overwhelmed) {
-                    reflectHorizontal();
-                }
+                    if(check)reflectHorizontal();
+                
                 model.increaseScore(currentTime); 
                 if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                 	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
-                    barriers.remove(barrier); // Safely remove it from the list
+                    if (barrier instanceof HollowPurpleBarrier) {
+                        model.getPurpleList().remove(barrier); 
+                     }
+                     else {
+                     barriers.remove(barrier); // Safely remove it from the list
+                     }
                 }
                 break;
             } else if (isMiddleLeftInside || isMiddleRightInside) {
             	
                 if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                 	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
+
+                    if (barrier instanceof HollowPurpleBarrier) {
+                       model.getPurpleList().remove(barrier); 
+                    }
+                    else {
                     barriers.remove(barrier); // Safely remove it from the list
+                    }
                 }
-                if (!overwhelmed) {
-                    reflectVertical();   
-                }
+                    if(check)reflectVertical();   
+                
                 model.increaseScore(currentTime);
                
                 break;
             } else if (isTopLeftInside || isTopRightInside) {
                 if (ballBounds.getMaxY() < barrierBounds.getMaxY() + ballBounds.getHeight() - py) {
-                    if (!overwhelmed) {
-                        reflectVertical();
-                    }
+                        if(check)reflectVertical();
+                    
                     model.increaseScore(currentTime); 
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                     	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
-                        barriers.remove(barrier); // Safely remove it from the list
+                        if (barrier instanceof HollowPurpleBarrier) {
+                            model.getPurpleList().remove(barrier); 
+                         }
+                         else {
+                         barriers.remove(barrier); // Safely remove it from the list
+                         }
                     }
                     break;
                 } else if ((ballBounds.getMaxX() < barrierBounds.getMaxX() + ballBounds.getWidth() - px) || ballBounds.getX() > barrierBounds.getX() - ballBounds.getWidth() + px) {
-                    if (!overwhelmed) {
-                        reflectHorizontal();
-                    }
+                        if(check)reflectHorizontal();
+                    
                     model.increaseScore(currentTime); 
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                     	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
-                        barriers.remove(barrier); // Safely remove it from the list
+                        if (barrier instanceof HollowPurpleBarrier) {
+                            model.getPurpleList().remove(barrier); 
+                         }
+                         else {
+                         barriers.remove(barrier); // Safely remove it from the list
+                         }
                     }
                     break;
                 }
             } else if (isBottomLeftInside || isBottomRightInside) {
                 if (ballBounds.getY() > barrierBounds.getY() - ballBounds.getHeight() + py) {
-                    if (!overwhelmed) {
-                        reflectVertical();
-                    }
+                        if(check)reflectVertical();
+                    
                     model.increaseScore(currentTime); 
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                     	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
-                        barriers.remove(barrier); // Safely remove it from the list
+                        if (barrier instanceof HollowPurpleBarrier) {
+                            model.getPurpleList().remove(barrier); 
+                         }
+                         else {
+                         barriers.remove(barrier); // Safely remove it from the list
+                         }
                     }
                     break;
                 } else if ((ballBounds.getMaxX() < barrierBounds.getMaxX() + ballBounds.getWidth() - px) || ballBounds.getX() > barrierBounds.getX() - ballBounds.getWidth() + px) {
-                    if (!overwhelmed) {
-                        reflectHorizontal();
-                    }
+                        if(check)reflectHorizontal();
+                    
                     model.increaseScore(currentTime); 
                     if (!barrier.getFrozen() && barrier.onHit()) { // If the barrier should be destroyed
                     	model.getGrid()[barrier.getGridY()][barrier.getGridX()] = 0;
-                        barriers.remove(barrier); // Safely remove it from the list
+                        if (barrier instanceof HollowPurpleBarrier) {
+                            model.getPurpleList().remove(barrier); 
+                         }
+                         else {
+                         barriers.remove(barrier); // Safely remove it from the list
+                         }
                     }
                     break;
                 }
