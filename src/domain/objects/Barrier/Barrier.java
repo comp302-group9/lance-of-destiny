@@ -167,7 +167,11 @@ public abstract class Barrier implements GameObject{
 	}
 
 	public Rectangle getBounds() {
-		return new Rectangle(x, y, width, height); 
+		return new Rectangle(x, y+height, width, height); 
+	}
+	
+	public Rectangle getFutureBounds() {
+		return new Rectangle(x+direction, y+height+direction, width, height);
 	}
 
 	public abstract boolean onHit();

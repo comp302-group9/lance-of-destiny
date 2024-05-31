@@ -1,12 +1,23 @@
 package domain.objects;
 
-import domain.models.RunningModeModel;
-import domain.objects.Barrier.*;
-import domain.objects.Spells.*;
-import ui.screens.RModeUI.SpellIcon;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import domain.models.RunningModeModel;
+import domain.objects.Barrier.Barrier;
+import domain.objects.Barrier.ExplosiveBarrier;
+import domain.objects.Barrier.ReinforcedBarrier;
+import domain.objects.Barrier.RewardingBarrier;
+import domain.objects.Barrier.SimpleBarrier;
+import domain.objects.Spells.DoubleAccel;
+import domain.objects.Spells.Expension;
+import domain.objects.Spells.Felicis;
+import domain.objects.Spells.Hex;
+import domain.objects.Spells.InfiniteVoid;
+import domain.objects.Spells.Overwhelm;
+import domain.objects.Spells.Spell;
+import domain.objects.Spells.YmirSpell3;
+import ui.screens.RModeUI.SpellIcon;
 
 public class ObjectFactory {
 
@@ -75,6 +86,7 @@ public class ObjectFactory {
         spellIcons.add(new SpellIcon(new Felicis(model)));
         spellIcons.add(new SpellIcon(new DoubleAccel(model.getFireball())));
         spellIcons.add(new SpellIcon(new InfiniteVoid()));
+        spellIcons.add(new SpellIcon(new YmirSpell3(model)));
         return spellIcons;
     }
 
@@ -91,6 +103,7 @@ public class ObjectFactory {
         List<Spell> spell = new ArrayList<>();
         spell.add(new DoubleAccel(model.getFireball()));
         spell.add(new InfiniteVoid());
+        spell.add(new YmirSpell3(model));
         return spell;
     }
 }

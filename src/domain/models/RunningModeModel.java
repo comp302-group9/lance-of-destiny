@@ -24,6 +24,7 @@ import domain.objects.Barrier.Barrier;
 import domain.objects.Barrier.BarrierObserver;
 import domain.objects.Barrier.Debris;
 import domain.objects.Barrier.ExplosiveBarrier;
+import domain.objects.Barrier.HollowPurpleBarrier;
 import domain.objects.Barrier.ReinforcedBarrier;
 import domain.objects.Barrier.RewardingBarrier;
 import domain.objects.Barrier.SimpleBarrier;
@@ -44,6 +45,7 @@ public class RunningModeModel implements BarrierObserver {
     private boolean paused = false;
     public static ArrayList<Barrier> barriers = new ArrayList<>();
     public static ArrayList<Box> boxes = new ArrayList<>();
+    private ArrayList<HollowPurpleBarrier> purpleList = new ArrayList<>();
     private Random random = new Random();
     private boolean gameOver = false;
     private String gameOverMessage = "Game Over!";
@@ -83,20 +85,7 @@ public class RunningModeModel implements BarrierObserver {
         //setupSaveButtonListener();
 
         initializeGame();
-        initializeSpells();
-        
-//        boxes.add(new Box(WIDTH/2,300));
-//
-//        // Initialize the paddle
-//        paddle = new Paddle(DEFAULT.screenWidth / 2, DEFAULT.screenHeight - 50, DEFAULT.paddleWidth, DEFAULT.paddleHeight); // Adjust parameters as needed
-//        
-//        // Initialize the fireball
-//        fireball = new Fireball( DEFAULT.screenWidth / 2, 7 * DEFAULT.screenHeight / 8, 16, 16); // Adjust parameters as needed
-//        if(spells.isEmpty()){
-//            initializeSpells();
-//
-//        initaliseBarrierLocations(grid);
-//        getFireball().setGrid(grid);;
+        initializeSpellsSingle();
 
         // Start a separate thread to handle incoming messages
         new Thread(this::handleIncomingMessages).start();
@@ -114,26 +103,8 @@ public class RunningModeModel implements BarrierObserver {
         this.grid = grid;
         this.gameId = gameId;
 
-        //setupQuitButtonListener();
-        //setupSaveButtonListener();
-
         initializeGame();
-        initializeSpells();
-        
-//        boxes.add(new Box(WIDTH/2,300));
-//
-//        // Initialize the paddle
-//        paddle = new Paddle(DEFAULT.screenWidth / 2, DEFAULT.screenHeight - 50, DEFAULT.paddleWidth, DEFAULT.paddleHeight); // Adjust parameters as needed
-//        
-//        // Initialize the fireball
-//        fireball = new Fireball( DEFAULT.screenWidth / 2, 7 * DEFAULT.screenHeight / 8, 16, 16); // Adjust parameters as needed
-//        if(spells.isEmpty()){
-//            initializeSpells();
-//
-//        initaliseBarrierLocations(grid);
-//        getFireball().setGrid(grid);
-//        }
-        
+        initializeSpellsSingle();
 
         lastUpdateTime = System.currentTimeMillis();
         this.gameStartingTime = System.currentTimeMillis();
@@ -157,7 +128,7 @@ public class RunningModeModel implements BarrierObserver {
         // Initialize the fireball
         fireball = new Fireball( DEFAULT.screenWidth / 2, 7 * DEFAULT.screenHeight / 8, 16, 16); // Adjust parameters as needed
         if(spells.isEmpty()){
-            initializeSpells();
+            initializeSpellsDual();
 
         initaliseBarrierLocations(grid);
         getFireball().setGrid(grid);;
@@ -173,23 +144,15 @@ public class RunningModeModel implements BarrierObserver {
         paddle = new Paddle(WIDTH / 2, HEIGHT - 50, WIDTH / 10, 20);
         fireball = new Fireball(WIDTH / 2, 7 * HEIGHT / 8, 16, 16);
         lastUpdateTime = System.currentTimeMillis();
-//        if(spells.isEmpty()){
-//            spells.add(new SpellIcon(new Overwhelm(fireball)));
-//            spells.add(new SpellIcon(new Hex(paddle)));
-//            spells.add(new SpellIcon(new Expension(paddle)));
-//            spells.add(new SpellIcon(new Felicis(this)));
-//        }
     }
 
-    void initializeSpells() {
-    	spells.clear(); // Clear existing spells before initializing new ones
-//    	spells.add(new SpellIcon(new Overwhelm(fireball)));
-//        spells.add(new SpellIcon(new Hex(paddle)));
-//        spells.add(new SpellIcon(new Expension(paddle)));
-//        spells.add(new SpellIcon(new Felicis(this)));
-//        spells.add(new SpellIcon(new DoubleAccel(fireball)));
-//        spells.add(new SpellIcon(new InfiniteVoid()));
-//        spells.add(new SpellIcon(new YmirSpell3()));
+    void initializeSpellsSingle() {
+    	spells.clear();
+        spells=ObjectFactory.getInstance().createSpellIcons2(this);
+    }
+
+    void initializeSpellsDual() {
+    	spells.clear();
         spells=ObjectFactory.getInstance().createSpellIcons(this);
     }
     //
@@ -233,6 +196,10 @@ public class RunningModeModel implements BarrierObserver {
     
     public int getGameId() {
         return gameId;
+    }
+    
+    public ArrayList<HollowPurpleBarrier> getPurpleList(){
+    	return this.purpleList;
     }
 
 
@@ -420,6 +387,16 @@ public class RunningModeModel implements BarrierObserver {
             lastCollisionTime = currentTime;
         }
         
+        if (!purpleList.isEmpty()) {
+            Iterator<HollowPurpleBarrier> iterator = purpleList.iterator();
+            while (iterator.hasNext()) {
+            	HollowPurpleBarrier b = iterator.next();
+            	if(CollisionHandler.CollisionCheck(fireball, b)) {
+            		iterator.remove();
+            	}
+            }
+        }
+        
         if (!debrisList.isEmpty()) {
         	Iterator<Debris> iterator = debrisList.iterator();
         	while (iterator.hasNext()) {
@@ -573,5 +550,20 @@ public class RunningModeModel implements BarrierObserver {
 
     public Paddle getPaddle() {return paddle;}
     public Fireball getFireball() {return fireball;}
+    
+    public void addPurpleBarrier(HollowPurpleBarrier barrier) {
+		// TODO Auto-generated method stub
+		//assumes barriers only placed with respect to grid.
+    	grid[barrier.getGridX()][barrier.getGridY()]= 1;
+		purpleList.add(barrier);
+
+	}
+
+
+	public void removePurpleBarrier(Barrier barrier) {
+		grid[barrier.getGridX()][barrier.getGridY()]= 0;
+		purpleList.remove(barrier);
+
+	}
 }
     

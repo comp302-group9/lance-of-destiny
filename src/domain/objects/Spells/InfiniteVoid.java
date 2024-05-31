@@ -2,7 +2,6 @@ package domain.objects.Spells;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -38,6 +37,7 @@ public class InfiniteVoid extends Spell {
 			if (!bar.getFrozen())bar.freeze();
 			else i--;
 		}
+		System.out.println("infiniteVoid!!");
 		
 	}
 

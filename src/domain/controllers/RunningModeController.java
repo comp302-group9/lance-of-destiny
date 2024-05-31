@@ -34,8 +34,6 @@ public class RunningModeController implements KeyListener, Runnable {
         model.initaliseBarrierLocations(grid);
         //model.setFireball(ObjectFactory.getInstance().createFireball(0, 0, 16, 16));
         model.getFireball().setGrid(grid);
-        //setupQuitButtonListener();
-        //setupSaveButtonListener();
         model.setGameOverCallback(this::handleGameOver);
     }
     /* 
